@@ -23,6 +23,7 @@ import {
 } from "../../api/admin";
 import { errorMessage } from "../../api/api";
 import usePageMeta from "../../utils/usePageMeta";
+import { useAdminNotifications } from "../../hooks/useAdminNotifications";
 
 const fmtIdr = (n) =>
   new Intl.NumberFormat("id-ID", {
@@ -948,6 +949,8 @@ const TABS = [
 ];
 
 const AdminDashboardPage = () => {
+  useAdminNotifications();
+
   const navigate = useNavigate();
   const [checking, setChecking] = useState(true);
   const [tab, setTab] = useState("overview");
