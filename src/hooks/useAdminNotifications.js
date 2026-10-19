@@ -12,12 +12,25 @@ export function useAdminNotifications() {
 
     // Bikin koneksi WebSocket
     const connectWS = () => {
-      const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-      const host = import.meta.env.VITE_BASE_URL
-        ? import.meta.env.VITE_BASE_URL.replace(/^https?:\/\//, "")
-        : window.location.host;
+      // 1. Cari tau host backend
+      let host;
+      const baseUrl = import.meta.env.VITE_BASE_URL;
 
+      if (baseUrl) {
+        host = baseUrl.replace(/^https?:\/\//, "").replace(/\/+$/, "");
+      } else if (window.location.hostname === "ai.rensdev.my.id") {
+        // KARENA VERCEL GAK BISA WEBSOCKET, KITA TEMBAK LANGSUNG KE API
+        host = "api.rensdev.my.id";
+      } else {
+        // Fallback buat localhost (development)
+        host = "localhost:3000";
+      }
+
+      const protocol = host.includes("localhost") ? "ws:" : "wss:";
       const wsUrl = `${protocol}//${host}/api/admin/ws`;
+
+      console.log(`[WS] Mencoba konek ke: ${wsUrl}`); // Biar gampang debug
+
       ws.current = new WebSocket(wsUrl);
 
       ws.current.onopen = () => console.log("[WS] Admin terhubung!");
