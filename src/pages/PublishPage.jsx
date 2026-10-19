@@ -1,3 +1,5 @@
+// src/pages/PublishPage.jsx
+
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -5,6 +7,7 @@ import api, { errorMessage } from "../api/api";
 import Loading from "../components/Loading";
 import { AlertCircleIcon, ArrowLeftIcon } from "lucide-react";
 import FullPagePreview from "../components/FullPagePreview";
+import usePageMeta from "../utils/usePageMeta"; 
 
 const GRID_STYLE_LIGHT = {
   backgroundImage:
@@ -32,6 +35,19 @@ const PublishPage = () => {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // ─── INI DIA YANG KITA TAMBAHIN BRE ───
+  usePageMeta({
+    title: project
+      ? `${project.name} — Renscraft`
+      : loading
+        ? "Loading... — Renscraft"
+        : "Website unavailable — Renscraft",
+    description: project
+      ? `View ${project.name}, a website built with Renscraft AI.`
+      : "This website is not available or is not published yet.",
+  });
+  // ─────────────────────────────────────
 
   useEffect(() => {
     if (!name) return;
