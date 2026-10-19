@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   SandpackCodeEditor,
-  SandpackLayout,
   SandpackPreview,
   SandpackProvider,
   useSandpack,
@@ -267,32 +266,36 @@ const PreviewPanel = ({ project, activeFile, showCode }) => {
         <ActiveFileSync />
         <SandpackErrorMonitor onErrorChange={setShowErrorOverlay} />
 
-        {/* Perubahan ada di className SandpackLayout ini bre, biar responsive */}
-        <SandpackLayout className="h-full! border-none! bg-transparent! rounded-none! flex flex-col md:flex-row">
+        {/* --- PERUBAHAN ADA DI SINI BRE --- */}
+        {/* Kita buang SandpackLayout, ganti pakai div flex murni */}
+        <div className="flex flex-col md:flex-row w-full h-full overflow-hidden">
           {showCode && (
-            <SandpackCodeEditor
-              showTabs
-              showLineNumbers
-              showInlineErrors
-              wrapContent
-              className="w-full h-1/2 md:h-full md:flex-1 md:min-w-0 border-b md:border-b-0 md:border-r border-zinc-200 dark:border-zinc-800"
-            />
+            <div className="w-full h-1/2 md:h-full md:w-1/2 shrink-0 border-b md:border-b-0 md:border-r border-zinc-200 dark:border-zinc-800 overflow-hidden">
+              <SandpackCodeEditor
+                showTabs
+                showLineNumbers
+                showInlineErrors
+                wrapContent
+                style={{ height: "100%", width: "100%" }}
+              />
+            </div>
           )}
 
           <div
-            className={`relative w-full ${
-              showCode ? "h-1/2 md:h-full md:flex-1" : "h-full flex-1"
+            className={`relative flex-1 w-full ${
+              showCode ? "h-1/2 md:h-full" : "h-full"
             }`}>
             <SandpackPreview
               showNavigator={false}
               showRefreshButton
               showOpenInCodeSandbox={false}
               showSandpackErrorOverlay={showErrorOverlay}
-              className="h-full! w-full!"
+              style={{ height: "100%", width: "100%" }}
             />
             <PreviewLoadingOverlay />
           </div>
-        </SandpackLayout>
+        </div>
+        {/* -------------------------------- */}
       </SandpackProvider>
     </div>
   );
