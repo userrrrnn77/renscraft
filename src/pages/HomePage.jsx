@@ -8,7 +8,6 @@ import PromptInput from "../components/PromptInput";
 import ThemeToggle from "../components/ThemeToggle";
 import LanguageToggle from "../components/LanguageToggle";
 import { useAppContext } from "../context/AppContext";
-// import { openBuyCredits } from "../utils/billing";
 import { openTopUp } from "../utils/topup";
 
 const ProjectRowSkeleton = () => (
@@ -52,7 +51,7 @@ const HomePage = () => {
   }, [user, loadProjects]);
 
   return (
-    <div className="relative h-screen overflow-y-scroll bg-zinc-50 text-zinc-900 font-sans transition-colors dark:bg-zinc-950 dark:text-zinc-50">
+    <div className="relative h-dvh overflow-y-auto bg-zinc-50 text-zinc-900 font-sans transition-colors dark:bg-zinc-950 dark:text-zinc-50">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-150 overflow-hidden">
@@ -60,76 +59,86 @@ const HomePage = () => {
         <div className="absolute top-20 right-1/4 size-90 rounded-full bg-orange-400/10 blur-[100px] dark:bg-orange-500/10" />
       </div>
 
-      <nav className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 bg-zinc-50/70 backdrop-blur-md border-b border-zinc-200/70 dark:bg-zinc-950/60 dark:border-zinc-800/70">
-        <Link to="/" className="flex items-center gap-2">
+      {/* Navbar Responsive */}
+      <nav className="sticky top-0 z-10 flex items-center justify-between px-4 md:px-6 py-3 md:py-4 bg-zinc-50/70 backdrop-blur-md border-b border-zinc-200/70 dark:bg-zinc-950/60 dark:border-zinc-800/70">
+        <Link to="/" className="flex items-center gap-2 shrink-0">
           <img
             src="/logo.svg"
             alt="logo"
             className="size-6 invert dark:invert-0"
           />
-          <span className="text-xl font-semibold tracking-tight">
+          <span className="text-lg md:text-xl font-semibold tracking-tight hidden sm:inline-block">
             Renscraft
           </span>
         </Link>
 
-        <div className="flex items-center gap-3 text-sm font-medium">
+        <div className="flex items-center gap-1.5 md:gap-3 text-sm font-medium">
           {typeof credits === "number" && (
             <button
               type="button"
               onClick={() => openTopUp()}
               title={t("nav.topUp")}
-              className={`inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full border text-xs cursor-pointer transition-colors ${
+              className={`inline-flex items-center gap-1.5 py-1 px-2 md:px-2.5 rounded-full border text-xs cursor-pointer transition-colors ${
                 credits === 0
                   ? "border-red-200 bg-red-50 text-red-700 hover:bg-red-100 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300 dark:hover:bg-red-500/20"
                   : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
               }`}>
               <CoinsIcon size={13} />
-              {credits === 0
-                ? t("home.noCredits")
-                : t("home.creditsCount", { count: credits })}
+              <span className="hidden xs:inline">
+                {credits === 0
+                  ? t("home.noCredits")
+                  : t("home.creditsCount", { count: credits })}
+              </span>
+              <span className="xs:hidden">{credits}</span>
             </button>
           )}
+
           <Link
             to="/my-projects"
-            className="inline-flex items-center gap-1.5 py-1.5 px-3 border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 text-xs rounded-md dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800">
+            className="hidden md:inline-flex items-center gap-1.5 py-1.5 px-3 border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 text-xs rounded-md dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800">
             <FolderOpenIcon size={13} />
             <span className="max-w-28 truncate">{t("nav.myProjects")}</span>
           </Link>
+
           <LanguageToggle />
           <ThemeToggle variant="outline" />
+
           <Link
             to="/profile"
-            className="inline-flex items-center gap-1.5 py-1.5 px-3 border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 text-xs rounded-md dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800">
+            className="inline-flex items-center gap-1.5 py-1.5 px-2 md:px-3 border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 text-xs rounded-md dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800">
             <UserIcon size={13} />
-            <span className="max-w-28 truncate">
+            <span className="hidden sm:inline max-w-28 truncate">
               {user?.name || t("nav.profile")}
             </span>
           </Link>
         </div>
       </nav>
 
-      <div className="relative flex-1 flex flex-col items-center justify-center px-6 pb-20 mt-8 xl:mt-20">
+      {/* Main Content */}
+      <div className="relative flex-1 flex flex-col items-center justify-center px-4 md:px-6 pb-20 mt-8 md:mt-12 xl:mt-20">
         <div className="w-full max-w-2xl flex flex-col items-center">
-          <h1 className="text-center text-4xl md:text-6xl font-medium mt-4 max-w-2xl tracking-tight">
+          <h1 className="text-center text-3xl md:text-5xl lg:text-6xl font-medium mt-4 max-w-2xl tracking-tight">
             {t("home.title")}
           </h1>
 
-          <p className="text-center text-sm md:text-base max-w-xl mt-4 leading-relaxed text-zinc-500 dark:text-zinc-400">
+          <p className="text-center text-sm md:text-base max-w-xl mt-3 md:mt-4 leading-relaxed text-zinc-500 dark:text-zinc-400">
             {t("home.subtitle")}
           </p>
 
           {brief ? (
-            <BriefWizard
-              brief={brief}
-              onAnswer={answerBrief}
-              onCategoryChange={changeBriefCategory}
-              onCancel={cancelBrief}
-              onGenerate={() => createFromPrompt(null, brief.briefId)}
-              generating={generatingProject}
-            />
+            <div className="w-full mt-6">
+              <BriefWizard
+                brief={brief}
+                onAnswer={answerBrief}
+                onCategoryChange={changeBriefCategory}
+                onCancel={cancelBrief}
+                onGenerate={() => createFromPrompt(null, brief.briefId)}
+                generating={generatingProject}
+              />
+            </div>
           ) : (
             <>
-              <div className="w-full mt-6">
+              <div className="w-full mt-6 md:mt-8">
                 <PromptInput
                   key={prefilledPrompt || "empty"}
                   onSubmit={startBrief}
@@ -141,14 +150,14 @@ const HomePage = () => {
                 />
               </div>
 
-              <div className="masked-marquee w-full mt-4 max-w-2xl overflow-hidden py-1">
-                <div className="animate-marquee gap-3">
+              <div className="masked-marquee w-full mt-6 max-w-2xl overflow-hidden py-1">
+                <div className="animate-marquee gap-2 md:gap-3">
                   {homeTags.map((tag, idx) => (
                     <button
                       key={idx}
                       onClick={() => startBrief(tag)}
                       disabled={generatingProject || briefLoading}
-                      className="px-4 py-1.5 border rounded-full text-sm shrink-0 font-medium transition cursor-pointer border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-white/10 dark:bg-white/5 dark:text-zinc-200 dark:hover:bg-white/10">
+                      className="px-3 md:px-4 py-1.5 border rounded-full text-xs md:text-sm shrink-0 font-medium transition cursor-pointer border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-white/10 dark:bg-white/5 dark:text-zinc-200 dark:hover:bg-white/10">
                       {tag}
                     </button>
                   ))}

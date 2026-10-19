@@ -190,7 +190,7 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/50 p-4 backdrop-blur-xs dark:bg-zinc-950/80"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/50 p-2 sm:p-4 backdrop-blur-xs dark:bg-zinc-950/80"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget && !busy && step !== "waiting")
           onClose();
@@ -198,19 +198,21 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
       <div
         role="dialog"
         aria-modal="true"
-        className="relative max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-xl border border-zinc-200 bg-white p-6 text-zinc-900 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50">
+        className="relative max-h-[95vh] sm:max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-xl border border-zinc-200 bg-white p-4 sm:p-6 text-zinc-900 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50">
         <button
           type="button"
           onClick={onClose}
           disabled={busy || step === "waiting"}
           aria-label={t("common.close")}
-          className="absolute right-4 top-4 cursor-pointer text-zinc-400 hover:text-zinc-900 disabled:opacity-30 dark:text-zinc-500 dark:hover:text-zinc-50">
+          className="absolute right-3 top-3 sm:right-4 sm:top-4 cursor-pointer text-zinc-400 hover:text-zinc-900 disabled:opacity-30 dark:text-zinc-500 dark:hover:text-zinc-50 p-1">
           <XIcon size={16} />
         </button>
 
         <div className="mb-5 pr-8">
-          <h3 className="text-lg font-medium">{t("manual.title")}</h3>
-          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+          <h3 className="text-base sm:text-lg font-medium">
+            {t("manual.title")}
+          </h3>
+          <p className="mt-1 text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
             {t("manual.subtitle")}
           </p>
         </div>
@@ -228,34 +230,36 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
         )}
 
         {config.state === "ready" && step === "pick" && (
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {packages.map((pkg) => (
               <button
                 key={pkg.id}
                 type="button"
                 onClick={() => startOrder(pkg)}
                 disabled={busy}
-                className="group flex w-full cursor-pointer items-center justify-between rounded-xl border border-zinc-200 bg-white p-4 text-left transition hover:border-zinc-400 disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700">
+                className="group flex w-full cursor-pointer items-center justify-between rounded-xl border border-zinc-200 bg-white p-3 sm:p-4 text-left transition hover:border-zinc-400 disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700">
                 <div>
                   <p className="text-sm font-medium">{pkg.label}</p>
                   <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
                     {pkg.credits} {t("payment.creditsSuffix")}
                   </p>
                 </div>
-                <p className="text-lg font-semibold">{formatIdr(pkg.amount)}</p>
+                <p className="text-base sm:text-lg font-semibold">
+                  {formatIdr(pkg.amount)}
+                </p>
               </button>
             ))}
           </div>
         )}
 
         {step === "transfer" && order && (
-          <div className="space-y-5">
-            <div className="rounded-xl border-2 border-dashed border-amber-300 bg-amber-50/50 p-4 dark:border-amber-500/40 dark:bg-amber-500/5">
+          <div className="space-y-4 sm:space-y-5">
+            <div className="rounded-xl border-2 border-dashed border-amber-300 bg-amber-50/50 p-3 sm:p-4 dark:border-amber-500/40 dark:bg-amber-500/5">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-amber-700 dark:text-amber-400">
                 {t("manual.exactAmountLabel")}
               </p>
-              <div className="mt-2 flex items-baseline justify-between gap-3">
-                <p className="font-mono text-3xl font-semibold text-amber-900 dark:text-amber-200">
+              <div className="mt-2 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+                <p className="font-mono text-2xl sm:text-3xl font-semibold text-amber-900 dark:text-amber-200">
                   {formatIdr(order.expectedAmount)}
                 </p>
                 <button
@@ -266,7 +270,7 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
                       "manual.copyAmount",
                     )
                   }
-                  className="inline-flex cursor-pointer items-center gap-1 rounded-md bg-amber-100 px-2 py-1 text-[11px] font-medium text-amber-800 hover:bg-amber-200 dark:bg-amber-500/20 dark:text-amber-300">
+                  className="inline-flex self-start sm:self-auto cursor-pointer items-center gap-1 rounded-md bg-amber-100 px-2 py-1 text-[11px] font-medium text-amber-800 hover:bg-amber-200 dark:bg-amber-500/20 dark:text-amber-300">
                   <CopyIcon size={11} />
                   {t("common.copy")}
                 </button>
@@ -278,7 +282,7 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
               </p>
             </div>
 
-            <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-950">
+            <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3 sm:p-4 dark:border-zinc-800 dark:bg-zinc-950">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
                 {t("manual.recipientAccount")}
               </p>
@@ -288,7 +292,7 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
                   {bankAccounts.map((acc, i) => (
                     <div
                       key={i}
-                      className="flex items-start justify-between gap-3 border-b border-zinc-200 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
+                      className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-3 border-b border-zinc-200 pb-3 last:border-0 last:pb-0 dark:border-zinc-800">
                       <div className="min-w-0 flex-1">
                         {acc.bank && (
                           <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
@@ -296,7 +300,7 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
                           </p>
                         )}
                         {acc.number ? (
-                          <p className="mt-0.5 font-mono text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+                          <p className="mt-0.5 font-mono text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
                             {acc.number}
                           </p>
                         ) : (
@@ -320,7 +324,7 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
                           onClick={() =>
                             copyToClipboard(acc.number, "manual.copyAccount")
                           }
-                          className="inline-flex shrink-0 cursor-pointer items-center gap-1 rounded-md border border-zinc-200 bg-white px-2 py-1 text-[10px] font-medium text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">
+                          className="inline-flex self-start shrink-0 cursor-pointer items-center gap-1 rounded-md border border-zinc-200 bg-white px-2 py-1 text-[10px] font-medium text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">
                           <CopyIcon size={10} />
                           {t("common.copy")}
                         </button>
@@ -336,7 +340,7 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
             </div>
 
             <div className="rounded-lg border border-zinc-200 bg-white p-3 text-xs text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
-              <p>
+              <p className="break-all">
                 {t("manual.orderId")}:{" "}
                 <code className="font-mono text-zinc-900 dark:text-zinc-100">
                   {order.orderId}
@@ -359,7 +363,7 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
               <button
                 type="button"
                 onClick={() => setStep("upload")}
-                className="cursor-pointer rounded-lg bg-zinc-950 px-4 py-2.5 text-sm font-medium text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200">
+                className="cursor-pointer rounded-lg bg-zinc-950 px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-medium text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200">
                 {t("manual.uploadP")}
               </button>
             </div>
@@ -367,9 +371,10 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
         )}
 
         {step === "upload" && order && (
-          <form onSubmit={submitProof} className="space-y-4">
+          <form onSubmit={submitProof} className="space-y-3 sm:space-y-4">
+            {/* Box Info Kecil */}
             <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-xs text-zinc-600 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400">
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
                 <span>{t("manual.transferAmount")}</span>
                 <button
                   type="button"
@@ -379,7 +384,7 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
                       "manual.copyAmount",
                     )
                   }
-                  className="inline-flex cursor-pointer items-center gap-1 rounded border border-zinc-200 bg-white px-1.5 py-0.5 text-[10px] font-medium text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">
+                  className="inline-flex self-start sm:self-auto cursor-pointer items-center gap-1 rounded border border-zinc-200 bg-white px-1.5 py-0.5 text-[10px] font-medium text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">
                   <CopyIcon size={10} />
                   {t("common.copy")}
                 </button>
@@ -390,7 +395,7 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
 
               {bankAccounts.length > 0 && bankAccounts[0].number && (
                 <div className="mt-2 border-t border-zinc-200 pt-2 dark:border-zinc-800">
-                  <div className="flex items-center justify-between gap-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
                     <span>
                       {bankAccounts[0].bank
                         ? `${bankAccounts[0].bank}`
@@ -404,7 +409,7 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
                           "manual.copyAccount",
                         )
                       }
-                      className="inline-flex cursor-pointer items-center gap-1 rounded border border-zinc-200 bg-white px-1.5 py-0.5 text-[10px] font-medium text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">
+                      className="inline-flex self-start sm:self-auto cursor-pointer items-center gap-1 rounded border border-zinc-200 bg-white px-1.5 py-0.5 text-[10px] font-medium text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">
                       <CopyIcon size={10} />
                       {t("common.copy")}
                     </button>
@@ -422,7 +427,7 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold uppercase tracking-widest text-zinc-500 mb-2">
+              <label className="block text-[11px] font-semibold uppercase tracking-widest text-zinc-500 mb-1.5 sm:mb-2">
                 {t("manual.senderName")}
               </label>
               <input
@@ -432,12 +437,12 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
                 required
                 maxLength={120}
                 placeholder={t("manual.senderNamePlaceholder")}
-                className="w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm outline-none focus:border-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-50"
+                className="w-full rounded-lg border border-zinc-200 px-3 py-2 sm:py-2.5 text-sm outline-none focus:border-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-50"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold uppercase tracking-widest text-zinc-500 mb-2">
+              <label className="block text-[11px] font-semibold uppercase tracking-widest text-zinc-500 mb-1.5 sm:mb-2">
                 {t("manual.senderBank")}
               </label>
               <input
@@ -447,27 +452,27 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
                 required
                 maxLength={60}
                 placeholder={t("manual.senderBankPlaceholder")}
-                className="w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm outline-none focus:border-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-50"
+                className="w-full rounded-lg border border-zinc-200 px-3 py-2 sm:py-2.5 text-sm outline-none focus:border-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-50"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold uppercase tracking-widest text-zinc-500 mb-2">
+              <label className="block text-[11px] font-semibold uppercase tracking-widest text-zinc-500 mb-1.5 sm:mb-2">
                 {t("manual.proof")}
               </label>
               <div
                 onClick={() => fileInputRef.current?.click()}
-                className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-300 px-4 py-6 transition hover:border-zinc-400 dark:border-zinc-700 dark:hover:border-zinc-600">
+                className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-300 px-4 py-4 sm:py-6 transition hover:border-zinc-400 dark:border-zinc-700 dark:hover:border-zinc-600">
                 {previewUrl ? (
                   <img
                     src={previewUrl}
                     alt={t("manual.proof")}
-                    className="max-h-40 rounded"
+                    className="max-h-32 sm:max-h-40 rounded"
                   />
                 ) : (
                   <>
                     <UploadCloudIcon
-                      size={22}
+                      size={20}
                       className="text-zinc-400 dark:text-zinc-500"
                     />
                     <p className="mt-2 text-xs font-medium text-zinc-700 dark:text-zinc-300">
@@ -501,18 +506,18 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
               )}
             </div>
 
-            <div className="flex items-center justify-between gap-2 pt-1">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
               <button
                 type="button"
                 onClick={goBack}
                 disabled={busy}
-                className="cursor-pointer text-xs font-medium text-zinc-500 hover:text-zinc-900 disabled:opacity-50 dark:hover:text-zinc-50">
+                className="cursor-pointer text-xs text-center font-medium text-zinc-500 hover:text-zinc-900 disabled:opacity-50 dark:hover:text-zinc-50 order-2 sm:order-1">
                 {t("manual.back")}
               </button>
               <button
                 type="submit"
                 disabled={busy || !file}
-                className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-zinc-950 px-4 py-2.5 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200">
+                className="inline-flex w-full sm:w-auto justify-center cursor-pointer items-center gap-1.5 rounded-lg bg-zinc-950 px-4 py-2.5 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 order-1 sm:order-2">
                 {busy && <Loader2Icon size={13} className="animate-spin" />}
                 {busy ? t("manual.sending") : t("manual.sendProof")}
               </button>
@@ -520,8 +525,9 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
           </form>
         )}
 
+        {/* Waiting & Done sama persis, cuma text-center udah aman bawaan */}
         {step === "waiting" && (
-          <div className="flex flex-col items-center py-6 text-center">
+          <div className="flex flex-col items-center py-6 text-center px-2">
             <Loader2Icon
               size={32}
               className="animate-spin text-zinc-400 dark:text-zinc-500"
@@ -531,7 +537,7 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
               {t("manual.verifyingSub")}
             </p>
 
-            <div className="mt-4 flex flex-col items-center gap-1.5">
+            <div className="mt-4 flex flex-col items-center gap-1.5 break-all">
               {status && (
                 <span className="text-[10px] uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
                   {t("manual.status")}: {status.status}
@@ -597,7 +603,7 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
             <button
               type="button"
               onClick={onClose}
-              className="mt-5 cursor-pointer rounded-lg bg-zinc-950 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200">
+              className="mt-5 cursor-pointer rounded-lg bg-zinc-950 px-4 py-2 sm:py-2.5 text-sm font-medium text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200">
               {t("manual.close")}
             </button>
           </div>

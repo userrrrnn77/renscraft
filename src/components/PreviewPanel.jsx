@@ -109,8 +109,7 @@ const PreviewLoadingOverlay = () => {
       aria-live="polite"
       className={`pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center gap-5 transition-opacity duration-300 ${
         isDark ? "bg-zinc-950" : "bg-white"
-      }`}
-    >
+      }`}>
       <div className="flex items-center gap-1.5">
         <span
           className="size-2 animate-pulse rounded-full bg-zinc-900 dark:bg-zinc-50"
@@ -263,43 +262,33 @@ const PreviewPanel = ({ project, activeFile, showCode }) => {
         files={sandpackFiles}
         customSetup={customSetup}
         options={options}
-        theme={sandpackTheme}
-      >
+        theme={sandpackTheme}>
         <SandpackFileWatcher />
         <ActiveFileSync />
         <SandpackErrorMonitor onErrorChange={setShowErrorOverlay} />
-        <SandpackLayout
-          style={{
-            height: "100%",
-            border: "none",
-            borderRadius: 0,
-            background: "transparent",
-          }}
-        >
+
+        {/* Perubahan ada di className SandpackLayout ini bre, biar responsive */}
+        <SandpackLayout className="h-full! border-none! bg-transparent! rounded-none! flex flex-col md:flex-row">
           {showCode && (
             <SandpackCodeEditor
               showTabs
               showLineNumbers
               showInlineErrors
               wrapContent
-              style={{ height: "100%", flex: 1, minWidth: 0 }}
+              className="w-full h-1/2 md:h-full md:flex-1 md:min-w-0 border-b md:border-b-0 md:border-r border-zinc-200 dark:border-zinc-800"
             />
           )}
 
           <div
-            className="relative"
-            style={{
-              height: "100%",
-              flex: showCode ? 1 : 2,
-              minWidth: 0,
-            }}
-          >
+            className={`relative w-full ${
+              showCode ? "h-1/2 md:h-full md:flex-1" : "h-full flex-1"
+            }`}>
             <SandpackPreview
               showNavigator={false}
               showRefreshButton
               showOpenInCodeSandbox={false}
               showSandpackErrorOverlay={showErrorOverlay}
-              style={{ height: "100%", width: "100%" }}
+              className="h-full! w-full!"
             />
             <PreviewLoadingOverlay />
           </div>

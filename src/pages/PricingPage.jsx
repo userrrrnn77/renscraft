@@ -53,12 +53,9 @@ const PricingPage = () => {
     ),
   });
 
-  // `data` harus di-declare SEBELUM useEffect yang pakai di deps array,
-  // kalau tidak TDZ -> ReferenceError saat render.
   const data = state.status === "ready" ? state.data : null;
   const packages = data?.packages ?? [];
 
-  // Default ke manual kalau Midtrans off & manual on.
   useEffect(() => {
     if (!data) return;
     if (!data.methods?.midtrans && data.methods?.manual) setMethod("manual");
@@ -100,17 +97,17 @@ const PricingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50">
+    <div className="min-h-dvh bg-white text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50">
       <SiteNav />
 
-      <main className="relative mx-auto max-w-6xl px-6 py-16 md:py-24">
+      <main className="relative mx-auto max-w-6xl px-4 md:px-6 py-12 md:py-24">
         {data?.methods?.midtrans && data?.methods?.manual && (
-          <div className="mt-6 inline-flex items-center gap-1 rounded-full border border-zinc-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="mt-2 md:mt-6 inline-flex items-center gap-1 rounded-full border border-zinc-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-900">
             {data.methods.midtrans && (
               <button
                 type="button"
                 onClick={() => setMethod("midtrans")}
-                className={`cursor-pointer rounded-full px-3 py-1 text-xs font-medium transition ${
+                className={`cursor-pointer rounded-full px-3 py-1.5 text-[11px] md:text-xs font-medium transition ${
                   method === "midtrans"
                     ? "bg-zinc-950 text-white dark:bg-zinc-50 dark:text-zinc-950"
                     : "text-zinc-600 dark:text-zinc-400"
@@ -122,7 +119,7 @@ const PricingPage = () => {
               <button
                 type="button"
                 onClick={() => setMethod("manual")}
-                className={`cursor-pointer rounded-full px-3 py-1 text-xs font-medium transition ${
+                className={`cursor-pointer rounded-full px-3 py-1.5 text-[11px] md:text-xs font-medium transition ${
                   method === "manual"
                     ? "bg-zinc-950 text-white dark:bg-zinc-50 dark:text-zinc-950"
                     : "text-zinc-600 dark:text-zinc-400"
@@ -147,11 +144,11 @@ const PricingPage = () => {
           <div className="absolute -top-40 left-1/2 -translate-x-1/2 size-130 rounded-full bg-red-500/[0.07] blur-[140px] dark:bg-red-500/15" />
         </div>
 
-        <header className="relative max-w-2xl">
-          <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
+        <header className="relative max-w-2xl mt-4 md:mt-0">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight">
             {t("pricing.title")}
           </h1>
-          <p className="mt-4 text-base leading-relaxed text-zinc-600 dark:text-zinc-400">
+          <p className="mt-3 md:mt-4 text-sm md:text-base leading-relaxed text-zinc-600 dark:text-zinc-400">
             {data
               ? t("pricing.subtitleWithCosts", {
                   generate: data.costs.generate,
@@ -160,7 +157,7 @@ const PricingPage = () => {
               : t("pricing.subtitle")}
           </p>
           {data?.freeCredits > 0 && (
-            <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="mt-2 text-xs md:text-sm text-zinc-500 dark:text-zinc-400">
               {t("pricing.freeCreditsNote", { count: data.freeCredits })}
             </p>
           )}
@@ -194,14 +191,14 @@ const PricingPage = () => {
         {data && (
           <section
             aria-label="Credit packs"
-            className="relative mt-12 grid gap-5 md:grid-cols-3">
+            className="relative mt-8 md:mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
             {packages.map((pkg) => {
               const best = pkg.id === bestId;
               const websites = Math.floor(pkg.credits / data.costs.generate);
               return (
                 <article
                   key={pkg.id}
-                  className={`relative flex flex-col rounded-2xl border p-7 transition-all duration-300 hover:-translate-y-1 ${
+                  className={`relative flex flex-col rounded-2xl border p-5 md:p-7 transition-all duration-300 hover:-translate-y-1 ${
                     best
                       ? "border-zinc-900 ring-1 ring-zinc-900 dark:border-zinc-50 dark:ring-zinc-50 dark:bg-zinc-900/40"
                       : "border-zinc-200 bg-white hover:border-zinc-300 hover:shadow-lg hover:shadow-zinc-200/60 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700 dark:hover:shadow-none"
@@ -216,14 +213,14 @@ const PricingPage = () => {
                     )}
                   </div>
 
-                  <p className="mt-6 text-4xl font-semibold tracking-tight">
+                  <p className="mt-5 md:mt-6 text-3xl md:text-4xl font-semibold tracking-tight">
                     {formatIdr(pkg.amount)}
                   </p>
-                  <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+                  <p className="mt-1 text-xs md:text-sm text-zinc-500 dark:text-zinc-400">
                     {t("pricing.creditsCount", { count: pkg.credits })}
                   </p>
 
-                  <ul className="mt-6 space-y-2.5 text-sm text-zinc-700 dark:text-zinc-300">
+                  <ul className="mt-5 md:mt-6 space-y-2.5 text-sm text-zinc-700 dark:text-zinc-300">
                     {websites > 0 && (
                       <li className="flex items-start gap-2">
                         <CheckIcon size={15} className="mt-0.5 shrink-0" />
@@ -245,7 +242,7 @@ const PricingPage = () => {
                   <button
                     type="button"
                     onClick={() => handleBuy(pkg)}
-                    className={`mt-8 rounded-lg px-4 py-2.5 text-sm font-medium cursor-pointer transition-all ${
+                    className={`mt-6 md:mt-8 rounded-lg px-4 py-2.5 text-sm font-medium cursor-pointer transition-all ${
                       best
                         ? "bg-zinc-950 text-white hover:bg-zinc-800 active:scale-[0.98] dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
                         : "border border-zinc-200 text-zinc-900 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-900"
@@ -262,28 +259,38 @@ const PricingPage = () => {
 
         <section
           aria-label="Good to know"
-          className="relative mt-20 grid max-w-3xl gap-6 text-sm leading-relaxed text-zinc-600 sm:grid-cols-2 dark:text-zinc-400">
+          className="relative mt-12 md:mt-20 grid max-w-3xl gap-6 text-sm leading-relaxed text-zinc-600 sm:grid-cols-2 dark:text-zinc-400">
           <div>
             <h2 className="font-medium text-zinc-900 dark:text-zinc-50">
               {t("pricing.failedBuildsFree")}
             </h2>
-            <p className="mt-1">{t("pricing.failedBuildsFreeText")}</p>
+            <p className="mt-1 text-xs md:text-sm">
+              {t("pricing.failedBuildsFreeText")}
+            </p>
           </div>
           {data?.methods?.midtrans ? (
             <div>
-              <h2>{t("pricing.midtransTitle")}</h2>
-              <p>{t("pricing.midtransText")}</p>
+              <h2 className="font-medium text-zinc-900 dark:text-zinc-50">
+                {t("pricing.midtransTitle")}
+              </h2>
+              <p className="mt-1 text-xs md:text-sm">
+                {t("pricing.midtransText")}
+              </p>
             </div>
           ) : data?.methods?.manual ? (
             <div>
-              <h2>{t("pricing.manualTitle")}</h2>
-              <p>{t("pricing.manualText")}</p>
+              <h2 className="font-medium text-zinc-900 dark:text-zinc-50">
+                {t("pricing.manualTitle")}
+              </h2>
+              <p className="mt-1 text-xs md:text-sm">
+                {t("pricing.manualText")}
+              </p>
             </div>
           ) : null}
         </section>
 
         {!user && (
-          <p className="relative mt-12 text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="relative mt-10 md:mt-12 text-xs md:text-sm text-zinc-500 dark:text-zinc-400">
             {t("pricing.haveAccount")}{" "}
             <Link
               to="/login"

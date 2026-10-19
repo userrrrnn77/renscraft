@@ -3,7 +3,13 @@ import { useAppContext } from "../context/AppContext";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import BuilderHeader from "../components/BuilderHeader";
-import { FolderTreeIcon, ImageIcon, MessageSquareIcon } from "lucide-react";
+import {
+  FolderTreeIcon,
+  ImageIcon,
+  MessageSquareIcon,
+  MonitorPlayIcon,
+  MenuIcon,
+} from "lucide-react";
 import ChatPanel from "../components/ChatPanel";
 import FileExplorer from "../components/FileExplorer";
 import PreviewPanel from "../components/PreviewPanel";
@@ -19,6 +25,11 @@ const BuilderPage = () => {
   const navigate = useNavigate();
 
   const [letfTab, setLeftTab] = useState("chat");
+  const [mobileView, setMobileView] = useState("chat"); // "chat" atau "preview"
+
+  // STATE BARU: Buat nampilin/nyembunyiin sidebar di desktop
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
   const [publishing, setPublishing] = useState(false);
   const [publishUrl, setPublishUrl] = useState(null);
 
@@ -96,7 +107,6 @@ const BuilderPage = () => {
     activeProject.status === "generating" ||
     isFailed;
 
-  // Tab config biar nggak nulis 3x conditional
   const TABS = [
     { id: "chat", label: "Chat", Icon: MessageSquareIcon },
     { id: "files", label: "Files", Icon: FolderTreeIcon },
@@ -104,13 +114,15 @@ const BuilderPage = () => {
   ];
 
   return (
-    <div className="h-screen flex flex-col bg-white overflow-hidden text-zinc-900 relative dark:bg-zinc-950 dark:text-zinc-50">
+    <div className="h-dvh flex flex-col bg-white overflow-hidden text-zinc-900 relative dark:bg-zinc-950 dark:text-zinc-50">
       <BuilderHeader
         projectName={activeProject.name}
         version={activeProject.version}
         credits={credits}
         showCode={showCode}
         publishing={publishing}
+        isSidebarOpen={isSidebarOpen}
+        onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         onToggleShowCode={() => setShowCode(!showCode)}
         onOpenPreview={handleOpenPreview}
         onPublish={handlePublish}
@@ -120,10 +132,39 @@ const BuilderPage = () => {
         onMyProjects={() => navigate("/my-projects")}
       />
 
+      <div className="md:hidden flex items-center border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shrink-0 z-10">
+        <button
+          onClick={() => setMobileView("chat")}
+          className={`flex-1 flex items-center justify-center gap-2 py-3 text-xs font-medium border-b-2 transition-colors ${
+            mobileView === "chat"
+              ? "border-zinc-900 text-zinc-900 dark:border-zinc-50 dark:text-zinc-50"
+              : "border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400"
+          }`}>
+          <MenuIcon size={14} /> Chat & Files
+        </button>
+        <button
+          onClick={() => setMobileView("preview")}
+          className={`flex-1 flex items-center justify-center gap-2 py-3 text-xs font-medium border-b-2 transition-colors ${
+            mobileView === "preview"
+              ? "border-zinc-900 text-zinc-900 dark:border-zinc-50 dark:text-zinc-50"
+              : "border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400"
+          }`}>
+          <MonitorPlayIcon size={14} /> Preview
+        </button>
+      </div>
+
       <div className="flex-1 flex overflow-hidden">
-        {/* left sidebar */}
-        <div className="w-[320px] shrink-0 flex flex-col border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950">
-          <div className="flex border-b border-zinc-100 dark:border-zinc-800">
+        {/* Left sidebar (Chat/Files/Images) */}
+        <div
+          className={`shrink-0 flex-col border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950 transition-all duration-300 ease-in-out ${
+            // Di Mobile: pakai logika tab. Di Desktop: pakai state isSidebarOpen
+            mobileView === "chat" ? "flex w-full" : "hidden md:flex"
+          } ${
+            isSidebarOpen
+              ? "md:w-[320px] opacity-100"
+              : "md:w-0 md:opacity-0 md:border-none md:overflow-hidden"
+          } h-full`}>
+          <div className="flex border-b border-zinc-100 dark:border-zinc-800 shrink-0 w-full md:w-[320px]">
             {TABS.map(({ id: tabId, label, Icon }) => {
               const active = letfTab === tabId;
               return (
@@ -141,13 +182,15 @@ const BuilderPage = () => {
             })}
           </div>
 
-          <div className="flex-1 overflow-hidden">
+          <div className="flex-1 overflow-hidden w-full md:w-[320px]">
             {letfTab === "chat" ? (
               <ChatPanel
                 messages={activeProject.messages}
                 onSend={handleChat}
                 loading={chatLoading}
                 disabled={isFailed}
+                // Bisa ditutup dari dalam ChatPanel (khusus desktop)
+                onClose={() => setIsSidebarOpen(false)}
               />
             ) : letfTab === "files" ? (
               <FileExplorer
@@ -156,6 +199,7 @@ const BuilderPage = () => {
                 onFileSelect={(path) => {
                   setActiveFile(path);
                   setShowCode(true);
+                  if (window.innerWidth < 768) setMobileView("preview");
                 }}
               />
             ) : (
@@ -163,9 +207,6 @@ const BuilderPage = () => {
                 projectId={activeProject._id}
                 initialImages={activeProject.uploadedImages || []}
                 onChange={() => {
-                  // Silent refresh biar aktif project sinkron sama server
-                  // (yang udah punya list terbaru). Nggak toast, biar nggak
-                  // ganggu kerjaan user.
                   loadProject(activeProject._id, true);
                 }}
               />
@@ -173,7 +214,13 @@ const BuilderPage = () => {
           </div>
         </div>
 
-        <div className="flex-1 overflow-hidden bg-zinc-50 dark:bg-zinc-900">
+        {/* Right content (Preview / Progress) */}
+        <div
+          className={`flex-1 overflow-hidden bg-zinc-50 dark:bg-zinc-900 ${
+            mobileView === "preview"
+              ? "flex flex-col"
+              : "hidden md:flex md:flex-col"
+          } h-full`}>
           {showProgress ? (
             <AgentProgressDashboard
               project={activeProject}

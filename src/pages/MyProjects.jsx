@@ -45,11 +45,7 @@ const GRID_STYLE_DARK = {
 const BUSY_STATUSES = new Set(["pending", "generating", "revising"]);
 
 const SECTIONS = [
-  {
-    id: "published",
-    icon: Globe2Icon,
-    test: (p) => p.published === true,
-  },
+  { id: "published", icon: Globe2Icon, test: (p) => p.published === true },
   {
     id: "draft",
     icon: LockIcon,
@@ -86,8 +82,6 @@ const categoryOf = (project) =>
       : BUSY_STATUSES.has(project.status)
         ? "busy"
         : "draft";
-
-// ── Thumbnail ───────────────────────────────────────────────────────────────
 
 const PREVIEW_WIDTH = 1280;
 const PREVIEW_HEIGHT = 800;
@@ -167,8 +161,6 @@ const ProjectThumbnail = ({ project, mode = "grid" }) => {
   );
 };
 
-// ── Grid card ───────────────────────────────────────────────────────────────
-
 const ProjectGridCard = ({ project, onDelete }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -185,10 +177,10 @@ const ProjectGridCard = ({ project, onDelete }) => {
         <ProjectThumbnail project={project} mode="grid" />
       </button>
 
-      <div className="p-5">
+      <div className="p-4 sm:p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <h3 className="truncate text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+            <h3 className="truncate text-sm sm:text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
               {project.name}
             </h3>
           </div>
@@ -196,36 +188,36 @@ const ProjectGridCard = ({ project, onDelete }) => {
             type="button"
             onClick={() => onDelete(project)}
             aria-label={t("myProjects.deleteAria", { name: project.name })}
-            className="shrink-0 cursor-pointer rounded-md p-1.5 text-zinc-400 opacity-0 transition group-hover:opacity-100 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10 dark:hover:text-red-400">
+            className="shrink-0 cursor-pointer rounded-md p-1.5 text-zinc-400 sm:opacity-0 sm:group-hover:opacity-100 transition hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10 dark:hover:text-red-400">
             <TrashIcon size={13} />
           </button>
         </div>
 
         {project.description && (
-          <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+          <p className="mt-1.5 line-clamp-2 text-xs sm:text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
             {project.description}
           </p>
         )}
 
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <span
-            className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider ring-1 ${STATUS_TONE[cat]}`}>
+            className={`inline-flex items-center rounded-full px-2 py-0.5 text-[9px] sm:text-[10px] font-medium uppercase tracking-wider ring-1 ${STATUS_TONE[cat]}`}>
             {t(`myProjects.status.${cat}`)}
           </span>
-          <span className="inline-flex items-center gap-1 text-[11px] text-zinc-500 dark:text-zinc-400">
+          <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] text-zinc-500 dark:text-zinc-400">
             <ClockIcon size={10} />
             {moment(project.updatedAt || project.createdAt).fromNow()}
           </span>
-          <span className="text-[11px] font-medium text-zinc-400 dark:text-zinc-500">
+          <span className="text-[10px] sm:text-[11px] font-medium text-zinc-400 dark:text-zinc-500">
             v{project.version}
           </span>
         </div>
 
-        <div className="mt-5 flex items-center gap-3">
+        <div className="mt-4 flex items-center gap-3">
           <button
             type="button"
             onClick={() => navigate(`/chat/${project._id}`)}
-            className="inline-flex cursor-pointer items-center gap-1 text-sm font-medium text-sky-600 hover:text-sky-500 dark:text-sky-400 dark:hover:text-sky-300">
+            className="inline-flex cursor-pointer items-center gap-1 text-xs sm:text-sm font-medium text-sky-600 hover:text-sky-500 dark:text-sky-400 dark:hover:text-sky-300">
             {t("myProjects.open")}
             <ArrowRightIcon size={13} />
           </button>
@@ -235,7 +227,7 @@ const ProjectGridCard = ({ project, onDelete }) => {
               to={`/publish/${encodeURIComponent(project.name)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-sm font-medium text-sky-600 hover:text-sky-500 dark:text-sky-400 dark:hover:text-sky-300">
+              className="inline-flex items-center gap-1 text-xs sm:text-sm font-medium text-sky-600 hover:text-sky-500 dark:text-sky-400 dark:hover:text-sky-300">
               {t("myProjects.viewProject")}
               <ArrowRightIcon size={13} />
             </Link>
@@ -255,19 +247,18 @@ const ProjectGridCard = ({ project, onDelete }) => {
   );
 };
 
-// ── List row ────────────────────────────────────────────────────────────────
-
 const ProjectListRow = ({ project, onDelete }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const cat = categoryOf(project);
 
   return (
-    <div className="group flex items-center gap-4 rounded-xl border border-zinc-200 bg-white px-3 py-3 transition hover:border-zinc-300 hover:shadow-sm dark:border-zinc-800 dark:bg-zinc-950/60 dark:hover:border-zinc-700">
+    <div className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 rounded-xl border border-zinc-200 bg-white p-3 transition hover:border-zinc-300 hover:shadow-sm dark:border-zinc-800 dark:bg-zinc-950/60 dark:hover:border-zinc-700">
+      {/* Thumbnail di HP disembunyiin, atau kecilin */}
       <button
         type="button"
         onClick={() => navigate(`/chat/${project._id}`)}
-        className="shrink-0 cursor-pointer overflow-hidden rounded-md"
+        className="shrink-0 cursor-pointer overflow-hidden rounded-md hidden sm:block"
         style={{ width: 96 }}>
         <div className="w-24">
           <ProjectThumbnail project={project} mode="list" />
@@ -275,7 +266,7 @@ const ProjectListRow = ({ project, onDelete }) => {
       </button>
 
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
           <button
             type="button"
             onClick={() => navigate(`/chat/${project._id}`)}
@@ -283,7 +274,7 @@ const ProjectListRow = ({ project, onDelete }) => {
             {project.name}
           </button>
           <span
-            className={`inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider ring-1 ${STATUS_TONE[cat]}`}>
+            className={`inline-flex self-start sm:self-auto shrink-0 items-center rounded-full px-2 py-0.5 text-[9px] sm:text-[10px] font-medium uppercase tracking-wider ring-1 ${STATUS_TONE[cat]}`}>
             {t(`myProjects.status.${cat}`)}
           </span>
         </div>
@@ -294,7 +285,7 @@ const ProjectListRow = ({ project, onDelete }) => {
           </p>
         )}
 
-        <div className="mt-1 flex items-center gap-3 text-[11px] text-zinc-400 dark:text-zinc-500">
+        <div className="mt-2 flex items-center gap-3 text-[10px] sm:text-[11px] text-zinc-400 dark:text-zinc-500">
           <span className="inline-flex items-center gap-1">
             <ClockIcon size={10} />
             {moment(project.updatedAt || project.createdAt).fromNow()}
@@ -303,49 +294,49 @@ const ProjectListRow = ({ project, onDelete }) => {
         </div>
       </div>
 
-      <div className="flex shrink-0 items-center gap-1">
-        {project.published && (
+      <div className="flex shrink-0 items-center justify-between sm:justify-end gap-1 border-t sm:border-t-0 border-zinc-100 pt-2 sm:pt-0 dark:border-zinc-800">
+        <div className="flex items-center gap-1">
+          {project.published && (
+            <Link
+              to={`/publish/${encodeURIComponent(project.name)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={t("myProjects.openLiveAria")}
+              className="inline-flex size-8 items-center justify-center rounded-md text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200">
+              <Globe2Icon size={14} />
+            </Link>
+          )}
+          <button
+            type="button"
+            onClick={() => onDelete(project)}
+            aria-label={t("myProjects.deleteAria", { name: project.name })}
+            className="inline-flex size-8 cursor-pointer items-center justify-center rounded-md text-zinc-400 sm:opacity-0 transition sm:group-hover:opacity-100 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10 dark:hover:text-red-400">
+            <TrashIcon size={14} />
+          </button>
           <Link
-            to={`/publish/${encodeURIComponent(project.name)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={t("myProjects.openLiveAria")}
+            to={`/chat/${project._id}`}
+            aria-label={t("myProjects.openProjectAria")}
             className="inline-flex size-8 items-center justify-center rounded-md text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200">
-            <Globe2Icon size={14} />
+            <ArrowRightIcon size={14} />
           </Link>
-        )}
-        <button
-          type="button"
-          onClick={() => onDelete(project)}
-          aria-label={t("myProjects.deleteAria", { name: project.name })}
-          className="inline-flex size-8 cursor-pointer items-center justify-center rounded-md text-zinc-400 opacity-0 transition group-hover:opacity-100 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10 dark:hover:text-red-400">
-          <TrashIcon size={14} />
-        </button>
-        <Link
-          to={`/chat/${project._id}`}
-          aria-label={t("myProjects.openProjectAria")}
-          className="inline-flex size-8 items-center justify-center rounded-md text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200">
-          <ArrowRightIcon size={14} />
-        </Link>
+        </div>
       </div>
     </div>
   );
 };
-
-// ── Section ─────────────────────────────────────────────────────────────────
 
 const Section = ({ section, projects, viewMode, onDelete }) => {
   const { t } = useTranslation();
   const Icon = section.icon;
 
   return (
-    <section className="mt-12 first:mt-8">
+    <section className="mt-8 md:mt-12 first:mt-8">
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
           <Icon size={12} className="text-zinc-400 dark:text-zinc-500" />
           <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">
             {t(`myProjects.sections.${section.id}.label`)}
-            <span className="ml-2 font-normal text-zinc-400 dark:text-zinc-600">
+            <span className="ml-2 font-normal text-zinc-400 dark:text-zinc-600 hidden sm:inline">
               — {t(`myProjects.sections.${section.id}.sub`)}
             </span>
           </span>
@@ -359,13 +350,13 @@ const Section = ({ section, projects, viewMode, onDelete }) => {
       </div>
 
       {viewMode === "grid" ? (
-        <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-4 md:mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
           {projects.map((p) => (
             <ProjectGridCard key={p._id} project={p} onDelete={onDelete} />
           ))}
         </div>
       ) : (
-        <div className="mt-5 space-y-2">
+        <div className="mt-4 md:mt-5 space-y-2">
           {projects.map((p) => (
             <ProjectListRow key={p._id} project={p} onDelete={onDelete} />
           ))}
@@ -374,8 +365,6 @@ const Section = ({ section, projects, viewMode, onDelete }) => {
     </section>
   );
 };
-
-// ── Delete modal ────────────────────────────────────────────────────────────
 
 const DeleteConfirm = ({ project, busy, onClose, onConfirm }) => {
   const { t } = useTranslation();
@@ -389,7 +378,7 @@ const DeleteConfirm = ({ project, busy, onClose, onConfirm }) => {
       <div
         role="dialog"
         aria-modal="true"
-        className="w-full max-w-sm rounded-xl border border-zinc-200 bg-white p-6 text-zinc-900 shadow-lg dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50">
+        className="w-full max-w-sm rounded-xl border border-zinc-200 bg-white p-5 sm:p-6 text-zinc-900 shadow-lg dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50">
         <h3 className="text-base font-semibold">
           {t("myProjects.delete.title")}
         </h3>
@@ -427,8 +416,6 @@ const DeleteConfirm = ({ project, busy, onClose, onConfirm }) => {
   );
 };
 
-// ── Page ────────────────────────────────────────────────────────────────────
-
 const VIEW_KEY = "renscraft:my-projects-view";
 
 const readStoredView = () => {
@@ -461,9 +448,7 @@ const MyProjects = () => {
   useEffect(() => {
     try {
       localStorage.setItem(VIEW_KEY, viewMode);
-    } catch {
-      // ignore
-    }
+    } catch {}
   }, [viewMode]);
 
   useEffect(() => {
@@ -511,7 +496,7 @@ const MyProjects = () => {
   const EXAMPLE_KEYS = ["portfolio", "landing", "culinary", "wedding"];
 
   return (
-    <div className="relative min-h-screen bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
+    <div className="relative min-h-dvh bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-100 overflow-hidden">
@@ -529,23 +514,24 @@ const MyProjects = () => {
       <div className="relative z-10">
         <SiteNav />
 
-        <main className="mx-auto w-full max-w-6xl px-6 pb-24 pt-10 md:pt-14">
-          <header className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        <main className="mx-auto w-full max-w-6xl px-4 sm:px-6 pb-24 pt-8 md:pt-14">
+          <header className="flex flex-col gap-5 sm:gap-6 sm:flex-row sm:items-end justify-between">
             <div>
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+              <p className="mb-2 sm:mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
                 {t("myProjects.label")}
               </p>
-              <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight">
                 {t("myProjects.title")}
               </h1>
-              <p className="mt-3 max-w-lg text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+              <p className="mt-2 sm:mt-3 max-w-lg text-xs sm:text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
                 {t("myProjects.subtitle")}
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2 shrink-0">
-              {!loading && projects.length > 0 && (
-                <div className="flex flex-wrap items-center gap-1 rounded-full border border-zinc-200 bg-white/60 p-1 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/60">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 shrink-0">
+              {/* Filter & View Toggle */}
+              <div className="flex items-center justify-between gap-2 w-full sm:w-auto">
+                <div className="flex flex-wrap items-center gap-1 rounded-full border border-zinc-200 bg-white/60 p-1 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/60 overflow-x-auto hide-scrollbar">
                   {filterTabs.map((f) => {
                     const active = filter === f.id;
                     return (
@@ -553,58 +539,54 @@ const MyProjects = () => {
                         key={f.id}
                         type="button"
                         onClick={() => setFilter(f.id)}
-                        className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition ${
+                        className={`inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full px-2.5 sm:px-3 py-1 text-[11px] sm:text-xs font-medium transition ${
                           active
                             ? "bg-zinc-950 text-white dark:bg-zinc-50 dark:text-zinc-950"
                             : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
                         }`}>
                         {t(`myProjects.filters.${f.id}`)}
                         <span
-                          className={`text-[10px] font-semibold ${
-                            active
-                              ? "opacity-70"
-                              : "text-zinc-400 dark:text-zinc-500"
-                          }`}>
+                          className={`text-[9px] sm:text-[10px] font-semibold ${active ? "opacity-70" : "text-zinc-400 dark:text-zinc-500"}`}>
                           {f.count}
                         </span>
                       </button>
                     );
                   })}
                 </div>
-              )}
 
-              {!loading && projects.length > 0 && (
-                <div className="flex items-center gap-0.5 rounded-lg border border-zinc-200 bg-white/60 p-0.5 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/60">
-                  <button
-                    type="button"
-                    onClick={() => setViewMode("grid")}
-                    aria-label={t("myProjects.views.gridAria")}
-                    aria-pressed={viewMode === "grid"}
-                    className={`inline-flex size-7 cursor-pointer items-center justify-center rounded-md transition ${
-                      viewMode === "grid"
-                        ? "bg-zinc-950 text-white dark:bg-zinc-50 dark:text-zinc-950"
-                        : "text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
-                    }`}>
-                    <Grid3x3Icon size={13} />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setViewMode("list")}
-                    aria-label={t("myProjects.views.listAria")}
-                    aria-pressed={viewMode === "list"}
-                    className={`inline-flex size-7 cursor-pointer items-center justify-center rounded-md transition ${
-                      viewMode === "list"
-                        ? "bg-zinc-950 text-white dark:bg-zinc-50 dark:text-zinc-950"
-                        : "text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
-                    }`}>
-                    <ListIcon size={13} />
-                  </button>
-                </div>
-              )}
+                {!loading && projects.length > 0 && (
+                  <div className="hidden sm:flex items-center gap-0.5 rounded-lg border border-zinc-200 bg-white/60 p-0.5 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/60">
+                    <button
+                      type="button"
+                      onClick={() => setViewMode("grid")}
+                      aria-label={t("myProjects.views.gridAria")}
+                      aria-pressed={viewMode === "grid"}
+                      className={`inline-flex size-7 cursor-pointer items-center justify-center rounded-md transition ${
+                        viewMode === "grid"
+                          ? "bg-zinc-950 text-white dark:bg-zinc-50 dark:text-zinc-950"
+                          : "text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                      }`}>
+                      <Grid3x3Icon size={13} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setViewMode("list")}
+                      aria-label={t("myProjects.views.listAria")}
+                      aria-pressed={viewMode === "list"}
+                      className={`inline-flex size-7 cursor-pointer items-center justify-center rounded-md transition ${
+                        viewMode === "list"
+                          ? "bg-zinc-950 text-white dark:bg-zinc-50 dark:text-zinc-950"
+                          : "text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                      }`}>
+                      <ListIcon size={13} />
+                    </button>
+                  </div>
+                )}
+              </div>
 
               <Link
                 to="/chat"
-                className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl bg-zinc-950 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200">
+                className="inline-flex w-full sm:w-auto justify-center shrink-0 items-center gap-1.5 rounded-xl bg-zinc-950 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200">
                 <PlusIcon size={14} />
                 {t("myProjects.new")}
               </Link>
@@ -612,13 +594,13 @@ const MyProjects = () => {
           </header>
 
           {loading && (
-            <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-8 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div
                   key={i}
                   className="overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">
                   <div className="aspect-16/10 animate-pulse bg-zinc-100 dark:bg-zinc-800" />
-                  <div className="space-y-3 p-5">
+                  <div className="space-y-3 p-4 sm:p-5">
                     <div className="h-4 w-2/3 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
                     <div className="h-3 w-full animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
                     <div className="h-3 w-1/3 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
@@ -629,19 +611,19 @@ const MyProjects = () => {
           )}
 
           {!loading && projects.length === 0 && (
-            <div className="mt-16 flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-300 px-6 py-16 text-center dark:border-zinc-800">
-              <div className="mb-5 flex size-14 items-center justify-center rounded-2xl border border-zinc-200 bg-white text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
-                <FolderOpenIcon size={22} />
+            <div className="mt-10 sm:mt-16 flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-300 px-4 sm:px-6 py-12 sm:py-16 text-center dark:border-zinc-800">
+              <div className="mb-4 sm:mb-5 flex size-12 sm:size-14 items-center justify-center rounded-2xl border border-zinc-200 bg-white text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
+                <FolderOpenIcon size={20} className="sm:size-5.5" />
               </div>
-              <h2 className="text-lg font-semibold">
+              <h2 className="text-base sm:text-lg font-semibold">
                 {t("myProjects.emptyTitle")}
               </h2>
-              <p className="mt-2 max-w-md text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+              <p className="mt-2 max-w-md text-xs sm:text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
                 {t("myProjects.emptySub")}
               </p>
 
-              <div className="mt-8 w-full max-w-md">
-                <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-500">
+              <div className="mt-6 sm:mt-8 w-full max-w-md">
+                <p className="mb-3 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-500">
                   {t("myProjects.emptyTry")}
                 </p>
                 <div className="grid gap-2 sm:grid-cols-2">
@@ -660,7 +642,7 @@ const MyProjects = () => {
                       <p className="text-xs font-semibold text-zinc-900 dark:text-zinc-50">
                         {t(`myProjects.filters.${k}`, k)}
                       </p>
-                      <p className="mt-1 line-clamp-2 text-[11px] leading-relaxed text-zinc-500 dark:text-zinc-400">
+                      <p className="mt-1 line-clamp-2 text-[10px] sm:text-[11px] leading-relaxed text-zinc-500 dark:text-zinc-400">
                         {t(`myProjects.emptyExamples.${k}`)}
                       </p>
                     </button>
@@ -670,7 +652,7 @@ const MyProjects = () => {
 
               <Link
                 to="/chat"
-                className="mt-8 inline-flex items-center gap-1.5 rounded-xl bg-zinc-950 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200">
+                className="mt-6 sm:mt-8 inline-flex items-center gap-1.5 rounded-xl bg-zinc-950 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200">
                 <PlusIcon size={15} />
                 {t("myProjects.emptyStartScratch")}
               </Link>
@@ -678,7 +660,7 @@ const MyProjects = () => {
           )}
 
           {!loading && projects.length > 0 && visibleSections.length === 0 && (
-            <div className="mt-16 rounded-2xl border border-dashed border-zinc-300 px-6 py-16 text-center dark:border-zinc-800">
+            <div className="mt-10 sm:mt-16 rounded-2xl border border-dashed border-zinc-300 px-4 sm:px-6 py-12 sm:py-16 text-center dark:border-zinc-800">
               <RefreshCwIcon
                 size={22}
                 className="mx-auto text-zinc-400 dark:text-zinc-500"
@@ -707,7 +689,7 @@ const MyProjects = () => {
             ))}
 
           {!loading && projects.length > 0 && (
-            <p className="mt-16 text-center text-[11px] text-zinc-400 dark:text-zinc-600">
+            <p className="mt-12 sm:mt-16 text-center text-[11px] text-zinc-400 dark:text-zinc-600">
               {t("myProjects.totalCount", { count: projects.length })}
             </p>
           )}

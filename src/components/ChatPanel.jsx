@@ -1,9 +1,15 @@
-import { BotIcon, BotMessageSquareIcon, UserIcon } from "lucide-react";
+import { BotIcon, BotMessageSquareIcon, UserIcon, XIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import PromptInput from "./PromptInput";
 
-const ChatPanel = ({ messages, onSend, loading, disabled = false }) => {
+const ChatPanel = ({
+  messages,
+  onSend,
+  loading,
+  disabled = false,
+  onClose,
+}) => {
   const { t } = useTranslation();
   const bottomRef = useRef(null);
 
@@ -13,6 +19,22 @@ const ChatPanel = ({ messages, onSend, loading, disabled = false }) => {
 
   return (
     <div className="flex flex-col h-full bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
+      {/* Header Chat (Opsional, buat naruh tombol Close) */}
+      <div className="flex items-center justify-between px-3 py-2 border-b border-zinc-100 dark:border-zinc-800 shrink-0">
+        <span className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+          AI Chat
+        </span>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="hidden md:inline-flex p-1 rounded-md text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 dark:hover:text-zinc-50 dark:hover:bg-zinc-800 cursor-pointer transition-colors"
+            title="Tutup Panel">
+            <XIcon size={14} />
+          </button>
+        )}
+      </div>
+
       <div className="flex-1 overflow-y-auto p-3 space-y-3 hide-scrollbar">
         {messages.length === 0 && (
           <div className="flex items-center justify-center h-full">
@@ -76,7 +98,7 @@ const ChatPanel = ({ messages, onSend, loading, disabled = false }) => {
         <div ref={bottomRef} />
       </div>
 
-      <div className="p-3 border-t border-zinc-200 dark:border-zinc-800">
+      <div className="p-3 border-t border-zinc-200 dark:border-zinc-800 shrink-0">
         <PromptInput
           onSubmit={onSend}
           loading={loading}

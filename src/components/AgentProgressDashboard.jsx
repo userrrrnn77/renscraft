@@ -75,8 +75,6 @@ export default function AgentProgressDashboard({
       ? t("progress.planning")
       : t("progress.generating");
 
-  // Translate errorCode -> message. Fallback ke project.error kalau code
-  // tidak ada di locale (mis. versi lama) atau tidak ada code sama sekali.
   const errorText = projectErrorMessage(project, "");
 
   const handleRetry = async () => {
@@ -90,12 +88,14 @@ export default function AgentProgressDashboard({
   };
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-zinc-50 flex flex-col items-center justify-center p-6 md:p-12 overflow-y-auto dark:bg-zinc-900">
+    <div className="relative h-full w-full overflow-hidden bg-zinc-50 flex flex-col items-center justify-center p-4 md:p-12 overflow-y-auto dark:bg-zinc-900">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-      >
-        <div className="absolute inset-0 dark:hidden" style={GRID_STYLE_LIGHT} />
+        className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="absolute inset-0 dark:hidden"
+          style={GRID_STYLE_LIGHT}
+        />
         <div
           className="absolute inset-0 hidden dark:block"
           style={GRID_STYLE_DARK}
@@ -109,8 +109,9 @@ export default function AgentProgressDashboard({
         />
       </div>
 
-      <div className="relative z-10 max-w-xl w-full rounded-2xl border border-zinc-200 bg-white/90 backdrop-blur-xl p-6 md:p-8 shadow-xl shadow-zinc-200/50 dark:border-zinc-800 dark:bg-zinc-950/70 dark:shadow-none">
-        <div className="flex items-start justify-between gap-4 mb-6">
+      <div className="relative z-10 max-w-xl w-full rounded-2xl border border-zinc-200 bg-white/90 backdrop-blur-xl p-4 md:p-8 shadow-xl shadow-zinc-200/50 dark:border-zinc-800 dark:bg-zinc-950/70 dark:shadow-none">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6">
           <div className="min-w-0">
             <div className="flex items-center gap-2 mb-1.5">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-2 py-0.5 text-[10px] font-medium uppercase tracking-widest text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
@@ -133,7 +134,7 @@ export default function AgentProgressDashboard({
           </div>
 
           {planned.length > 0 && !isFailed && (
-            <div className="shrink-0 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-right dark:border-zinc-800 dark:bg-zinc-900">
+            <div className="shrink-0 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-left sm:text-right dark:border-zinc-800 dark:bg-zinc-900 self-start">
               <div className="text-lg font-semibold leading-none tracking-tight text-zinc-900 dark:text-zinc-50">
                 {percent}
                 <span className="text-xs font-medium text-zinc-400 dark:text-zinc-500">
@@ -147,8 +148,9 @@ export default function AgentProgressDashboard({
           )}
         </div>
 
+        {/* Error state */}
         {isFailed && errorText && (
-          <div className="mb-5 flex items-start gap-2.5 rounded-lg border border-red-100 bg-red-50 p-4 text-sm text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300">
+          <div className="mb-5 flex items-start gap-2.5 rounded-lg border border-red-100 bg-red-50 p-3 md:p-4 text-sm text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300">
             <AlertCircleIcon size={16} className="mt-0.5 shrink-0" />
             <p className="font-medium leading-relaxed">{errorText}</p>
           </div>
@@ -174,8 +176,7 @@ export default function AgentProgressDashboard({
                   type="button"
                   onClick={handleRetry}
                   disabled={retrying}
-                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-zinc-950 px-3 py-2 text-xs font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
-                >
+                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-zinc-950 px-3 py-2 text-xs font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200">
                   {retrying ? (
                     <Loader2Icon size={13} className="animate-spin" />
                   ) : (
@@ -189,8 +190,7 @@ export default function AgentProgressDashboard({
                   type="button"
                   onClick={onRetryNew}
                   disabled={retrying}
-                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
-                >
+                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-700 transition hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">
                   <Wand2Icon size={13} />
                   {t("progress.newPrompt")}
                 </button>
@@ -221,6 +221,7 @@ export default function AgentProgressDashboard({
           </div>
         )}
 
+        {/* Progress bar */}
         {planned.length > 0 && !isFailed && (
           <div className="mb-6">
             <div className="mb-2 flex items-center justify-between text-[10px] font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
@@ -238,8 +239,7 @@ export default function AgentProgressDashboard({
             <div className="relative h-2 w-full overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
               <div
                 className="relative h-full rounded-full bg-zinc-900 transition-all duration-700 ease-out dark:bg-zinc-100"
-                style={{ width: `${percent}%` }}
-              >
+                style={{ width: `${percent}%` }}>
                 {percent > 0 && percent < 100 && (
                   <span className="absolute right-0 top-0 h-full w-8 bg-linear-to-r from-transparent to-white/40 dark:to-white/60" />
                 )}
@@ -248,12 +248,14 @@ export default function AgentProgressDashboard({
           </div>
         )}
 
+        {/* File List */}
         {planned.length > 0 ? (
           <div>
             <span className="mb-3 block text-[10px] font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
               {t("progress.files")}
             </span>
-            <div className="max-h-75 space-y-2 overflow-y-auto pr-1">
+            {/* max-h disesuaikan buat mobile */}
+            <div className="max-h-[35vh] md:max-h-75 space-y-2 overflow-y-auto pr-1">
               {planned.map((file, idx) => {
                 const isCompleted = completed.includes(file.path);
                 const isGenerating = current === file.path;
@@ -262,49 +264,42 @@ export default function AgentProgressDashboard({
                   <div
                     key={file.path}
                     style={{ animationDelay: `${Math.min(idx * 40, 400)}ms` }}
-                    className={`flex items-center gap-3 rounded-lg border p-2.5 transition-all duration-300 ${
+                    className={`flex items-center gap-2.5 md:gap-3 rounded-lg border p-2 md:p-2.5 transition-all duration-300 ${
                       isGenerating
                         ? "border-sky-200 bg-sky-50/60 dark:border-sky-500/30 dark:bg-sky-500/6"
                         : isCompleted
                           ? "border-zinc-100 bg-white dark:border-zinc-800 dark:bg-zinc-950"
                           : "border-zinc-100 bg-white opacity-50 dark:border-zinc-800 dark:bg-zinc-950"
-                    }`}
-                  >
+                    }`}>
                     {isCompleted ? (
                       <CheckCircle2Icon
-                        size={16}
+                        size={14}
                         className="shrink-0 text-emerald-500"
                       />
                     ) : isGenerating ? (
                       <Loader2Icon
-                        size={16}
+                        size={14}
                         className="shrink-0 animate-spin text-sky-500 dark:text-sky-400"
                       />
                     ) : (
                       <CircleIcon
-                        size={16}
+                        size={14}
                         className="shrink-0 text-zinc-300 dark:text-zinc-700"
                       />
                     )}
                     <div className="min-w-0 flex-1">
                       <p
-                        className={`truncate text-xs font-medium ${
+                        className={`truncate text-[11px] md:text-xs font-medium ${
                           isGenerating
                             ? "text-zinc-900 dark:text-zinc-50"
                             : "text-zinc-700 dark:text-zinc-300"
-                        }`}
-                      >
+                        }`}>
                         {file.path}
                       </p>
-                      <p className="mt-0.5 truncate text-[10px] text-zinc-400 dark:text-zinc-500">
+                      <p className="mt-0.5 truncate text-[9px] md:text-[10px] text-zinc-400 dark:text-zinc-500">
                         {file.description}
                       </p>
                     </div>
-                    {isGenerating && (
-                      <span className="shrink-0 rounded bg-sky-100 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-sky-700 animate-pulse dark:bg-sky-500/20 dark:text-sky-300">
-                        {t("progress.active")}
-                      </span>
-                    )}
                   </div>
                 );
               })}
@@ -312,11 +307,11 @@ export default function AgentProgressDashboard({
           </div>
         ) : (
           !isFailed && (
-            <div className="flex flex-col items-center justify-center py-8 text-zinc-400 dark:text-zinc-500">
+            <div className="flex flex-col items-center justify-center py-6 md:py-8 text-zinc-400 dark:text-zinc-500">
               <div className="relative mb-3">
-                <Loader2Icon size={26} className="animate-spin" />
+                <Loader2Icon size={24} className="animate-spin" />
               </div>
-              <p className="text-xs">{t("progress.analyzing")}</p>
+              <p className="text-xs text-center">{t("progress.analyzing")}</p>
             </div>
           )
         )}
@@ -327,9 +322,10 @@ export default function AgentProgressDashboard({
               type="button"
               onClick={onBack}
               disabled={retrying}
-              className="cursor-pointer text-xs text-zinc-400 underline-offset-2 transition hover:text-zinc-700 hover:underline disabled:opacity-50 dark:text-zinc-500 dark:hover:text-zinc-300"
-            >
-              {isFailed ? t("progress.backToProjects") : t("progress.cancelAndGoBack")}
+              className="cursor-pointer text-xs text-zinc-400 underline-offset-2 transition hover:text-zinc-700 hover:underline disabled:opacity-50 dark:text-zinc-500 dark:hover:text-zinc-300">
+              {isFailed
+                ? t("progress.backToProjects")
+                : t("progress.cancelAndGoBack")}
             </button>
           </div>
         )}

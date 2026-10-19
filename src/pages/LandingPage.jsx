@@ -60,51 +60,51 @@ const BuildMock = () => {
   const total = MOCK_FILES.length;
 
   return (
-    <div className="relative mx-auto mt-16 w-full max-w-xl">
+    <div className="relative mx-auto mt-10 md:mt-16 w-full max-w-xl">
       <div
         aria-hidden
-        className="pointer-events-none absolute -inset-6 rounded-4xl bg-linear-to-b from-red-500/[0.07] to-transparent blur-2xl dark:from-red-500/15"
+        className="pointer-events-none absolute -inset-4 md:-inset-6 rounded-4xl bg-linear-to-b from-red-500/[0.07] to-transparent blur-2xl dark:from-red-500/15"
       />
 
-      <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-xl shadow-zinc-200/40 dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-none">
-        <div className="flex items-center gap-2 border-b border-zinc-200 bg-zinc-50 px-4 py-2.5 dark:border-zinc-800 dark:bg-zinc-950">
+      <div className="relative overflow-hidden rounded-xl md:rounded-2xl border border-zinc-200 bg-white shadow-xl shadow-zinc-200/40 dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-none">
+        <div className="flex items-center gap-2 border-b border-zinc-200 bg-zinc-50 px-3 md:px-4 py-2 md:py-2.5 dark:border-zinc-800 dark:bg-zinc-950">
           <div className="flex gap-1.5">
-            <span className="size-2.5 rounded-full bg-red-400" />
-            <span className="size-2.5 rounded-full bg-amber-400" />
-            <span className="size-2.5 rounded-full bg-emerald-400" />
+            <span className="size-2 md:size-2.5 rounded-full bg-red-400" />
+            <span className="size-2 md:size-2.5 rounded-full bg-amber-400" />
+            <span className="size-2 md:size-2.5 rounded-full bg-emerald-400" />
           </div>
-          <div className="ml-3 flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-2 py-0.5 dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="ml-2 md:ml-3 flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-2 py-0.5 dark:border-zinc-800 dark:bg-zinc-900">
             <span className="size-1.5 rounded-full bg-emerald-500" />
-            <span className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+            <span className="text-[9px] md:text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
               renscraft.my.id/builder
             </span>
           </div>
         </div>
 
-        <div className="p-5 md:p-6">
-          <p className="rounded-xl bg-zinc-50 px-4 py-3 text-sm text-zinc-600 dark:bg-zinc-800/60 dark:text-zinc-300">
+        <div className="p-4 md:p-6">
+          <p className="rounded-lg md:rounded-xl bg-zinc-50 px-3 md:px-4 py-2 md:py-3 text-xs md:text-sm text-zinc-600 dark:bg-zinc-800/60 dark:text-zinc-300">
             {t("landing.mockPrompt")}
           </p>
 
-          <div className="mt-5 flex items-center justify-between text-xs text-zinc-400 dark:text-zinc-500">
+          <div className="mt-4 md:mt-5 flex items-center justify-between text-[10px] md:text-xs text-zinc-400 dark:text-zinc-500">
             <span className="flex items-center gap-1.5">
               <Loader2Icon
-                size={11}
-                className="animate-spin motion-reduce:animate-none text-zinc-500 dark:text-zinc-400"
+                size={10}
+                className="animate-spin motion-reduce:animate-none text-zinc-500 dark:text-zinc-400 md:size-2.75"
               />
               {t("landing.mockWriting")}
             </span>
             <span>{t("landing.mockFilesCount", { done, total })}</span>
           </div>
-          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+          <div className="mt-2 h-1 md:h-1.5 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
             <div className="h-full w-2/5 rounded-full bg-zinc-800 dark:bg-zinc-200" />
           </div>
 
-          <ul className="mt-4 space-y-2">
+          <ul className="mt-3 md:mt-4 space-y-1.5 md:space-y-2">
             {MOCK_FILES.map((f) => (
               <li
                 key={f.path}
-                className={`flex items-center gap-3 rounded-lg border px-3 py-2 text-xs font-medium ${
+                className={`flex items-center gap-2 md:gap-3 rounded-lg border px-2 md:px-3 py-1.5 md:py-2 text-[10px] md:text-xs font-medium ${
                   f.state === "active"
                     ? "border-zinc-300 bg-zinc-50 text-zinc-900 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50"
                     : f.state === "done"
@@ -113,20 +113,20 @@ const BuildMock = () => {
                 }`}>
                 {f.state === "done" && (
                   <CheckCircle2Icon
-                    size={15}
-                    className="shrink-0 text-emerald-500"
+                    size={12}
+                    className="shrink-0 text-emerald-500 md:size-3.75"
                   />
                 )}
                 {f.state === "active" && (
                   <Loader2Icon
-                    size={15}
-                    className="shrink-0 animate-spin motion-reduce:animate-none text-zinc-900 dark:text-zinc-50"
+                    size={12}
+                    className="shrink-0 animate-spin motion-reduce:animate-none text-zinc-900 dark:text-zinc-50 md:size-3.75"
                   />
                 )}
                 {f.state === "todo" && (
                   <CircleIcon
-                    size={15}
-                    className="shrink-0 text-zinc-300 dark:text-zinc-700"
+                    size={12}
+                    className="shrink-0 text-zinc-300 dark:text-zinc-700 md:size-3.75"
                   />
                 )}
                 {f.path}
@@ -150,65 +150,71 @@ const ReferenceMock = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="relative mx-auto mt-14 w-full max-w-2xl">
+    <div className="relative mx-auto mt-10 md:mt-14 w-full max-w-2xl">
       <div
         aria-hidden
-        className="pointer-events-none absolute -inset-6 rounded-4xl bg-linear-to-b from-sky-500/[0.07] to-transparent blur-2xl dark:from-sky-500/15"
+        className="pointer-events-none absolute -inset-4 md:-inset-6 rounded-4xl bg-linear-to-b from-sky-500/[0.07] to-transparent blur-2xl dark:from-sky-500/15"
       />
 
-      <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-xl shadow-zinc-200/40 dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-none">
-        <div className="flex items-center gap-3 border-b border-zinc-200 bg-zinc-50 px-4 py-3.5 md:px-5 dark:border-zinc-800 dark:bg-zinc-950">
-          <div className="flex size-7 shrink-0 items-center justify-center rounded-md bg-white ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800">
-            <Link2Icon size={13} className="text-zinc-500 dark:text-zinc-400" />
+      <div className="relative overflow-hidden rounded-xl md:rounded-2xl border border-zinc-200 bg-white shadow-xl shadow-zinc-200/40 dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-none">
+        <div className="flex items-center gap-2 md:gap-3 border-b border-zinc-200 bg-zinc-50 px-3 md:px-5 py-2.5 md:py-3.5 dark:border-zinc-800 dark:bg-zinc-950">
+          <div className="hidden sm:flex size-6 md:size-7 shrink-0 items-center justify-center rounded-md bg-white ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800">
+            <Link2Icon
+              size={12}
+              className="text-zinc-500 dark:text-zinc-400 md:size-3.25"
+            />
           </div>
-          <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 dark:border-zinc-800 dark:bg-zinc-900">
-            <span className="truncate font-mono text-xs text-zinc-700 dark:text-zinc-300">
+          <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-zinc-200 bg-white px-2 md:px-3 py-1 md:py-1.5 dark:border-zinc-800 dark:bg-zinc-900">
+            <span className="truncate font-mono text-[10px] md:text-xs text-zinc-700 dark:text-zinc-300">
               https://my-portfolio.vercel.app
             </span>
-            <span className="relative ml-auto flex size-2 shrink-0">
+            <span className="relative ml-auto flex size-1.5 md:size-2 shrink-0">
               <span className="absolute inset-0 animate-ping rounded-full bg-sky-400 opacity-75" />
-              <span className="relative inline-flex size-2 rounded-full bg-sky-500" />
+              <span className="relative inline-flex size-1.5 md:size-2 rounded-full bg-sky-500" />
             </span>
           </div>
           <button
             type="button"
-            className="shrink-0 rounded-lg bg-zinc-950 px-3 py-1.5 text-[11px] font-medium text-white dark:bg-zinc-50 dark:text-zinc-950">
+            className="shrink-0 rounded-lg bg-zinc-950 px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-[11px] font-medium text-white dark:bg-zinc-50 dark:text-zinc-950">
             {t("landing.referenceAnalyze")}
           </button>
         </div>
 
-        <div className="p-5 md:p-6">
-          <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-            <Loader2Icon size={11} className="animate-spin text-sky-500" />
+        <div className="p-4 md:p-6">
+          <div className="flex items-center gap-2 text-[10px] md:text-xs text-zinc-500 dark:text-zinc-400">
+            <Loader2Icon
+              size={10}
+              className="animate-spin text-sky-500 md:size-2.75"
+            />
             <span>{t("landing.referenceReading")}</span>
           </div>
 
-          <div className="mt-3 h-1 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+          <div className="mt-2 md:mt-3 h-1 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
             <div className="h-full w-3/4 rounded-full bg-linear-to-r from-sky-400 to-sky-600" />
           </div>
 
-          <div className="mt-6 grid grid-cols-2 gap-3">
+          <div className="mt-4 md:mt-6 grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3">
             {REFERENCE_ITEM_KEYS.map(({ key, icon: Icon }) => (
               <div
                 key={key}
-                className="rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-950/60">
+                className="rounded-lg md:rounded-xl border border-zinc-200 bg-white p-2.5 md:p-3 dark:border-zinc-800 dark:bg-zinc-950/60">
                 <div className="flex items-center gap-2">
                   <Icon
-                    size={13}
-                    className="text-zinc-500 dark:text-zinc-400"
+                    size={12}
+                    className="text-zinc-500 dark:text-zinc-400 md:size-3.25"
                   />
-                  <span className="text-xs font-medium text-zinc-900 dark:text-zinc-50">
+                  <span className="text-[11px] md:text-xs font-medium text-zinc-900 dark:text-zinc-50">
                     {t(`landing.referenceItems.${key}.title`)}
                   </span>
                 </div>
-                <p className="mt-1 text-[11px] leading-relaxed text-zinc-500 dark:text-zinc-400">
+                <p className="mt-1 text-[10px] md:text-[11px] leading-relaxed text-zinc-500 dark:text-zinc-400">
                   {t(`landing.referenceItems.${key}.desc`)}
                 </p>
               </div>
             ))}
           </div>
 
-          <p className="mt-5 text-[11px] text-zinc-400 dark:text-zinc-500">
+          <p className="mt-4 md:mt-5 text-[10px] md:text-[11px] text-zinc-400 dark:text-zinc-500">
             {t("landing.referenceFootnote")}
           </p>
         </div>
@@ -237,14 +243,14 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
+    <div className="min-h-dvh bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
       <SiteNav />
 
       {/* Hero */}
-      <section className="relative mx-auto max-w-4xl px-6 pb-20 pt-20 text-center md:pb-28 md:pt-32">
+      <section className="relative mx-auto max-w-4xl px-4 md:px-6 pb-16 md:pb-28 pt-16 md:pt-32 text-center">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-180 overflow-hidden">
+          className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-150 md:h-180 overflow-hidden">
           <div
             className="absolute inset-0 dark:hidden"
             style={GRID_STYLE_LIGHT}
@@ -256,28 +262,28 @@ const LandingPage = () => {
           <div className="absolute -top-40 left-1/2 -translate-x-1/2 size-130 rounded-full bg-red-500/8 blur-[140px] dark:bg-red-500/20" />
         </div>
 
-        <h1 className="text-5xl font-semibold leading-[1.05] tracking-tight md:text-7xl">
+        <h1 className="text-3xl sm:text-5xl md:text-7xl font-semibold leading-[1.1] md:leading-[1.05] tracking-tight">
           {t("landing.heroTitle1")}
           <br />
           {t("landing.heroTitle2")}
         </h1>
-        <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-zinc-600 md:text-lg dark:text-zinc-400">
+        <p className="mx-auto mt-4 md:mt-6 max-w-xl text-sm md:text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
           {t("landing.heroSub")}
         </p>
-        <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <div className="mt-8 md:mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
           <button
             type="button"
             onClick={handleStart}
-            className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-medium text-white transition hover:bg-zinc-800 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 dark:focus-visible:outline-zinc-50">
+            className="inline-flex w-full sm:w-auto cursor-pointer justify-center items-center gap-2 rounded-xl bg-zinc-950 px-6 py-3 text-sm font-medium text-white transition hover:bg-zinc-800 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 dark:focus-visible:outline-zinc-50">
             {t("landing.ctaBuild")} <ArrowRightIcon size={16} />
           </button>
           <Link
             to="/pricing"
-            className="rounded-xl border border-zinc-200 px-6 py-3 text-sm font-medium text-zinc-700 hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-900">
+            className="inline-flex w-full sm:w-auto justify-center rounded-xl border border-zinc-200 px-6 py-3 text-sm font-medium text-zinc-700 hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-900">
             {t("landing.ctaPricing")}
           </Link>
         </div>
-        <p className="mt-4 text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="mt-4 text-xs md:text-sm text-zinc-500 dark:text-zinc-400">
           {t("landing.freeCreditsNote")}
         </p>
 
@@ -285,26 +291,26 @@ const LandingPage = () => {
       </section>
 
       {/* Steps */}
-      <section className="mx-auto max-w-3xl px-6 pb-24 md:pb-32">
-        <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
+      <section className="mx-auto max-w-3xl px-4 md:px-6 pb-16 md:pb-32">
+        <h2 className="text-2xl md:text-4xl font-semibold tracking-tight">
           {t("landing.stepsTitle")}
         </h2>
-        <ol className="mt-10 divide-y divide-zinc-200 border-y border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
+        <ol className="mt-6 md:mt-10 divide-y divide-zinc-200 border-y border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
           {STEP_KEYS.map((s, i) => {
             const Icon = s.icon;
             return (
-              <li key={s.key} className="flex gap-5 py-6">
-                <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200">
-                  <Icon size={15} />
+              <li key={s.key} className="flex gap-3 md:gap-5 py-4 md:py-6">
+                <div className="flex size-8 md:size-9 shrink-0 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200">
+                  <Icon size={14} className="md:size-3.75" />
                 </div>
-                <div className="pt-1">
-                  <h3 className="text-lg font-medium">
-                    <span className="mr-2 text-xs font-semibold text-zinc-400 dark:text-zinc-500">
+                <div className="pt-0.5 md:pt-1">
+                  <h3 className="text-base md:text-lg font-medium">
+                    <span className="mr-1.5 md:mr-2 text-[10px] md:text-xs font-semibold text-zinc-400 dark:text-zinc-500">
                       0{i + 1}
                     </span>
                     {t(`landing.steps.${s.key}.title`)}
                   </h3>
-                  <p className="mt-1 max-w-prose text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                  <p className="mt-1 max-w-prose text-xs md:text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
                     {t(`landing.steps.${s.key}.text`)}
                   </p>
                 </div>
@@ -315,17 +321,17 @@ const LandingPage = () => {
       </section>
 
       {/* Reference */}
-      <section className="relative mx-auto max-w-4xl px-6 pb-24 md:pb-32">
+      <section className="relative mx-auto max-w-4xl px-4 md:px-6 pb-16 md:pb-32">
         <div className="text-center">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">
+          <p className="mb-2 md:mb-3 text-[10px] md:text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">
             {t("landing.referenceLabel")}
           </p>
-          <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
+          <h2 className="text-2xl md:text-4xl font-semibold tracking-tight">
             {t("landing.referenceTitle1")}
             <br />
             {t("landing.referenceTitle2")}
           </h2>
-          <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400">
+          <p className="mx-auto mt-4 md:mt-5 max-w-xl text-sm md:text-base leading-relaxed text-zinc-600 dark:text-zinc-400">
             {t("landing.referenceSub")}
           </p>
         </div>
@@ -336,58 +342,58 @@ const LandingPage = () => {
       <DisplayProjects />
 
       {/* Final CTA */}
-      <section className="mx-auto max-w-6xl px-6 pb-24">
+      <section className="mx-auto max-w-6xl px-4 md:px-6 pb-16 md:pb-24">
         <div className="grid gap-4 md:grid-cols-2">
-          <div className="relative overflow-hidden rounded-3xl bg-zinc-950 px-6 py-12 text-white md:px-10 md:py-16 dark:bg-zinc-900 dark:ring-1 dark:ring-zinc-800">
+          <div className="relative overflow-hidden rounded-2xl md:rounded-3xl bg-zinc-950 px-5 md:px-10 py-10 md:py-16 text-white dark:bg-zinc-900 dark:ring-1 dark:ring-zinc-800">
             <div
               aria-hidden
               className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 size-100 rounded-full bg-red-500/20 blur-[120px]"
             />
             <div className="relative">
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-400">
+              <p className="mb-2 md:mb-3 text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-400">
                 {t("landing.ctaDiyLabel")}
               </p>
-              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
+              <h2 className="text-xl md:text-3xl font-semibold tracking-tight">
                 {t("landing.ctaDiyTitle")}
               </h2>
-              <p className="mt-3 max-w-sm text-sm leading-relaxed text-zinc-400">
+              <p className="mt-2 md:mt-3 max-w-sm text-xs md:text-sm leading-relaxed text-zinc-400">
                 {t("landing.ctaDiyText")}
               </p>
               <button
                 type="button"
                 onClick={handleStart}
-                className="mt-7 inline-flex cursor-pointer items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-medium text-zinc-950 transition hover:bg-zinc-200 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                className="mt-5 md:mt-7 inline-flex w-full sm:w-auto justify-center cursor-pointer items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-xs md:text-sm font-medium text-zinc-950 transition hover:bg-zinc-200 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
                 {t("landing.ctaDiyButton")} <ArrowRightIcon size={15} />
               </button>
-              <p className="mt-4 text-xs text-zinc-500">
+              <p className="mt-3 md:mt-4 text-[10px] md:text-xs text-zinc-500">
                 {t("landing.ctaDiyNote")}
               </p>
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-3xl border border-zinc-200 bg-linear-to-br from-zinc-50 to-white px-6 py-12 md:px-10 md:py-16 dark:border-zinc-800 dark:from-zinc-900 dark:to-zinc-950">
+          <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border border-zinc-200 bg-linear-to-br from-zinc-50 to-white px-5 md:px-10 py-10 md:py-16 dark:border-zinc-800 dark:from-zinc-900 dark:to-zinc-950">
             <div
               aria-hidden
               className="pointer-events-none absolute -bottom-40 right-0 size-100 rounded-full bg-sky-500/[0.07] blur-[120px] dark:bg-sky-500/10"
             />
             <div className="relative">
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-sky-600 dark:text-sky-400">
+              <p className="mb-2 md:mb-3 text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.2em] text-sky-600 dark:text-sky-400">
                 {t("landing.ctaCustomLabel")}
               </p>
-              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
+              <h2 className="text-xl md:text-3xl font-semibold tracking-tight">
                 {t("landing.ctaCustomTitle")}
               </h2>
-              <p className="mt-3 max-w-sm text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+              <p className="mt-2 md:mt-3 max-w-sm text-xs md:text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
                 {t("landing.ctaCustomText")}
               </p>
               <a
                 href="https://rensdev.my.id/contact"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-7 inline-flex cursor-pointer items-center gap-2 rounded-xl bg-zinc-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 dark:focus-visible:outline-zinc-50">
+                className="mt-5 md:mt-7 inline-flex w-full sm:w-auto justify-center cursor-pointer items-center gap-2 rounded-xl bg-zinc-950 px-5 py-2.5 text-xs md:text-sm font-medium text-white transition hover:bg-zinc-800 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200 dark:focus-visible:outline-zinc-50">
                 {t("landing.ctaCustomButton")} <ArrowRightIcon size={15} />
               </a>
-              <p className="mt-4 text-xs text-zinc-500 dark:text-zinc-400">
+              <p className="mt-3 md:mt-4 text-[10px] md:text-xs text-zinc-500 dark:text-zinc-400">
                 {t("landing.ctaCustomNote")}
               </p>
             </div>
@@ -396,8 +402,8 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-200 bg-white pt-16 pb-8 dark:border-zinc-800 dark:bg-zinc-950">
-        <div className="mx-auto max-w-6xl px-6">
+      <footer className="border-t border-zinc-200 bg-white pt-12 md:pt-16 pb-8 dark:border-zinc-800 dark:bg-zinc-950">
+        <div className="mx-auto max-w-6xl px-4 md:px-6">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div className="lg:col-span-2">
               <Link to="/" className="flex items-center gap-2">
@@ -410,16 +416,16 @@ const LandingPage = () => {
                   Renscraft
                 </span>
               </Link>
-              <p className="mt-4 max-w-xs text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+              <p className="mt-3 md:mt-4 max-w-xs text-xs md:text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
                 {t("landing.footerTagline")}
               </p>
             </div>
 
             <div>
-              <h3 className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">
+              <h3 className="text-xs md:text-sm font-semibold text-zinc-950 dark:text-zinc-50">
                 {t("landing.footerConnect")}
               </h3>
-              <ul className="mt-4 space-y-3 text-sm text-zinc-500 dark:text-zinc-400">
+              <ul className="mt-3 md:mt-4 space-y-2 md:space-y-3 text-xs md:text-sm text-zinc-500 dark:text-zinc-400">
                 <li>
                   <a
                     href="https://rensdev.my.id"
@@ -460,10 +466,10 @@ const LandingPage = () => {
             </div>
 
             <div>
-              <h3 className="text-sm font-semibold text-zinc-950 dark:text-zinc-50">
+              <h3 className="text-xs md:text-sm font-semibold text-zinc-950 dark:text-zinc-50">
                 {t("landing.footerLegal")}
               </h3>
-              <ul className="mt-4 space-y-3 text-sm text-zinc-500 dark:text-zinc-400">
+              <ul className="mt-3 md:mt-4 space-y-2 md:space-y-3 text-xs md:text-sm text-zinc-500 dark:text-zinc-400">
                 <li>
                   <Link
                     to="/terms"
@@ -496,11 +502,11 @@ const LandingPage = () => {
             </div>
           </div>
 
-          <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-zinc-200 pt-8 sm:flex-row dark:border-zinc-800">
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+          <div className="mt-12 md:mt-16 flex flex-col items-center justify-between gap-4 border-t border-zinc-200 pt-6 md:pt-8 sm:flex-row dark:border-zinc-800">
+            <p className="text-[10px] md:text-xs text-zinc-500 dark:text-zinc-400 text-center sm:text-left">
               {t("landing.footerCopyright", { year: new Date().getFullYear() })}
             </p>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
+            <p className="text-[10px] md:text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
               {t("landing.footerBuiltBy")}
               <a
                 href="https://rensdev.my.id"

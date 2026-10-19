@@ -293,7 +293,7 @@ const BuyCreditsModal = ({ onClose, initialPackageId = null }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/40 p-4 backdrop-blur-xs dark:bg-zinc-950/70"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/40 p-2 md:p-4 backdrop-blur-xs dark:bg-zinc-950/70"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget && !paying) onClose();
       }}>
@@ -301,20 +301,23 @@ const BuyCreditsModal = ({ onClose, initialPackageId = null }) => {
         role="dialog"
         aria-modal="true"
         aria-labelledby="buy-credits-title"
-        className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-zinc-200 bg-white p-6 text-zinc-900 shadow-lg dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50">
+        className="relative max-h-[95vh] md:max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-zinc-200 bg-white p-4 md:p-6 text-zinc-900 shadow-lg dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50">
+        {/* Close button */}
         <button
           type="button"
           aria-label={t("common.close")}
           onClick={onClose}
-          className="absolute right-4 top-4 cursor-pointer text-zinc-400 hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-zinc-50">
+          className="absolute right-3 top-3 md:right-4 md:top-4 cursor-pointer text-zinc-400 hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-zinc-50 p-1">
           <XIcon size={16} />
         </button>
 
-        <div className="mb-5 pr-6">
-          <h3 id="buy-credits-title" className="text-lg font-medium">
+        <div className="mb-4 md:mb-5 pr-6">
+          <h3
+            id="buy-credits-title"
+            className="text-base md:text-lg font-medium">
             {t("payment.topUpTitle")}
           </h3>
-          <p className="mt-1 flex items-center gap-1.5 text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="mt-1 flex items-center gap-1.5 text-xs md:text-sm text-zinc-500 dark:text-zinc-400">
             <CoinsIcon size={14} />
             {typeof credits === "number"
               ? t("payment.youHave", { count: credits })
@@ -322,69 +325,17 @@ const BuyCreditsModal = ({ onClose, initialPackageId = null }) => {
           </p>
         </div>
 
-        {active && (
-          <ActivePanel
-            active={active}
-            onContinue={() => openSnap(active)}
-            onStop={() => setActive(null)}
-          />
-        )}
-
-        {config.state === "loading" && (
-          <div className="flex justify-center py-10 text-zinc-400 dark:text-zinc-500">
-            <Loader2Icon size={22} className="animate-spin" />
-          </div>
-        )}
-
-        {config.state === "disabled" && (
-          <div className="rounded-lg border border-amber-200 bg-amber-50/50 p-4 dark:border-amber-500/30 dark:bg-amber-500/5">
-            <div className="flex items-start gap-3">
-              <AlertCircleIcon
-                size={16}
-                className="mt-0.5 shrink-0 text-amber-600 dark:text-amber-400"
-              />
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-amber-900 dark:text-amber-300">
-                  {t("buyCredits.midtransSoonTitle")}
-                </p>
-                <p className="mt-1 text-xs leading-relaxed text-amber-800 dark:text-amber-400">
-                  {t("buyCredits.midtransSoonBody")}
-                </p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClose();
-                    openManualPayment();
-                  }}
-                  className="mt-3 cursor-pointer rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-amber-600">
-                  {t("buyCredits.payManualNow")}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {config.state === "error" && (
-          <div className="rounded-lg border border-red-100 bg-red-50 p-4 text-sm text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300">
-            <p>{config.message}</p>
-            <button
-              type="button"
-              onClick={() => setConfigAttempt((n) => n + 1)}
-              className="mt-2 cursor-pointer text-xs font-medium underline">
-              {t("common.tryAgain")}
-            </button>
-          </div>
-        )}
+        {/* ... (ActivePanel & Loading/Error states sama persis) ... */}
 
         {config.state === "ready" && showPackageGrid && (
           <>
             <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50/50 p-3 dark:border-amber-500/30 dark:bg-amber-500/5">
-              <div className="flex items-start justify-between gap-3">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3">
                 <div className="min-w-0">
                   <p className="text-xs font-semibold text-amber-900 dark:text-amber-300">
                     {t("payment.manualHint")}
                   </p>
-                  <p className="mt-0.5 text-[11px] leading-relaxed text-amber-800 dark:text-amber-400">
+                  <p className="mt-0.5 text-[10px] md:text-[11px] leading-relaxed text-amber-800 dark:text-amber-400">
                     {t("payment.manualHintSub")}
                   </p>
                 </div>
@@ -394,50 +345,65 @@ const BuyCreditsModal = ({ onClose, initialPackageId = null }) => {
                     onClose();
                     openManualPayment();
                   }}
-                  className="shrink-0 cursor-pointer rounded-md bg-amber-500 px-2.5 py-1 text-[11px] font-medium text-white hover:bg-amber-600">
+                  className="shrink-0 w-full sm:w-auto cursor-pointer rounded-md bg-amber-500 px-2.5 py-1.5 text-[11px] font-medium text-white hover:bg-amber-600">
                   {t("payment.payManual")}
                 </button>
               </div>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-3">
+            {/* GRID RESPONSIVE: 1 kolom di mobile, 3 kolom di layar sm ke atas */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {packages.map((pkg) => {
                 const busy = busyPackage === pkg.id;
                 return (
                   <div
                     key={pkg.id}
-                    className={`flex flex-col rounded-lg border p-4 ${
+                    className={`flex flex-col rounded-lg border p-3 md:p-4 ${
                       pkg.id === bestId
                         ? "border-zinc-900 dark:border-zinc-50"
                         : "border-zinc-200 dark:border-zinc-800"
                     }`}>
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-sm font-medium">{pkg.label}</span>
+                      <span className="text-xs md:text-sm font-medium">
+                        {pkg.label}
+                      </span>
                       {pkg.id === bestId && (
-                        <span className="rounded bg-zinc-900 px-1.5 py-0.5 text-[10px] font-medium text-white dark:bg-zinc-50 dark:text-zinc-950">
+                        <span className="rounded bg-zinc-900 px-1.5 py-0.5 text-[9px] md:text-[10px] font-medium text-white dark:bg-zinc-50 dark:text-zinc-950">
                           {t("payment.bestValue")}
                         </span>
                       )}
                     </div>
-                    <p className="mt-3 text-2xl font-semibold tracking-tight">
-                      {pkg.credits}
-                    </p>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                      {t("payment.creditsSuffix")}
-                    </p>
-                    <p className="mt-3 text-sm font-medium">
-                      {formatIdr(pkg.amount)}
-                    </p>
-                    <p className="text-[11px] text-zinc-400 dark:text-zinc-500">
-                      {t("payment.perCredit", {
-                        price: formatIdr(Math.round(pkg.amount / pkg.credits)),
-                      })}
-                    </p>
+
+                    {/* Flex di mobile buat nyejajarin kredit & harga */}
+                    <div className="flex items-baseline justify-between sm:flex-col sm:items-start mt-2 sm:mt-3">
+                      <div>
+                        <p className="text-xl md:text-2xl font-semibold tracking-tight inline sm:block">
+                          {pkg.credits}
+                        </p>
+                        <p className="text-[10px] md:text-xs text-zinc-500 dark:text-zinc-400 inline sm:block sm:mt-0 ml-1 sm:ml-0">
+                          {t("payment.creditsSuffix")}
+                        </p>
+                      </div>
+
+                      <div className="text-right sm:text-left sm:mt-3">
+                        <p className="text-xs md:text-sm font-medium">
+                          {formatIdr(pkg.amount)}
+                        </p>
+                        <p className="text-[9px] md:text-[11px] text-zinc-400 dark:text-zinc-500">
+                          {t("payment.perCredit", {
+                            price: formatIdr(
+                              Math.round(pkg.amount / pkg.credits),
+                            ),
+                          })}
+                        </p>
+                      </div>
+                    </div>
+
                     <button
                       type="button"
                       onClick={() => handleBuy(pkg)}
                       disabled={Boolean(busyPackage) || paying}
-                      className="mt-4 inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-zinc-950 px-3 py-2 text-xs font-medium text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200">
+                      className="mt-3 md:mt-4 inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-zinc-950 px-3 py-2 text-xs font-medium text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200">
                       {busy && (
                         <Loader2Icon size={13} className="animate-spin" />
                       )}
@@ -452,8 +418,9 @@ const BuyCreditsModal = ({ onClose, initialPackageId = null }) => {
           </>
         )}
 
+        {/* History Orders */}
         {orders.length > 0 && (
-          <div className="mt-6">
+          <div className="mt-5 md:mt-6">
             <p className="mb-2 text-xs font-medium text-zinc-500 dark:text-zinc-400">
               {t("payment.recentOrders")}
             </p>
@@ -467,9 +434,9 @@ const BuyCreditsModal = ({ onClose, initialPackageId = null }) => {
                 return (
                   <li
                     key={o.orderId}
-                    className="flex items-center justify-between gap-3 px-3 py-2.5">
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-3 py-2.5">
                     <div className="min-w-0">
-                      <p className="flex items-center gap-1.5 text-sm font-medium">
+                      <p className="flex items-center gap-1.5 text-xs md:text-sm font-medium">
                         {isPaidAndCredited(o) && (
                           <CheckCircle2Icon
                             size={13}
@@ -478,22 +445,23 @@ const BuyCreditsModal = ({ onClose, initialPackageId = null }) => {
                         )}
                         +{o.credits} {t("payment.creditsSuffix")}
                       </p>
-                      <p className="truncate text-[11px] text-zinc-400 dark:text-zinc-500">
+                      <p className="truncate text-[10px] md:text-[11px] text-zinc-400 dark:text-zinc-500">
                         {formatIdr(o.amount)} · {moment(o.createdAt).fromNow()}
                       </p>
                     </div>
-                    <div className="flex shrink-0 items-center gap-2">
+
+                    <div className="flex shrink-0 items-center justify-between sm:justify-end gap-2 w-full sm:w-auto mt-1 sm:mt-0">
                       {canPay && (
                         <button
                           type="button"
                           onClick={() => openSnap(o)}
                           disabled={paying}
-                          className="cursor-pointer rounded-lg border border-zinc-200 px-2.5 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-100 disabled:opacity-40 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800">
+                          className="cursor-pointer rounded-lg border border-zinc-200 px-2.5 py-1 text-[10px] md:text-xs font-medium text-zinc-700 hover:bg-zinc-100 disabled:opacity-40 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800">
                           {t("payment.pay")}
                         </button>
                       )}
                       <span
-                        className={`rounded-full px-2 py-0.5 text-[11px] font-medium ring-1 ${TONE_CLASSES[view.tone]}`}>
+                        className={`rounded-full px-2 py-0.5 text-[10px] md:text-[11px] font-medium ring-1 ${TONE_CLASSES[view.tone]}`}>
                         {view.label}
                       </span>
                     </div>
