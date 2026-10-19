@@ -24,6 +24,7 @@ import {
 import { errorMessage } from "../../api/api";
 import usePageMeta from "../../utils/usePageMeta";
 import { useAdminNotifications } from "../../hooks/useAdminNotifications";
+import { BellIcon } from "lucide-react";
 
 const fmtIdr = (n) =>
   new Intl.NumberFormat("id-ID", {
@@ -999,13 +1000,31 @@ const AdminDashboardPage = () => {
               restricted
             </span>
           </div>
-          <button
-            type="button"
-            onClick={logout}
-            className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-800">
-            <LogOutIcon size={12} />
-            Sign out
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={async () => {
+                if (!("Notification" in window))
+                  return toast.error("Browser tidak mendukung notifikasi");
+                const permission = await Notification.requestPermission();
+                if (permission === "granted") {
+                  toast.success("Notifikasi berhasil diaktifkan!");
+                } else {
+                  toast.error("Izin notifikasi ditolak.");
+                }
+              }}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-800">
+              <BellIcon size={12} />
+              Aktifkan Notif
+            </button>
+            <button
+              type="button"
+              onClick={logout}
+              className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-800">
+              <LogOutIcon size={12} />
+              Sign out
+            </button>
+          </div>
         </div>
       </header>
 
