@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Homepage / Landing -->
+  <url>
+    <loc>https://ai.rensdev.my.id/</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://ai.rensdev.my.id/og-image.png</image:loc>
+      <image:title>Renscraft — AI Website Builder</image:title>
+      <image:caption>Describe your website, watch it get built, revise it by chat, then publish or export.</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Pricing (transaksional) -->
+  <url>
+    <loc>https://ai.rensdev.my.id/pricing</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Contact -->
+  <url>
+    <loc>https://ai.rensdev.my.id/contact</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Legal -->
+  <url>
+    <loc>https://ai.rensdev.my.id/terms</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://ai.rensdev.my.id/privacy</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://ai.rensdev.my.id/refund</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <!--
+    /publish/:name itu dynamic — generate via endpoint /sitemap.xml di server.
+    Lihat section "Notes" di bawah.
+  -->
+</urlset>

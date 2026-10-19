@@ -1,0 +1,48 @@
+# robots.txt for Renscraft (ai.rensdev.my.id)
+# Part of the Rensdev network — https://rensdev.my.id
+
+User-agent: *
+Allow: /
+Allow: /publish/
+Allow: /pricing
+Allow: /terms
+Allow: /privacy
+Allow: /refund
+Allow: /contact
+
+# App / auth / private areas
+Disallow: /api/
+Disallow: /chat
+Disallow: /chat/
+Disallow: /preview/
+Disallow: /my-projects
+Disallow: /profile
+Disallow: /login
+Disallow: /register
+Disallow: /auth/
+Disallow: /admin
+Disallow: /admin/
+
+# Don't crawl JSON endpoints
+Disallow: /*.json$
+
+# AI crawlers — opt out of training (hapus blok ini kalau mau di-train)
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+Sitemap: https://ai.rensdev.my.id/sitemap.xml

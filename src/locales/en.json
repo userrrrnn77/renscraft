@@ -1,0 +1,681 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "close": "Close",
+    "delete": "Delete",
+    "save": "Save",
+    "saving": "Saving...",
+    "loading": "Loading...",
+    "tryAgain": "Try again",
+    "back": "Back",
+    "next": "Next",
+    "skip": "Skip",
+    "copy": "Copy",
+    "or": "or"
+  },
+
+  "errors": {
+    "AUTH_INVALID_CREDENTIALS": "Invalid email or password",
+    "AUTH_EMAIL_EXISTS": "An account with this email already exists",
+    "AUTH_NOT_AUTHENTICATED": "You are not signed in",
+    "AUTH_SESSION_EXPIRED": "Session expired or invalid, please sign in again",
+    "AUTH_USER_NOT_FOUND": "User not found",
+    "AUTH_SUPABASE_NOT_CONFIGURED": "Supabase authentication is not configured",
+    "AUTH_SUPABASE_INVALID_TOKEN": "Supabase session is invalid or expired",
+    "AUTH_SUPABASE_OAUTH_ONLY": "Only Google and GitHub OAuth accounts are supported",
+    "AUTH_SUPABASE_NO_EMAIL": "Supabase did not provide a usable email for this account",
+    "AUTH_EMAIL_ACCOUNT_EXISTS": "An account already uses this email. Sign in to that account first.",
+
+    "ADMIN_NOT_CONFIGURED": "Admin auth is not configured",
+    "ADMIN_INVALID_CREDENTIALS": "Invalid credentials",
+    "ADMIN_TOO_MANY_ATTEMPTS": "Too many login attempts. Try again in 15 minutes.",
+    "ADMIN_REQUIRED": "Admin access required",
+    "ADMIN_SESSION_EXPIRED": "Admin session expired or invalid",
+    "ADMIN_INVALID_USER_ID": "Invalid user id",
+    "ADMIN_INVALID_AMOUNT": "Amount must be an integer between -10000 and 10000",
+    "ADMIN_USER_NOT_FOUND": "User not found",
+    "ADMIN_ORDER_ID_REQUIRED": "orderId required",
+    "ADMIN_ORDER_NOT_FOUND": "Order not found",
+    "ADMIN_ORDER_NOT_PENDING": "Order is not awaiting approval",
+    "ADMIN_ORDER_NOT_REVIEW": "Order is not awaiting review",
+    "ADMIN_USER_MISSING": "User no longer exists",
+    "ADMIN_APPROVE_FAILED": "Approve failed",
+    "ADMIN_REASON_REQUIRED": "Reason is required",
+
+    "INSUFFICIENT_CREDITS": "Not enough credits: this needs {{required}}, you have {{credits}}",
+    "ACCOUNT_NOT_FOUND": "Account not found, please sign in again.",
+
+    "PROJECT_NOT_FOUND": "Project not found",
+    "PROJECT_PROMPT_REQUIRED": "Prompt is required",
+    "PROJECT_PROMPT_TOO_LONG": "Prompt is too long (max {{max}} characters)",
+    "PROJECT_TOO_MANY_ACTIVE": "You already have websites being generated. Wait until they finish.",
+    "PROJECT_BUSY": "The project is still being generated or revised. Try again when it finishes.",
+    "PROJECT_FILES_INVALID": "Files payload is invalid",
+    "PROJECT_TOO_MANY_FILES": "Too many files (max {{max}})",
+    "PROJECT_FILE_PATH_INVALID": "Invalid file path: {{path}}",
+    "PROJECT_FILE_TOO_LARGE": "{{path}} is too large",
+    "PROJECT_TOO_LARGE": "Project is too large",
+    "PROJECT_PUBLISH_NAME_TAKEN": "This website name is already used by another published website. Rename it first.",
+    "PROJECT_PUBLISH_NOT_COMPLETED": "Only completed projects can be published.",
+    "PROJECT_PUBLIC_NOT_AVAILABLE": "This website is not available or is not published yet.",
+    "PROJECT_BRIEF_NOT_FOUND": "Brief not found or already expired",
+    "PROJECT_BRIEF_USED": "Brief has already been used",
+
+    "PROJECT_IMAGE_R2_MISSING": "Image upload is not configured",
+    "PROJECT_IMAGE_EMPTY": "Empty image body",
+    "PROJECT_IMAGE_TOO_LARGE": "Image too large (max {{max}}MB)",
+    "PROJECT_IMAGE_UNSUPPORTED": "Unsupported image type. Use JPEG, PNG, WebP, GIF, or AVIF.",
+    "PROJECT_IMAGE_UPLOAD_FAILED": "Upload to storage failed, try again.",
+    "PROJECT_IMAGE_URL_REQUIRED": "Image URL is required",
+
+    "BRIEF_PROMPT_REQUIRED": "Prompt is required",
+    "BRIEF_PROMPT_TOO_LONG": "Prompt is too long (max {{max}} characters)",
+    "BRIEF_TOO_MANY_ATTEMPTS": "Too many attempts. Try again later.",
+    "BRIEF_NOT_FOUND": "Brief not found or already expired",
+    "BRIEF_ANSWERS_INVALID": "Answers must be an object",
+    "BRIEF_TOO_MANY_ANSWERS": "Too many answers (max {{max}} keys)",
+    "BRIEF_UNKNOWN_CATEGORY": "Unknown category",
+
+    "CHAT_PROMPT_REQUIRED": "Prompt is required",
+    "CHAT_PROMPT_TOO_LONG": "Prompt is too long (max {{max}} characters)",
+    "CHAT_FAILED": "Failed to process the revision. Please try again.",
+
+    "PAYMENTS_DISABLED": "Payments are temporarily disabled",
+    "PAYMENTS_NOT_AUTHENTICATED": "You are not signed in",
+    "PAYMENTS_UNKNOWN_PACKAGE": "Unknown package",
+    "PAYMENTS_ACCOUNT_NOT_FOUND": "Account not found, please sign in again.",
+    "PAYMENTS_TOO_MANY_PENDING": "You have too many unpaid orders. Finish or wait for them to expire.",
+    "PAYMENTS_TOO_MANY_ATTEMPTS": "Too many payment attempts, please try again in a while.",
+    "PAYMENTS_GATEWAY_DOWN": "Payment service is unavailable, try again later",
+    "PAYMENTS_ORDER_NOT_FOUND": "Order not found",
+    "PAYMENTS_INVALID_NOTIFICATION": "Invalid notification",
+    "PAYMENTS_INVALID_SIGNATURE": "Invalid signature",
+    "PAYMENTS_UNKNOWN_ORDER": "Unknown order",
+    "PAYMENTS_STATUS_UNAVAILABLE": "Could not confirm the payment yet",
+    "PAYMENTS_TEMP_ERROR": "Temporary error, please retry",
+
+    "MANUAL_DISABLED": "Manual transfer is temporarily disabled",
+    "MANUAL_NOT_AUTHENTICATED": "You are not signed in",
+    "MANUAL_UNKNOWN_PACKAGE": "Unknown package",
+    "MANUAL_ACCOUNT_NOT_FOUND": "Account not found, please sign in again.",
+    "MANUAL_TOO_MANY_ACTIVE": "You already have too many unpaid manual orders. Finish them first.",
+    "MANUAL_STORAGE_NOT_CONFIGURED": "Storage not configured",
+    "MANUAL_ORDER_ID_REQUIRED": "Order ID is required",
+    "MANUAL_EMPTY_IMAGE": "Empty image",
+    "MANUAL_PROOF_TOO_LARGE": "Proof too large (max {{max}}MB)",
+    "MANUAL_PROOF_INVALID_TYPE": "Proof must be JPEG, PNG, WebP, GIF, or AVIF",
+    "MANUAL_NAME_BANK_REQUIRED": "Name and bank are required",
+    "MANUAL_UPLOAD_FAILED": "Upload failed, try again",
+    "MANUAL_ORDER_NOT_FOUND": "Order not found",
+    "MANUAL_ORDER_WRONG_STATUS": "This order is no longer accepting proofs",
+    "MANUAL_PROOF_DUPLICATE": "This screenshot was already used for another order",
+    "MANUAL_ATTACH_FAILED": "Could not attach proof",
+
+    "INTERNAL_ERROR": "Something went wrong on our side. Please try again.",
+    "RATE_LIMITED": "Too many requests. Please try again in a moment.",
+    "BAD_REQUEST": "Invalid request."
+  },
+
+  "projectErrors": {
+    "GENERATION_FAILED": "Generation failed. The credits have been refunded.",
+    "GENERATION_TIMEOUT": "Generation timed out. Please try again.",
+    "REVISION_TIMEOUT": "The revision timed out and was not applied. Please try again.",
+    "REVISION_NO_CHANGE": "The AI did not apply any change. Try rewording your request, or specify the file you want to edit.",
+    "NO_APP_JS": "The AI could not generate the entry point (/App.js). Please try again."
+  },
+
+  "nav": {
+    "home": "Home",
+    "pricing": "Pricing",
+    "myProjects": "My Projects",
+    "signIn": "Sign in",
+    "getStarted": "Get started",
+    "openBuilder": "Open builder",
+    "topUp": "Top up credits",
+    "profile": "Profile"
+  },
+
+  "language": {
+    "switchTo": "Switch to {{lang}}",
+    "en": "English",
+    "id": "Indonesia"
+  },
+
+  "auth": {
+    "welcomeBack": "Welcome back",
+    "createAccount": "Create your account",
+    "signInSubtitle": "Sign in to continue crafting.",
+    "registerSubtitle": "Start building your first site in minutes.",
+    "fullName": "Full Name",
+    "email": "Email Address",
+    "password": "Password",
+    "signIn": "Sign in",
+    "createAccountBtn": "Create account",
+    "newHere": "New to Renscraft?",
+    "haveAccount": "Already have an account?",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "agreePrefix": "I agree to the",
+    "agreeTerms": "Terms of Service",
+    "agreeAnd": "and",
+    "agreePrivacy": "Privacy Policy",
+    "agreeSuffix": ", and I have read the",
+    "agreeRefund": "Refund Policy",
+    "footer": "Crafting your web with RensCraft",
+    "orUseEmail": "or use your email",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithGithub": "Continue with GitHub",
+    "oauthStartFailed": "Could not start sign-in. Please try again.",
+    "signingIn": "Signing you in…",
+    "callbackNotConfigured": "Google and GitHub sign-in are not configured.",
+    "callbackFailed": "Sign-in could not be completed. Please try again."
+  },
+
+  "home": {
+    "title": "Let's build your app together",
+    "subtitle": "Describe your idea and watch AI design, structure and launch your website instantly. No coding required.",
+    "placeholder": "Create a portfolio website...",
+    "noCredits": "No credits left",
+    "creditsCount": "{{count}} credits"
+  },
+
+  "builder": {
+    "code": "Code",
+    "preview": "Preview",
+    "openPreview": "Open Preview",
+    "publish": "Publish",
+    "export": "Export",
+    "projects": "Projects",
+    "profile": "Profile",
+    "tabChat": "Chat",
+    "tabFiles": "Files",
+    "tabImages": "Images",
+    "publishSuccess": "Website published successfully",
+    "publishFailed": "Publish failed"
+  },
+
+  "progress": {
+    "failed": "Failed",
+    "planning": "Planning",
+    "generating": "Generating",
+    "generationFailed": "Generation Failed",
+    "planningArch": "Planning Architecture...",
+    "building": "AI Agent is Building...",
+    "errorDuringBuild": "An error occurred during build",
+    "writingCode": "Writing production-ready React codebase",
+    "notCharged": "You were <1>not charged</1> for this attempt — the credits were refunded automatically.",
+    "retry": "Try again",
+    "retrying": "Retrying...",
+    "newPrompt": "New prompt",
+    "retryHint": "<1>Try again</1> reruns the same prompt (the failed project is cleaned up).",
+    "newPromptHint": "<1>New prompt</1> starts fresh on the chat page.",
+    "progress": "Progress",
+    "files": "Files",
+    "active": "Active",
+    "analyzing": "Analyzing requirements and designing project structure...",
+    "backToProjects": "Back to my projects",
+    "cancelAndGoBack": "Cancel and go back",
+    "done": "done",
+    "filesCount": "{{done}} / {{total}} files"
+  },
+
+  "chat": {
+    "emptyState": "Ask AI to modify your website",
+    "you": "You",
+    "ai": "AI",
+    "placeholder": "Ask AI to modify...",
+    "placeholderDisabled": "Generation failed. Start a new project."
+  },
+
+  "profile": {
+    "title": "Profile",
+    "credits": "Credits",
+    "projects": "Projects",
+    "topUp": "Top up credits",
+    "openProjects": "Open projects",
+    "signOut": "Sign out",
+    "signOutNote": "You will need to sign in again to open your projects.",
+    "memberSince": "Member since {{date}}",
+    "back": "Back"
+  },
+
+  "publish": {
+    "title": "Your website is live!",
+    "subtitle": "Anyone with the link below can view your published site.",
+    "linkLabel": "Published Link",
+    "copyLink": "Copy Link",
+    "openSite": "Open Site",
+    "copied": "Public link copied to clipboard"
+  },
+
+  "payment": {
+    "topUpTitle": "Top up credits",
+    "youHave": "You have {{count}} credits",
+    "youHave_one": "You have 1 credit",
+    "creditsNeverExpire": "Credits never expire",
+    "buy": "Buy {{label}}",
+    "opening": "Opening...",
+    "bestValue": "Best value",
+    "recentOrders": "Recent orders",
+    "pay": "Pay",
+    "creditsSuffix": "credits",
+    "perCredit": "{{price}} per credit",
+    "topUpsDisabled": "Top-ups are switched off right now. Please check back later.",
+    "couldNotLoad": "Could not load the top-up options.",
+    "couldNotStart": "Could not start the payment. Try again.",
+    "alreadyPaid": "This order can't be paid anymore. Start a new one.",
+    "snapOpenFailed": "Could not open the payment window. Try again.",
+    "paymentFailed": "The payment didn't go through. Try again or pick another method.",
+    "creditsAdded": "+{{count}} credits added",
+    "lostConnection": "Lost connection while checking your payment. Your order is saved below.",
+    "manualHint": "You can also pay manually",
+    "manualHintSub": "Bank transfer + upload proof. Credits arrive after confirmation.",
+    "payManual": "Pay manually"
+  },
+
+  "theme": {
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "enableLight": "Enable light mode",
+    "enableDark": "Enable dark mode"
+  },
+
+  "files": {
+    "filesLabel": "FILES"
+  },
+
+  "preview": {
+    "preparing": "Preparing your preview…",
+    "stillPreparing": "Still preparing…",
+    "bundling": "Bundling React and dependencies",
+    "largeProject": "Large project — this can take up to 30 seconds"
+  },
+
+  "images": {
+    "title": "Uploaded images",
+    "uploading": "Uploading...",
+    "dropOrClick": "Drop images or click",
+    "accept": "JPEG, PNG, WebP, GIF · max {{max}}MB",
+    "emptyHint": "No images yet. Upload product photos, logos, or banners here.",
+    "refHint": "These images are used by the AI as <1>ref-img-NN</1> on the next generate/revision. Chat: <2>\"use ref-img-01 as the MMT banner\"</2>.",
+    "tooBig": "{{count}} file(s) too large (max {{max}}MB per image)",
+    "added": "{{count}} image(s) added",
+    "uploadFailed": "Failed to upload {{name}}",
+    "confirmRemove": "Remove this image from the project?",
+    "removeFailed": "Failed to remove image",
+    "removeAria": "Remove image"
+  },
+
+  "displayProjects": {
+    "label": "Made with Renscraft",
+    "title1": "Websites built with AI.",
+    "title2": "Ready to explore.",
+    "subtitle": "Explore websites built with Renscraft and see what you can create from a simple idea.",
+    "publishedCount": "{{count}} published websites",
+    "publishedCount_one": "1 published website",
+    "loadingLabel": "Loading published websites",
+    "errorFallback": "We couldn't load the published websites. Please try again.",
+    "emptyTitle": "No published websites yet",
+    "emptySub": "Your next idea could be the first website featured here.",
+    "buildWebsite": "Build a website",
+    "viewWebsite": "View website",
+    "published": "Published website",
+    "pagination": "Published website pagination",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "page": "Page {{current}} of {{total}}",
+    "previewOf": "Preview of {{name}}",
+    "openInNewTab": "Open {{name}} in a new tab"
+  },
+
+  "buyCredits": {
+    "loading": "Loading...",
+    "loadFailed": "Could not load the top-up options.",
+    "topUpsDisabled": "Top-ups are switched off right now. Please check back later.",
+    "completeTitle": "Complete your payment",
+    "completeBody": "Finish the payment in the Midtrans window.",
+    "receivedTitle": "Payment received",
+    "receivedBody": "Adding your credits...",
+    "reviewTitle": "Payment under review",
+    "reviewBody": "Your bank is reviewing this payment. Credits are added automatically once it's approved, so you can close this window.",
+    "confirmingTitle": "Confirming your payment",
+    "confirmingBody": "This usually takes a few seconds.",
+    "waitingTitle": "Waiting for payment",
+    "waitingBody": "Credits are added as soon as the payment is confirmed. If you paid with a bank transfer or QRIS, it can take a minute.",
+    "continuePayment": "Continue payment",
+    "stopWaiting": "Stop waiting",
+    "orderPrefix": "Order {{id}}",
+    "settled": {
+      "failed": "The payment failed. Try again or pick another method.",
+      "expired": "This payment expired. Start a new one when you're ready.",
+      "canceled": "This payment was canceled.",
+      "refunded": "This payment was refunded.",
+      "chargeback": "This payment was reversed by the bank.",
+      "notCompleted": "The payment was not completed."
+    },
+    "alreadyPaid": "This order can't be paid anymore. Start a new one.",
+    "snapOpenFailed": "Could not open the payment window. Try again.",
+    "paymentFailed": "The payment didn't go through. Try again or pick another method.",
+    "creditsAdded": "+{{count}} credits added",
+    "lostConnection": "Lost connection while checking your payment. Your order is saved below.",
+    "midtransSoonTitle": "Automatic payments are coming soon",
+    "midtransSoonBody": "Midtrans is not live yet. Top up with a manual bank transfer — credits are added after the proof is approved.",
+    "payManualNow": "Pay with manual transfer"
+  },
+
+  "manual": {
+    "title": "Manual transfer",
+    "subtitle": "Transfer to our account, upload the proof, credits are added after confirmation.",
+    "loadFailed": "Could not load manual payment info",
+    "pickPackage": "Pick a package",
+    "exactAmountLabel": "⚠ Amount must match exactly",
+    "exactAmountNote": "Not {{amount}}. The system auto-rejects mismatched amounts.",
+    "expectedAmount": "Expected amount",
+    "recipientAccount": "Recipient account",
+    "copyAmount": "Amount copied",
+    "copyAccount": "Account number copied",
+    "orderId": "Order ID",
+    "expiresAt": "Expires",
+    "changeP": "← Change package",
+    "uploadP": "Done transferring, upload proof →",
+    "transferAmount": "Transfer amount",
+    "senderName": "Sender's full name",
+    "senderNamePlaceholder": "Name on the sender's bank account",
+    "senderBank": "Sender's bank",
+    "senderBankPlaceholder": "BCA / Mandiri / BRI / Jago / ...",
+    "proof": "Transfer proof",
+    "clickToPick": "Click to pick an image",
+    "proofAccept": "JPEG, PNG, WebP · max {{max}}MB",
+    "changeImage": "Change image",
+    "back": "← Back",
+    "sending": "Uploading...",
+    "sendProof": "Send proof",
+    "verifying": "Verifying",
+    "verifyingSub": "OCR is reading your transfer proof. Usually 5–30 seconds.",
+    "status": "Status",
+    "checkNow": "Check status now",
+    "closeModal": "Close modal",
+    "creditsAdded": "Credits added!",
+    "creditsAddedSub": "Your balance has been updated.",
+    "close": "Close",
+    "fileTooLarge": "File too large (max {{max}}MB)",
+    "needProof": "Please upload the transfer proof",
+    "needName": "Full name is required",
+    "needBank": "Your bank is required",
+    "orderExpired": "Order expired",
+    "orderRejected": "Your payment was rejected by the admin",
+    "rejected": "Payment rejected",
+    "couldNotCreate": "Could not create manual order",
+    "uploadFailed": "Upload failed",
+    "couldNotCheck": "Could not check status right now"
+  },
+
+  "brief": {
+    "back": "Back",
+    "skip": "Skip",
+    "next": "Next",
+    "skipAll": "Skip all, jump to summary",
+    "summary": "Summary",
+    "summarySub": "Empty slots show as placeholders — the AI won't invent data to fill them.",
+    "aiChoice": "AI's choice",
+    "placeholder": "Placeholder",
+    "change": "Change",
+    "fill": "Fill",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "answeringIsFree": "Answering is free. Generating a website uses credits.",
+    "generate": "Generate Website",
+    "questionOf": "Question {{current}} of {{total}}",
+    "backToQuestions": "Back to questions"
+  },
+
+  "landing": {
+    "heroTitle1": "Describe a website.",
+    "heroTitle2": "Get a real one.",
+    "heroSub": "Renscraft writes the React code, shows you the live preview, and lets you keep editing by chat. Publish it with a link or export the code.",
+    "ctaBuild": "Let's build your website",
+    "ctaPricing": "See pricing",
+    "freeCreditsNote": "New accounts start with free credits.",
+    "mockPrompt": "A website for my coffee shop. Warm, simple, with a menu and opening hours.",
+    "mockWriting": "Writing your website",
+    "mockFilesCount": "{{done}} of {{total}} files",
+    "stepsTitle": "From idea to live site in minutes",
+    "steps": {
+      "describe": {
+        "title": "Describe it",
+        "text": "Write what you need in plain words: a portfolio, a cafe site, a landing page — or paste a reference URL."
+      },
+      "build": {
+        "title": "Watch it get built",
+        "text": "The AI plans the files and writes them one by one. You see the preview as it comes together."
+      },
+      "change": {
+        "title": "Change it by chat",
+        "text": "Ask for edits like \u201cmake the hero darker\u201d, or open the code and edit it yourself."
+      },
+      "ship": {
+        "title": "Publish or export",
+        "text": "Share a public link, or download the whole React project as a ZIP."
+      }
+    },
+    "referenceLabel": "Reference websites",
+    "referenceTitle1": "Found a site you love?",
+    "referenceTitle2": "Paste the link.",
+    "referenceSub": "Give Renscraft any public URL — a portfolio, a WordPress blog, a Google Site, a Canva page. It reads the content, mirrors the images into your own storage, and studies the design. You get a site that's inspired by it, not a clone of it.",
+    "referenceAnalyze": "Analyze",
+    "referenceReading": "Reading the page, extracting design tokens…",
+    "referenceItems": {
+      "content": {
+        "title": "Content & copy",
+        "desc": "Headings, paragraphs, structure — the actual text and hierarchy."
+      },
+      "images": {
+        "title": "Images & assets",
+        "desc": "Mirrored to our storage, so they never break when the source changes."
+      },
+      "colors": {
+        "title": "Colors & shadows",
+        "desc": "Palette, borders, shadows — the full visual language of the site."
+      },
+      "fonts": {
+        "title": "Fonts & typography",
+        "desc": "Font families, sizes, weights — everything that sets the tone."
+      }
+    },
+    "referenceFootnote": "Works with React, Next.js, WordPress, Google Sites, Canva, Framer — anything with a public URL.",
+    "ctaDiyLabel": "Do it yourself",
+    "ctaDiyTitle": "Start with your first website",
+    "ctaDiyText": "Describe what you need, watch it get built, edit it by chat. Pay per build in rupiah — credits never expire, failed builds are refunded.",
+    "ctaDiyButton": "Try Renscraft",
+    "ctaDiyNote": "Free credits for new accounts",
+    "ctaCustomLabel": "Done for you",
+    "ctaCustomTitle": "Need something fully custom?",
+    "ctaCustomText": "E-commerce, dashboards, mobile apps, API integrations — hand-built by Rensdev. Fixed scope, fixed price, direct to the developer.",
+    "ctaCustomButton": "Talk to the developer",
+    "ctaCustomNote": "Reply within 1 business day",
+    "footerTagline": "Crafting your web with Rensdev — describe what you need, preview instantly, and ship production-ready React.",
+    "footerConnect": "Connect",
+    "footerDeveloperPortal": "Developer Portal",
+    "footerGithub": "GitHub",
+    "footerInstagram": "Instagram",
+    "footerTiktok": "TikTok",
+    "footerLegal": "Legal",
+    "footerCopyright": "© {{year}} Renscraft. All rights reserved.",
+    "footerBuiltBy": "Built with passion by"
+  },
+
+  "pricing": {
+    "manualTitle": "Paid by manual transfer",
+    "manualText": "Transfer to our bank account and upload the proof. Credits are added once the admin approves it.",
+    "title": "Pay for the websites you build",
+    "subtitle": "Buy credits once, spend them whenever you want. Credits never expire.",
+    "subtitleWithCosts": "Buy credits once, spend them whenever you want. Credits never expire. A new website costs {{generate}} credits and each revision costs {{revision}}.",
+    "freeCreditsNote": "New accounts start with {{count}} free credits.",
+    "loadError": "Could not load the pricing.",
+    "disabled": "Top-ups are switched off right now. Please check back later.",
+    "methodAuto": "Automatic (Midtrans)",
+    "methodManual": "Manual transfer",
+    "bestValue": "Best value",
+    "creditsCount": "{{count}} credits",
+    "enoughFor": "Enough for about {{count}} websites",
+    "enoughFor_one": "Enough for about 1 website",
+    "reviseWithChat": "Revise with chat, {{cost}} credits each",
+    "publishExport": "Publish and export the code",
+    "buy": "Buy {{label}}",
+    "signUpToBuy": "Sign up to buy",
+    "failedBuildsFree": "Failed builds cost nothing",
+    "failedBuildsFreeText": "If a generation or revision fails, the credits are refunded automatically.",
+    "midtransTitle": "Paid through Midtrans",
+    "midtransText": "Checkout opens in a secure Midtrans window. Credits are added as soon as the payment is confirmed.",
+    "haveAccount": "Already have an account?",
+    "signIn": "Sign in"
+  },
+
+  "myProjects": {
+    "label": "Projects",
+    "title": "Things I've built.",
+    "subtitle": "Every draft, every build in progress, every published site — all in one place.",
+    "filters": {
+      "all": "All",
+      "published": "Published",
+      "draft": "Drafts",
+      "busy": "Building",
+      "failed": "Failed"
+    },
+
+    "emptyExampleTitles": {
+      "portfolio": "Portfolio",
+      "landing": "Landing page",
+      "culinary": "Culinary",
+      "wedding": "Wedding invitation"
+    },
+
+    "sections": {
+      "published": { "label": "Published", "sub": "Live" },
+      "draft": { "label": "Drafts", "sub": "Private" },
+      "busy": { "label": "Building", "sub": "In progress" },
+      "failed": { "label": "Failed", "sub": "Needs retry" }
+    },
+    "status": {
+      "published": "Published",
+      "draft": "Draft",
+      "busy": "Building",
+      "failed": "Failed"
+    },
+    "views": {
+      "gridAria": "Grid view",
+      "listAria": "List view"
+    },
+    "new": "New",
+    "open": "Open",
+    "viewProject": "View project",
+    "openPreviewAria": "Open preview in new tab",
+    "openLiveAria": "Open live site",
+    "openProjectAria": "Open project",
+    "deleteAria": "Delete {{name}}",
+    "projectsCount": "{{count}} projects",
+    "projectsCount_one": "1 project",
+    "projectsCount_zero": "0 projects",
+    "totalCount": "{{count}} projects total",
+    "totalCount_one": "1 project total",
+    "projectTotal": "{{count}} projects total",
+    "emptyTitle": "No projects yet.",
+    "emptySub": "Your workspace is empty. Describe a website, or start from one of the examples below.",
+    "emptyTry": "Try one of these",
+    "emptyStartScratch": "Start from scratch",
+    "emptyExamples": {
+      "portfolio": "Fullstack developer portfolio, my name is Rendy, focused on React & Node.js",
+      "landing": "SaaS analytics landing page with hero, main features, pricing, and CTA",
+      "culinary": "Website for Kopi Senja coffee shop with menu, opening hours, and WhatsApp contact",
+      "wedding": "Online wedding invitation for Rina & Dimas, modern minimalist theme"
+    },
+    "filteredEmpty": "Nothing here yet.",
+    "filteredEmptyViewAll": "View all projects",
+    "delete": {
+      "title": "Delete this project?",
+      "body": "<1>{{name}}</1> will be permanently deleted. This cannot be undone.",
+      "deleting": "Deleting..."
+    }
+  },
+
+  "contact": {
+    "backToHome": "Back to home",
+    "label": "Contact",
+    "title": "Talk to the human who builds this.",
+    "subtitle": "Renscraft is built and run by one person. Whether it's a bug, a feature idea, a refund, or just a hello — pick whichever channel you prefer. We usually reply within 1 business day.",
+    "channels": {
+      "emailLabel": "Email",
+      "emailDesc": "Best for refund requests, account issues, and anything that needs an order ID.",
+      "instagramLabel": "Instagram",
+      "instagramDesc": "Behind-the-scenes of Renscraft, quick questions, and design updates.",
+      "githubLabel": "GitHub",
+      "githubDesc": "Source code, issue tracker, and open-source bits of the Renscraft stack.",
+      "tiktokLabel": "TikTok",
+      "tiktokDesc": "Short demos, tips, and the occasional build-in-public clip."
+    },
+    "beforeWrite": "Before you write",
+    "refundTitle": "Refund request?",
+    "refundText": "Include the order ID from the Top-up modal (Recent orders).",
+    "bugTitle": "Bug report?",
+    "bugText": "Describe what you did, what you expected, and what happened. Screenshots help a lot.",
+    "featureTitle": "Feature idea?",
+    "featureText": "Just describe it in one paragraph. No formal template needed.",
+    "accountTitle": "Account issue?",
+    "accountText": "Send from the email you signed up with, so we can find you faster."
+  },
+
+  "publishPage": {
+    "errorTitle": "Website unavailable",
+    "errorFallback": "This website is not available or is not published yet.",
+    "backToRenscraft": "Back to Renscraft"
+  },
+  "meta": {
+    "landingTitle": "Renscraft — Crafting your web with Rensdev",
+    "landingDescription": "Tulis deskripsi website, lihat dibangun, revisi lewat chat, lalu publish atau export kodenya.",
+    "pricingTitle": "Harga — Renscraft",
+    "pricingDescription": "Paket kredit simpel buat Renscraft. Bayar sekali dalam rupiah, kredit nggak akan expired.",
+    "myProjectsTitle": "Project Saya — Renscraft",
+    "myProjectsDescription": "Semua project Renscraft kamu: draft, yang sedang dibangun, dan yang sudah publish.",
+    "contactTitle": "Kontak — Renscraft",
+    "contactDescription": "Hubungi tim Renscraft. Email, Instagram, GitHub, dan TikTok."
+  },
+  "legal": {
+    "label": "Legal",
+    "backToHome": "Back to home",
+    "lastUpdated": "Last updated: {{date}}",
+    "questions": "Questions?",
+    "contactUs": "Contact us"
+  },
+  "toasts": {
+    "sessionExpired": "Session expired, please sign in again.",
+    "welcomeBack": "Welcome back!",
+    "accountCreated": "Account created successfully!",
+    "accountCreatedFreeCredits": "Account created! You got {{count}} free credits.",
+    "accountCreatedIpLimit": "Account created. Free credits are no longer available from this network.",
+    "signedIn": "Signed in successfully!",
+    "logoutSuccess": "Logged out successfully",
+    "logoutFailed": "Logout failed",
+    "projectsLoadFailed": "Failed to load projects list",
+    "projectLoadFailed": "Failed to load project details",
+    "aiPlanning": "AI agent is planning the structure...",
+    "projectCreateFailed": "Failed to create project",
+    "briefStartFailed": "Failed to process the prompt",
+    "briefExpired": "Brief expired. Please start over.",
+    "briefAnswerFailed": "Failed to save the answer",
+    "briefCategoryFailed": "Failed to change category",
+    "projectDeleted": "Project deleted successfully",
+    "projectDeleteFailed": "Failed to delete project",
+    "revisionNoChange": "No changes were applied, your credits were refunded.",
+    "revisionPatchesFailed": "{{count}} revision patch(es) failed",
+    "revisionSuccess": "Updated to version {{version}}",
+    "revisionStillRunning": "Connection lost. The revision is still running...",
+    "autosaveFailed": "Failed to save code modifications",
+    "briefNotActive": "Brief is not active",
+    "notEnoughCredits": "Not enough credits",
+    "revisionFailed": "Revision request failed",
+    "loginFailed": "Invalid email or password",
+    "registerFailed": "Registration failed",
+    "supabaseSignInFailed": "Could not sign in with this account"
+  }
+}
