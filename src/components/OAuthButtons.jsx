@@ -77,7 +77,9 @@ const OAuthButtons = ({ disabled = false, onStart, onError }) => {
             type="button"
             onClick={() => start(id)}
             disabled={disabled || pending !== null}
-            className="w-full py-2.5 border border-zinc-200 rounded-lg text-sm font-medium text-zinc-900 hover:bg-zinc-50 disabled:opacity-40 flex items-center justify-center gap-2.5 cursor-pointer transition-colors dark:border-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-900">
+            // Perubahan ada di className di bawah ini bre:
+            // Gw ganti text-zinc-900 jadi text-zinc-50, border jadi border-white/10, bg ditambahin bg-white/5 biar glass.
+            className="w-full py-2.5 border border-white/10 bg-white/5 rounded-lg text-sm font-medium text-zinc-50 hover:bg-white/10 disabled:opacity-40 flex items-center justify-center gap-2.5 cursor-pointer transition-colors">
             {pending === id ? (
               <Loader2Icon className="animate-spin h-4 w-4" />
             ) : (
@@ -89,11 +91,9 @@ const OAuthButtons = ({ disabled = false, onStart, onError }) => {
       </div>
 
       <div className="flex items-center gap-3 my-7" role="separator">
-        <div className="h-px flex-1 bg-zinc-100 dark:bg-zinc-800" />
-        <span className="text-xs text-zinc-400 dark:text-zinc-500">
-          {t("auth.orUseEmail")}
-        </span>
-        <div className="h-px flex-1 bg-zinc-100 dark:bg-zinc-800" />
+        <div className="h-px flex-1 bg-white/10" />
+        <span className="text-xs text-zinc-400">{t("auth.orUseEmail")}</span>
+        <div className="h-px flex-1 bg-white/10" />
       </div>
     </>
   );
