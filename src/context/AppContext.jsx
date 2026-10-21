@@ -391,6 +391,22 @@ export function AppContextProvider({ children }) {
   const startBrief = useCallback(
     async (prompt) => {
       if (!user) return false;
+
+      const { briefId, status } = await createBrief(prompt);
+
+      if (status === "classifying") {
+        // Poll GET /api/briefs/:id sampai status !== "classifying"
+        while (true) {
+          await new Promise((r) => setTimeout(r, 1500));
+          const state = await getBrief(briefId);
+          if (state.mode !== "classifying") {
+            setBrief(state);
+            storeBrief(briefId);
+            return true;
+          }
+        }
+      }
+
       setBriefLoading(true);
       try {
         const state = await createBrief(prompt);
