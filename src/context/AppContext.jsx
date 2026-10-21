@@ -392,30 +392,43 @@ export function AppContextProvider({ children }) {
     async (prompt) => {
       if (!user) return false;
 
-      const { briefId, status } = await createBrief(prompt);
-
-      if (status === "classifying") {
-        // Poll GET /api/briefs/:id sampai status !== "classifying"
-        while (true) {
-          await new Promise((r) => setTimeout(r, 1500));
-          const state = await getBrief(briefId);
-          if (state.mode !== "classifying") {
-            setBrief(state);
-            storeBrief(briefId);
-            return true;
-          }
-        }
-      }
-
       setBriefLoading(true);
       try {
-        const state = await createBrief(prompt);
+        let state = await createBrief(prompt);
 
-        // Classifier gagal: pakai jalur lama
-        if (state.mode === "direct") return await createFromPrompt(prompt);
-        // Kategori tanpa slot (game, tool, dashboard): langsung generate
-        if (state.autoStart) return await createFromPrompt(null, state.briefId);
+        // 1. Kalau backend lagi proses AI di background
+        if (state.status === "classifying") {
+          const briefId = state.briefId;
+          let attempts = 0;
+          const MAX_ATTEMPTS = 40; // 40 x 1.5s = 60 detik maksimal nunggu
 
+          while (attempts < MAX_ATTEMPTS) {
+            await new Promise((r) => setTimeout(r, 1500)); // tunggu 1.5 detik
+            state = await getBrief(briefId);
+
+            // Kalau status udah bukan "classifying" (artinya udah open/gagal), keluar loop
+            if (state.status !== "classifying") {
+              break;
+            }
+            attempts++;
+          }
+
+          if (attempts >= MAX_ATTEMPTS) {
+            throw new Error("Timeout menunggu AI merancang brief.");
+          }
+        }
+
+        // 2. Classifier gagal: pakai jalur lama (generate langsung)
+        if (state.mode === "direct") {
+          return await createFromPrompt(prompt);
+        }
+
+        // 3. Kategori tanpa slot (game, tool, dashboard): langsung generate
+        if (state.autoStart) {
+          return await createFromPrompt(null, state.briefId);
+        }
+
+        // 4. Buka wizard dengan data yang udah jadi
         setBrief(state);
         storeBrief(state.briefId);
         return true;
