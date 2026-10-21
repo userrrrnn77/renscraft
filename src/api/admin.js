@@ -29,14 +29,22 @@ export const adminListUsers = async ({ page = 1, limit = 25, q = "" } = {}) => {
   return data;
 };
 
-export const adminListProjects = async ({ page = 1, limit = 25, status = "" } = {}) => {
+export const adminListProjects = async ({
+  page = 1,
+  limit = 25,
+  status = "",
+} = {}) => {
   const p = new URLSearchParams({ page: String(page), limit: String(limit) });
   if (status) p.set("status", status);
   const { data } = await api.get(`/api/admin/projects?${p}`);
   return data;
 };
 
-export const adminListOrders = async ({ page = 1, limit = 25, status = "" } = {}) => {
+export const adminListOrders = async ({
+  page = 1,
+  limit = 25,
+  status = "",
+} = {}) => {
   const p = new URLSearchParams({ page: String(page), limit: String(limit) });
   if (status) p.set("status", status);
   const { data } = await api.get(`/api/admin/orders?${p}`);
@@ -48,5 +56,21 @@ export const adminGrantCredits = async (userId, amount, reason = "") => {
     amount,
     reason,
   });
+  return data;
+};
+
+export const adminListRedeemCodes = async ({ page = 1, limit = 25 } = {}) => {
+  const p = new URLSearchParams({ page: String(page), limit: String(limit) });
+  const { data } = await api.get(`/api/admin/redeem?${p}`);
+  return data;
+};
+
+export const adminCreateRedeemCode = async (payload) => {
+  const { data } = await api.post("/api/admin/redeem", payload);
+  return data;
+};
+
+export const adminDeleteRedeemCode = async (id) => {
+  const { data } = await api.delete(`/api/admin/redeem/${id}`);
   return data;
 };

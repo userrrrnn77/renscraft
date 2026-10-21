@@ -41,6 +41,9 @@ const SiteNav = () => {
             <NavLink to="/pricing" className={linkClass}>
               {t("nav.pricing")}
             </NavLink>
+            <NavLink to="/webpub" className={linkClass}>
+              {t("nav.webpub")}
+            </NavLink>
             {user && (
               <NavLink to="/my-projects" className={linkClass}>
                 {t("nav.myProjects")}

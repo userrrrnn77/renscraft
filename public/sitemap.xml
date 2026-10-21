@@ -52,6 +52,13 @@
     <priority>0.4</priority>
   </url>
 
+<url>
+  <loc>https://ai.rensdev.my.id/webpub</loc>
+   <lastmod>2026-10-21</lastmod> 
+  <changefreq>daily</changefreq>
+  <priority>0.8</priority>
+</url>
+
   <!--
     /publish/:name itu dynamic — generate via endpoint /sitemap.xml di server.
     Lihat section "Notes" di bawah.

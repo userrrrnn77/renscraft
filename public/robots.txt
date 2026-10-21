@@ -9,6 +9,7 @@ Allow: /terms
 Allow: /privacy
 Allow: /refund
 Allow: /contact
+Allow: /webpub
 
 # App / auth / private areas
 Disallow: /api/

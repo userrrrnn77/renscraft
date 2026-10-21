@@ -113,7 +113,21 @@
 
     "INTERNAL_ERROR": "Something went wrong on our side. Please try again.",
     "RATE_LIMITED": "Too many requests. Please try again in a moment.",
-    "BAD_REQUEST": "Invalid request."
+    "BAD_REQUEST": "Invalid request.",
+    "REDEEM_CODE_REQUIRED": "Code is required",
+    "REDEEM_INVALID": "Code not found",
+    "REDEEM_EXPIRED": "This code has expired",
+    "REDEEM_EXHAUSTED": "This code has reached its redemption limit",
+    "REDEEM_ALREADY_USED": "You already redeemed this code",
+    "REDEEM_TOO_MANY_ATTEMPTS": "Too many attempts, try again in 15 minutes",
+    "REDEEM_FAILED": "Could not redeem code",
+    "ADMIN_REDEEM_CODE_INVALID": "Code must be 3-64 chars: A-Z, 0-9, _ or -",
+    "ADMIN_REDEEM_CREDITS_INVALID": "Credits must be 1-10000",
+    "ADMIN_REDEEM_MAX_INVALID": "maxRedemptions must be 1-10000",
+    "ADMIN_REDEEM_EXPIRY_INVALID": "Expiry must be a future date",
+    "ADMIN_REDEEM_CODE_EXISTS": "A code with that name already exists",
+    "ADMIN_REDEEM_ID_INVALID": "Invalid id",
+    "ADMIN_REDEEM_NOT_FOUND": "Code not found"
   },
 
   "projectErrors": {
@@ -132,7 +146,26 @@
     "getStarted": "Get started",
     "openBuilder": "Open builder",
     "topUp": "Top up credits",
-    "profile": "Profile"
+    "profile": "Profile",
+    "webpub": "Explore"
+  },
+  
+  "webpub": {
+    "metaTitle": "Published Websites — Renscraft",
+    "metaDescription": "Browse websites built and published with Renscraft.",
+    "label": "Explore",
+    "title": "Published websites",
+    "subtitle": "Browse everything built and shared with Renscraft.",
+    "loading": "Loading websites...",
+    "errorFallback": "Failed to load websites. Please try again.",
+    "emptyTitle": "No published websites yet",
+    "emptySub": "Your next idea could be the first website featured here.",
+    "buildWebsite": "Build a website",
+    "showing": "Showing {{start}}–{{end}} of {{total}} projects",
+    "pagination": "Published websites pagination",
+    "previous": "Previous page",
+    "next": "Next page",
+    "page": "Page {{current}} of {{total}}"
   },
 
   "language": {
@@ -677,5 +710,11 @@
     "loginFailed": "Invalid email or password",
     "registerFailed": "Registration failed",
     "supabaseSignInFailed": "Could not sign in with this account"
+  },
+  "redeem": {
+    "title": "Redeem code",
+    "subtitle": "Have a code? Redeem it for credits.",
+    "placeholder": "ENTER-CODE",
+    "button": "Redeem"
   }
 }

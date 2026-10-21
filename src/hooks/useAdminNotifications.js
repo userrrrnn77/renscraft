@@ -20,7 +20,7 @@ export function useAdminNotifications() {
         ? import.meta.env.VITE_BASE_URL.replace(/^https?:\/\//, "")
         : window.location.hostname === "ai.rensdev.my.id"
           ? "api.rensdev.my.id"
-          : "localhost:3000";
+          : "localhost:3001";
 
       const wsUrl = `${protocol}//${host}/api/admin/ws`;
       ws.current = new WebSocket(wsUrl);

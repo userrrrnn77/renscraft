@@ -22,6 +22,7 @@ import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import ManualPaymentHost from "./components/ManualPaymentHost";
 import { getPaymentMethods } from "./utils/topup";
 import { useEffect } from "react";
+import WebPublicPage from "./pages/WebPublicPage";
 
 const App = () => {
   useEffect(() => {
@@ -55,6 +56,7 @@ const App = () => {
         <Route path="/" element={<LandingPage />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/publish/:name" element={<PublishPage />} />
+        <Route path="/webpub" element={<WebPublicPage />} />
         <Route path="/auth/callback" element={<AuthCallbackPage />} />
 
         {/* Legal */}

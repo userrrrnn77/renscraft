@@ -8,12 +8,20 @@ import { useAppContext } from "../context/AppContext";
 import ThemeToggle from "../components/ThemeToggle";
 import LanguageToggle from "../components/LanguageToggle";
 import { openTopUp } from "../utils/topup";
+import { useState } from "react";
+import { GiftIcon, Loader2Icon } from "lucide-react";
+import toast from "react-hot-toast";
+import { errorMessage } from "../api/api";
+import { redeemCode } from "../api/redeem";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, credits, projects, loadProjects, refreshCredits, logout } =
     useAppContext();
+
+  const [code, setCode] = useState("");
+  const [redeeming, setRedeeming] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -22,6 +30,23 @@ const ProfilePage = () => {
   }, [user, loadProjects, refreshCredits]);
 
   const initial = (user?.name || "?").trim().charAt(0).toUpperCase();
+
+  const handleRedeem = async (e) => {
+    e.preventDefault();
+    const trimmed = code.trim();
+    if (!trimmed || redeeming) return;
+    setRedeeming(true);
+    try {
+      const data = await redeemCode(trimmed);
+      toast.success(`+${data.credits} credits added!`);
+      setCode("");
+      await refreshCredits();
+    } catch (err) {
+      toast.error(errorMessage(err, "Failed to redeem code"));
+    } finally {
+      setRedeeming(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
@@ -88,6 +113,40 @@ const ProfilePage = () => {
               {t("profile.openProjects")}
             </button>
           </div>
+        </section>
+
+        <section className="bg-white border border-zinc-200 rounded-2xl p-6 dark:bg-zinc-900 dark:border-zinc-800">
+          <div className="flex items-center gap-2 mb-1">
+            <GiftIcon size={15} className="text-zinc-500 dark:text-zinc-400" />
+            <p className="text-sm font-medium">{t("redeem.title")}</p>
+          </div>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+            {t("redeem.subtitle")}
+          </p>
+
+          <form onSubmit={handleRedeem} className="mt-4 flex gap-2">
+            <input
+              type="text"
+              value={code}
+              onChange={(e) => setCode(e.target.value.toUpperCase())}
+              placeholder={t("redeem.placeholder")}
+              maxLength={64}
+              disabled={redeeming}
+              className="flex-1 rounded-lg border border-zinc-200 px-3 py-2 font-mono text-sm uppercase tracking-wider outline-none focus:border-zinc-900 disabled:opacity-60 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-50"
+              autoComplete="off"
+              spellCheck={false}
+            />
+            <button
+              type="submit"
+              disabled={redeeming || !code.trim()}
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-zinc-950 px-4 py-2 text-xs font-medium text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200">
+              {redeeming ? (
+                <Loader2Icon size={13} className="animate-spin" />
+              ) : (
+                t("redeem.button")
+              )}
+            </button>
+          </form>
         </section>
 
         <section className="bg-white border border-zinc-200 rounded-2xl p-6 flex items-center justify-between gap-4 dark:bg-zinc-900 dark:border-zinc-800">

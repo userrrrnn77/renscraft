@@ -113,7 +113,22 @@
 
     "INTERNAL_ERROR": "Ada masalah di sisi kami. Coba lagi ya.",
     "RATE_LIMITED": "Terlalu banyak permintaan. Coba lagi sebentar.",
-    "BAD_REQUEST": "Permintaan tidak valid."
+    "BAD_REQUEST": "Permintaan tidak valid.",
+    "REDEEM_CODE_REQUIRED": "Kode wajib diisi",
+    "REDEEM_INVALID": "Kode tidak ditemukan",
+    "REDEEM_EXPIRED": "Kode ini sudah kedaluwarsa",
+    "REDEEM_EXHAUSTED": "Kode ini sudah mencapai batas penukaran",
+    "REDEEM_ALREADY_USED": "Kamu sudah pernah menukar kode ini",
+    "REDEEM_TOO_MANY_ATTEMPTS": "Terlalu banyak percobaan, coba lagi dalam 15 menit",
+    "REDEEM_FAILED": "Gagal menukar kode",
+
+    "ADMIN_REDEEM_CODE_INVALID": "Kode harus 3-64 karakter: A-Z, 0-9, _ atau -",
+    "ADMIN_REDEEM_CREDITS_INVALID": "Kredit harus 1-10000",
+    "ADMIN_REDEEM_MAX_INVALID": "maxRedemptions harus 1-10000",
+    "ADMIN_REDEEM_EXPIRY_INVALID": "Kedaluwarsa harus tanggal di masa depan",
+    "ADMIN_REDEEM_CODE_EXISTS": "Kode dengan nama itu sudah ada",
+    "ADMIN_REDEEM_ID_INVALID": "ID tidak valid",
+    "ADMIN_REDEEM_NOT_FOUND": "Kode tidak ditemukan"
   },
 
   "projectErrors": {
@@ -132,7 +147,25 @@
     "getStarted": "Mulai",
     "openBuilder": "Buka builder",
     "topUp": "Top up kredit",
-    "profile": "Profil"
+    "profile": "Profil",
+    "webpub": "Jelajahi"
+  },
+  "webpub": {
+    "metaTitle": "Website Published — Renscraft",
+    "metaDescription": "Jelajahi website yang dibuat dan dipublish pakai Renscraft.",
+    "label": "Jelajahi",
+    "title": "Website published",
+    "subtitle": "Jelajahi semua yang udah dibuat dan dibagikan lewat Renscraft.",
+    "loading": "Memuat website...",
+    "errorFallback": "Gagal memuat website. Coba lagi ya.",
+    "emptyTitle": "Belum ada website published",
+    "emptySub": "Idemu berikutnya bisa jadi website pertama yang tampil di sini.",
+    "buildWebsite": "Bikin website",
+    "showing": "Nampilin {{start}}–{{end}} dari {{total}} project",
+    "pagination": "Navigasi website published",
+    "previous": "Halaman sebelumnya",
+    "next": "Halaman berikutnya",
+    "page": "Halaman {{current}} dari {{total}}"
   },
 
   "language": {
@@ -672,5 +705,11 @@
     "loginFailed": "Email atau password salah",
     "registerFailed": "Registrasi gagal",
     "supabaseSignInFailed": "Gagal login dengan akun ini"
+  },
+  "redeem": {
+    "title": "Tukar kode",
+    "subtitle": "Punya kode? Tukar dengan kredit.",
+    "placeholder": "MASUKKAN-KODE",
+    "button": "Tukar"
   }
 }

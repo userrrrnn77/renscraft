@@ -113,7 +113,7 @@ const CardLoadingOverlay = ({ visible, isDark }) => {
   );
 };
 
-const ProjectCard = memo(({ project, hidden = false }) => {
+export const ProjectCard = memo(({ project, hidden = false }) => {
   const { t } = useTranslation();
   const previewRef = useRef(null);
   const iframeRef = useRef(null);
