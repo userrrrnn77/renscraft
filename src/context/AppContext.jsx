@@ -392,23 +392,25 @@ export function AppContextProvider({ children }) {
     async (prompt) => {
       if (!user) return false;
 
-      const { briefId, status } = await createBrief(prompt);
-
-      if (status === "classifying") {
-        while (true) {
-          await new Promise((r) => setTimeout(r, 1500));
-          const state = await getBrief(briefId);
-          // GANTI INI BRE:
-          if (state.status !== "classifying") {
-            setBrief(state);
-            storeBrief(briefId);
-            return true;
-          }
-        }
-      }
-
       setBriefLoading(true);
       try {
+        const { briefId, status } = await createBrief(prompt);
+        if (status === "classifying") {
+          while (true) {
+            await new Promise((r) => setTimeout(r, 1500));
+            const state = await getBrief(briefId);
+            if (state.status !== "classifying") {
+              if (state.autoStart) {
+                storeBrief(briefId);
+                return await createFromPrompt(null, briefId);
+              }
+              setBrief(state);
+              storeBrief(briefId);
+              return true;
+            }
+          }
+        }
+
         let state = await createBrief(prompt);
 
         // 1. Kalau backend lagi proses AI di background
