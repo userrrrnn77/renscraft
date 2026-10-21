@@ -391,16 +391,42 @@ export function AppContextProvider({ children }) {
   const startBrief = useCallback(
     async (prompt) => {
       if (!user) return false;
-
       setBriefLoading(true);
       try {
         const { briefId, status } = await createBrief(prompt);
+
+        // ─── Classifying: poll dengan deadline ──────────────────────────────
+        // Classifier jalan di background (server balikin "classifying" duluan).
+        // Server-side timeout 45s + 1 retry (maxRetries=1 di classifier.js)
+        // → worst case ~90s. Kalau lewat dari ini, ada bug / hang di server.
         if (status === "classifying") {
-          while (true) {
+          const DEADLINE_MS = 60_000;
+          const startedAt = Date.now();
+
+          while (Date.now() - startedAt < DEADLINE_MS) {
             await new Promise((r) => setTimeout(r, 1500));
-            const state = await getBrief(briefId);
+
+            let state;
+            try {
+              state = await getBrief(briefId);
+            } catch (pollErr) {
+              // 404 = brief hilang/expired di server. Bukan network error.
+              if (pollErr?.response?.status === 404) {
+                clearStoredBrief();
+                toast.error(tt("toasts.briefExpired"));
+                return false;
+              }
+              // Network hiccup sesaat: lanjut polling, jangan bail langsung.
+              // Deadline loop tetap yang jadi pengaman terakhir.
+              console.warn("getBrief poll failed: ", pollErr);
+              continue;
+            }
+
             if (state.status !== "classifying") {
               if (state.autoStart) {
+                // Semua slot udah ke-extract / kategori nggak butuh slot.
+                // storeBrief dulu biar kalau createFromPrompt gagal di tengah
+                // jalan (mis. 402), refresh masih bisa recover wizard-nya.
                 storeBrief(briefId);
                 return await createFromPrompt(null, briefId);
               }
@@ -409,45 +435,33 @@ export function AppContextProvider({ children }) {
               return true;
             }
           }
+
+          // Deadline lewat: status masih "classifying" di DB. Jangan biarkan
+          // user stuck di spinner. Bersihin storage biar refresh tidak
+          // restore state rusak ini.
+          clearStoredBrief();
+          toast.error(tt("toasts.briefClassifyTimeout"));
+          return false;
         }
 
-        let state = await createBrief(prompt);
+        // ─── Non-classifying: server udah balikin state final ──────────────
+        // Saat ini unreachable (controller selalu balikin "classifying"),
+        // tapi disiapkan buat future kalau classifier dijadikan sync.
+        const state = await getBrief(briefId);
 
-        // 1. Kalau backend lagi proses AI di background
-        if (state.status === "classifying") {
-          const briefId = state.briefId;
-          let attempts = 0;
-          const MAX_ATTEMPTS = 40; // 40 x 1.5s = 60 detik maksimal nunggu
-
-          while (attempts < MAX_ATTEMPTS) {
-            await new Promise((r) => setTimeout(r, 1500)); // tunggu 1.5 detik
-            state = await getBrief(briefId);
-
-            // Kalau status udah bukan "classifying" (artinya udah open/gagal), keluar loop
-            if (state.status !== "classifying") {
-              break;
-            }
-            attempts++;
-          }
-
-          if (attempts >= MAX_ATTEMPTS) {
-            throw new Error("Timeout menunggu AI merancang brief.");
-          }
-        }
-
-        // 2. Classifier gagal: pakai jalur lama (generate langsung)
         if (state.mode === "direct") {
+          // Classifier gagal total: fallback ke jalur lama (generate langsung
+          // pakai prompt mentah, tanpa wizard).
           return await createFromPrompt(prompt);
         }
 
-        // 3. Kategori tanpa slot (game, tool, dashboard): langsung generate
         if (state.autoStart) {
-          return await createFromPrompt(null, state.briefId);
+          storeBrief(briefId);
+          return await createFromPrompt(null, briefId);
         }
 
-        // 4. Buka wizard dengan data yang udah jadi
         setBrief(state);
-        storeBrief(state.briefId);
+        storeBrief(briefId);
         return true;
       } catch (err) {
         console.error("Failed to start brief: ", err);
@@ -465,6 +479,43 @@ export function AppContextProvider({ children }) {
     setBrief(null);
     clearStoredBrief();
   }, []);
+
+  const addBriefExtra = useCallback(
+    async ({ label, kind, value }) => {
+      if (!brief) return { ok: false };
+      try {
+        const data = await patchBrief(brief.briefId, {
+          extraSlots: [{ label, kind, value }],
+        });
+        setBrief(stripErrors(data));
+        return { ok: true };
+      } catch (err) {
+        if (err?.response?.status === 404) {
+          dropBrief();
+          toast.error(errorMessage(err, tt("toasts.briefExpired")));
+        } else {
+          toast.error(errorMessage(err, tt("toasts.briefExtraFailed")));
+        }
+        return { ok: false };
+      }
+    },
+    [brief, dropBrief],
+  );
+
+  const removeBriefExtra = useCallback(
+    async (key) => {
+      if (!brief) return;
+      try {
+        const data = await patchBrief(brief.briefId, {
+          removeExtraSlots: [key],
+        });
+        setBrief(stripErrors(data));
+      } catch (err) {
+        if (err?.response?.status === 404) dropBrief();
+      }
+    },
+    [brief, dropBrief],
+  );
 
   // Kirim jawaban. Mengembalikan { [slotKey]: "pesan" } (kosong = sukses).
   // Kegagalan jaringan dikembalikan sebagai { __error } supaya wizard tetap
@@ -695,6 +746,8 @@ export function AppContextProvider({ children }) {
         answerBrief,
         changeBriefCategory,
         cancelBrief,
+        addBriefExtra,
+        removeBriefExtra,
       }}>
       {children}
     </AppContext.Provider>

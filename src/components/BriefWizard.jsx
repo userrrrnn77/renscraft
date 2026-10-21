@@ -6,6 +6,8 @@ import {
   ChevronDownIcon,
   Loader2Icon,
   PencilIcon,
+  PlusIcon,
+  Trash2Icon,
 } from "lucide-react";
 
 const INPUT_CLS =
@@ -289,9 +291,34 @@ function Summary({
   onCancel,
   generating,
   actionsRef,
+  onAddExtra,
+  onRemoveExtra,
 }) {
   const { t } = useTranslation();
   const [editing, setEditing] = useState(null);
+  const [addOpen, setAddOpen] = useState(false);
+  const [extraLabel, setExtraLabel] = useState("");
+  const [extraKind, setExtraKind] = useState("text");
+  const [extraValue, setExtraValue] = useState("");
+  const [extraBusy, setExtraBusy] = useState(false);
+
+  const submitExtra = async (e) => {
+    e?.preventDefault();
+    if (!extraLabel.trim() || !extraValue.trim()) return;
+    setExtraBusy(true);
+    const res = await onAddExtra({
+      label: extraLabel.trim(),
+      kind: extraKind,
+      value: extraValue.trim(),
+    });
+    setExtraBusy(false);
+    if (res?.ok) {
+      setExtraLabel("");
+      setExtraValue("");
+      setExtraKind("text");
+      setAddOpen(false);
+    }
+  };
 
   return (
     <div>
@@ -325,13 +352,25 @@ function Summary({
                   )}
                 </div>
                 {editing !== slot.key && (
-                  <button
-                    type="button"
-                    onClick={() => setEditing(slot.key)}
-                    className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 cursor-pointer shrink-0 dark:text-white/80 dark:hover:text-white dark:hover:bg-white/10">
-                    <PencilIcon size={12} />
-                    {filled ? t("brief.change") : t("brief.fill")}
-                  </button>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => setEditing(slot.key)}
+                      className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 cursor-pointer dark:text-white/80 dark:hover:text-white dark:hover:bg-white/10">
+                      <PencilIcon size={12} />
+                      {filled ? t("brief.change") : t("brief.fill")}
+                    </button>
+                    {removable && (
+                      <button
+                        type="button"
+                        onClick={() => onRemoveExtra?.(slot.key)}
+                        disabled={generating}
+                        aria-label={t("brief.removeExtra")}
+                        className="cursor-pointer rounded-md p-1 text-zinc-400 hover:bg-red-50 hover:text-red-600 disabled:opacity-40 dark:hover:bg-red-500/10 dark:hover:text-red-400">
+                        <Trash2Icon size={12} />
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
               {editing === slot.key && (
@@ -344,6 +383,76 @@ function Summary({
             </div>
           );
         })}
+      </div>
+
+      <div className="mt-3">
+        {!addOpen ? (
+          <button
+            type="button"
+            onClick={() => setAddOpen(true)}
+            disabled={generating}
+            className="inline-flex items-center gap-1 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50">
+            <PlusIcon size={12} /> {t("brief.addExtra")}
+          </button>
+        ) : (
+          <form
+            onSubmit={submitExtra}
+            className="rounded-lg border border-zinc-200 dark:border-zinc-800 p-3 space-y-2">
+            <input
+              value={extraLabel}
+              onChange={(e) => setExtraLabel(e.target.value)}
+              placeholder={t("brief.extraLabelPlaceholder")}
+              maxLength={60}
+              required
+              className={INPUT_CLS}
+            />
+            <select
+              value={extraKind}
+              onChange={(e) => setExtraKind(e.target.value)}
+              className={INPUT_CLS}>
+              <option value="text">{t("brief.kindText")}</option>
+              <option value="longtext">{t("brief.kindLongtext")}</option>
+              <option value="list">{t("brief.kindList")}</option>
+            </select>
+            {extraKind === "list" || extraKind === "longtext" ? (
+              <textarea
+                rows={4}
+                value={extraValue}
+                onChange={(e) => setExtraValue(e.target.value)}
+                placeholder={t("brief.extraValuePlaceholder")}
+                required
+                className={`${INPUT_CLS} resize-none`}
+              />
+            ) : (
+              <input
+                value={extraValue}
+                onChange={(e) => setExtraValue(e.target.value)}
+                placeholder={t("brief.extraValuePlaceholder")}
+                required
+                className={INPUT_CLS}
+              />
+            )}
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                disabled={extraBusy}
+                className="px-3 py-1.5 rounded-md text-xs font-medium bg-red-600 text-white hover:bg-red-700 disabled:opacity-50">
+                {extraBusy ? (
+                  <Loader2Icon size={12} className="animate-spin" />
+                ) : (
+                  t("brief.save")
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => setAddOpen(false)}
+                disabled={extraBusy}
+                className="px-3 py-1.5 rounded-md text-xs text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800">
+                {t("brief.cancel")}
+              </button>
+            </div>
+          </form>
+        )}
       </div>
 
       <p className="text-xs text-zinc-500 mt-4 dark:text-zinc-400">
@@ -380,6 +489,8 @@ const BriefWizard = ({
   onCancel,
   onGenerate,
   generating = false,
+  onAddExtra,
+  onRemoveExtra,
 }) => {
   const { t } = useTranslation();
   const [step, setStep] = useState(() => initialStep(brief));
@@ -508,6 +619,8 @@ const BriefWizard = ({
           onCancel={onCancel}
           generating={generating}
           actionsRef={summaryActionsRef}
+          onAddExtra={onAddExtra}
+          onRemoveExtra={onRemoveExtra}
         />
       )}
 

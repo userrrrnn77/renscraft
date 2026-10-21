@@ -42,6 +42,8 @@ const HomePage = () => {
     answerBrief,
     changeBriefCategory,
     cancelBrief,
+    addBriefExtra,
+    removeBriefExtra,
   } = useAppContext();
 
   const prefilledPrompt = location.state?.prefilledPrompt || "";
@@ -134,6 +136,8 @@ const HomePage = () => {
                 onCancel={cancelBrief}
                 onGenerate={() => createFromPrompt(null, brief.briefId)}
                 generating={generatingProject}
+                onAddExtra={addBriefExtra}
+                onRemoveExtra={removeBriefExtra}
               />
             </div>
           ) : (

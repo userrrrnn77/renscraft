@@ -128,7 +128,12 @@
     "ADMIN_REDEEM_EXPIRY_INVALID": "Kedaluwarsa harus tanggal di masa depan",
     "ADMIN_REDEEM_CODE_EXISTS": "Kode dengan nama itu sudah ada",
     "ADMIN_REDEEM_ID_INVALID": "ID tidak valid",
-    "ADMIN_REDEEM_NOT_FOUND": "Kode tidak ditemukan"
+    "ADMIN_REDEEM_NOT_FOUND": "Kode tidak ditemukan",
+    "BRIEF_EXTRA_SLOTS_INVALID": "Format slot tambahan tidak valid.",
+    "BRIEF_TOO_MANY_EXTRA_SLOTS": "Maksimal {{max}} slot tambahan.",
+    "BRIEF_EXTRA_SLOT_LABEL_INVALID": "Judul field harus {{min}}–{{max}} karakter.",
+    "BRIEF_EXTRA_SLOT_KIND_INVALID": "Tipe field tidak didukung.",
+    "BRIEF_EXTRA_SLOT_VALUE_INVALID": "\"{{label}}\": {{detail}}"
   },
 
   "projectErrors": {
@@ -459,7 +464,13 @@
     "answeringIsFree": "Jawab gratis. Generate website pakai kredit.",
     "generate": "Generate Website",
     "questionOf": "Pertanyaan {{current}} dari {{total}}",
-    "backToQuestions": "Kembali ke pertanyaan"
+    "backToQuestions": "Kembali ke pertanyaan",
+    "addExtra": "Tambah info",
+    "extraLabelPlaceholder": "Judul field (mis. Jam buka, Instagram)",
+    "extraValuePlaceholder": "Isi...",
+    "kindText": "Teks singkat",
+    "kindLongtext": "Paragraf",
+    "kindList": "Daftar (satu per baris)"
   },
 
   "landing": {
@@ -676,6 +687,8 @@
     "contactUs": "Hubungi kami"
   },
   "toasts": {
+    "briefClassifyTimeout": "Server terlalu lama memproses. Coba lagi sebentar.",
+    "briefExtraFailed": "Gagal menambah info tambahan",
     "sessionExpired": "Sesi berakhir, silakan login lagi.",
     "welcomeBack": "Selamat datang kembali!",
     "accountCreated": "Akun berhasil dibuat!",

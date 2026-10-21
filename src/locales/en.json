@@ -76,6 +76,12 @@
     "BRIEF_TOO_MANY_ANSWERS": "Too many answers (max {{max}} keys)",
     "BRIEF_UNKNOWN_CATEGORY": "Unknown category",
 
+    "BRIEF_EXTRA_SLOTS_INVALID": "Invalid extra slot format.",
+    "BRIEF_TOO_MANY_EXTRA_SLOTS": "Max {{max}} extra slots.",
+    "BRIEF_EXTRA_SLOT_LABEL_INVALID": "Field name must be {{min}}–{{max}} characters.",
+    "BRIEF_EXTRA_SLOT_KIND_INVALID": "Unsupported field type.",
+    "BRIEF_EXTRA_SLOT_VALUE_INVALID": "\"{{label}}\": {{detail}}",
+
     "CHAT_PROMPT_REQUIRED": "Prompt is required",
     "CHAT_PROMPT_TOO_LONG": "Prompt is too long (max {{max}} characters)",
     "CHAT_FAILED": "Failed to process the revision. Please try again.",
@@ -149,7 +155,7 @@
     "profile": "Profile",
     "webpub": "Explore"
   },
-  
+
   "webpub": {
     "metaTitle": "Published Websites — Renscraft",
     "metaDescription": "Browse websites built and published with Renscraft.",
@@ -444,6 +450,13 @@
   },
 
   "brief": {
+    "addExtra": "Add info",
+    "extraLabelPlaceholder": "Field name (e.g. Opening hours, Instagram)",
+    "extraValuePlaceholder": "Value...",
+    "kindText": "Short text",
+    "kindLongtext": "Paragraph",
+    "kindList": "List (one per line)",
+    "removeExtra": "Remove this info",
     "back": "Back",
     "skip": "Skip",
     "next": "Next",
@@ -681,6 +694,8 @@
     "contactUs": "Contact us"
   },
   "toasts": {
+    "briefClassifyTimeout": "The server is taking too long to process. Please try again in a moment.",
+    "briefExtraFailed": "Failed to add extra info",
     "sessionExpired": "Session expired, please sign in again.",
     "welcomeBack": "Welcome back!",
     "accountCreated": "Account created successfully!",
