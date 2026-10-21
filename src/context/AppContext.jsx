@@ -559,7 +559,10 @@ export function AppContextProvider({ children }) {
 
   const cancelBrief = useCallback(() => dropBrief(), [dropBrief]);
 
-  // Lanjutkan wizard setelah refresh halaman
+  // Lanjutkan wizard setelah refresh halaman.
+  // R4: kalau server bilang autoStart (questionKeys kosong karena semua
+  // must-have udah ke-extract), langsung generate — jangan balik ke wizard
+  // walau user refresh di tengah proses.
   useEffect(() => {
     if (!user) return;
     const id = readStoredBrief();
@@ -568,12 +571,20 @@ export function AppContextProvider({ children }) {
     let cancelled = false;
     getBrief(id)
       .then((state) => {
-        if (!cancelled) setBrief(state);
+        if (cancelled) return;
+
+        if (state.autoStart) {
+          createFromPrompt(null, id);
+          return;
+        }
+
+        setBrief(state);
       })
       .catch((err) => {
         // 404 = kedaluwarsa / sudah dipakai: hapus diam-diam
         if (err?.response?.status === 404) clearStoredBrief();
       });
+
     return () => {
       cancelled = true;
     };
