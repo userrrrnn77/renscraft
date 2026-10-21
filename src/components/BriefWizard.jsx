@@ -332,6 +332,7 @@ function Summary({
       <div className="mt-4 divide-y divide-zinc-200 dark:divide-white/10 max-h-[50vh] overflow-y-auto pr-1">
         {brief.slots.map((slot) => {
           const filled = slot.value != null && slot.value !== "";
+          const removable = slot.origin === "user";
           return (
             <div key={slot.key} className="py-3">
               <div className="flex items-start justify-between gap-3">
