@@ -392,6 +392,21 @@ export function AppContextProvider({ children }) {
     async (prompt) => {
       if (!user) return false;
 
+      const { briefId, status } = await createBrief(prompt);
+
+      if (status === "classifying") {
+        while (true) {
+          await new Promise((r) => setTimeout(r, 1500));
+          const state = await getBrief(briefId);
+          // GANTI INI BRE:
+          if (state.status !== "classifying") {
+            setBrief(state);
+            storeBrief(briefId);
+            return true;
+          }
+        }
+      }
+
       setBriefLoading(true);
       try {
         let state = await createBrief(prompt);
