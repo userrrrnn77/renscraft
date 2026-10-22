@@ -10,21 +10,6 @@ import LanguageToggle from "../components/LanguageToggle";
 import { useAppContext } from "../context/AppContext";
 import { openTopUp } from "../utils/topup";
 
-const ProjectRowSkeleton = () => (
-  <div className="rounded-lg px-4 py-3 bg-white border border-zinc-200 dark:bg-white/5 dark:border-white/10">
-    <div className="flex items-center justify-between">
-      <div className="flex-1 min-w-0 space-y-2">
-        <div className="h-3.5 w-1/3 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
-        <div className="flex items-center gap-3">
-          <div className="h-2.5 w-16 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
-          <div className="h-2.5 w-6 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
-        </div>
-      </div>
-      <div className="size-4 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
-    </div>
-  </div>
-);
-
 const HomePage = () => {
   const { t } = useTranslation();
   const location = useLocation();

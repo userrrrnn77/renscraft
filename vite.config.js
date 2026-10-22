@@ -1,21 +1,22 @@
-import tailwindcss from '@tailwindcss/vite'
-import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss()
-  ],
+  plugins: [react(), tailwindcss()],
   server: {
     host: true, // wajib biar bisa diakses cloudflared
     port: 5173,
     allowedHosts: [".trycloudflare.com"], // biar gak ganti2 tiap url random
     cors: true,
     proxy: {
-      "/api": "http://localhost:3000"
-   }
+      "/api": "http://localhost:3000",
+      "/auth/v1": {
+        target: "https://kqzsuymhcusqdlkcznqh.supabase.co",
+        changeOrigin: true,
+        secure: true,
+      },
+    },
   },
-  
-})
+});

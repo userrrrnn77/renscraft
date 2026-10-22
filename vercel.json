@@ -8,6 +8,10 @@
 
   "rewrites": [
     {
+      "source": "/auth/v1/:path*",
+      "destination": "https://kqzsuymhcusqdlkcznqh.supabase.co/auth/v1/:path*"
+    },
+    {
       "source": "/((?!assets/).*)",
       "destination": "/index.html"
     }
