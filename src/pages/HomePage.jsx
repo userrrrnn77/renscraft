@@ -169,20 +169,6 @@ const HomePage = () => {
               </div>
             </>
           )}
-
-          {loadingProjects && (
-            <div className="mt-12 w-full">
-              <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-200 dark:border-zinc-800">
-                <div className="h-3 w-24 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
-                <div className="h-3 w-16 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
-              </div>
-              <div className="space-y-2 max-h-[80vh] overflow-hidden">
-                {[0, 1, 2].map((i) => (
-                  <ProjectRowSkeleton key={i} />
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>
