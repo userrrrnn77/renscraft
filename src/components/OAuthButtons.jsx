@@ -38,7 +38,12 @@ const PROVIDERS = [
   { id: "github", labelKey: "auth.continueWithGithub", Icon: GithubIcon },
 ];
 
-const OAuthButtons = ({ disabled = false, onStart, onError }) => {
+const OAuthButtons = ({
+  disabled = false,
+  onStart,
+  onError,
+  referralCode = null,
+}) => {
   const { t } = useTranslation();
   const [pending, setPending] = useState(null);
 
