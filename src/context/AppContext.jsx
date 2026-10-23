@@ -157,32 +157,71 @@ export function AppContextProvider({ children }) {
     }
   };
 
-  const register = async (name, email, password) => {
-    try {
-      const { data } = await api.post("/api/auth/register", {
-        name,
-        email,
-        password,
-      });
-      setUser(data.user);
-      applyCredits(data.user?.credits);
-      if (data.freeCredits > 0) {
-        toast.success(
-          tt("toasts.accountCreatedFreeCredits", { count: data.freeCredits }),
-        );
-      } else if (data.freeCreditsReason === "ip_limit") {
-        toast.success(tt("toasts.accountCreatedIpLimit"));
-      } else {
-        toast.success(tt("toasts.accountCreated"));
+  // ─── Register (2-step: request-otp → verify-otp) ──────────────────────────
+
+  const registerRequestOtp = useCallback(
+    async ({ name, email, password, referralCode = null }) => {
+      try {
+        const { data } = await api.post("/api/auth/register/request-otp", {
+          name,
+          email,
+          password,
+          referralCode: referralCode || undefined,
+        });
+        return data;
+      } catch (err) {
+        const errMsg = errorMessage(err, tt("toasts.registerFailed"));
+        throw new Error(errMsg);
       }
-      navigate("/chat");
+    },
+    [],
+  );
+
+  const registerVerifyOtp = useCallback(
+    async (otpId, code) => {
+      try {
+        const { data } = await api.post("/api/auth/register/verify-otp", {
+          otpId,
+          code,
+        });
+
+        setUser(data.user);
+        applyCredits(data.user?.credits);
+
+        if (data.creditsSource === "referral") {
+          toast.success(
+            tt("toasts.accountCreatedReferral", { count: data.creditsAwarded }),
+          );
+        } else if (data.creditsSource === "free_signup") {
+          toast.success(
+            tt("toasts.accountCreatedFreeCredits", {
+              count: data.creditsAwarded,
+            }),
+          );
+        } else {
+          toast.success(tt("toasts.accountCreated"));
+        }
+        navigate("/chat");
+        return data;
+      } catch (err) {
+        const errMsg = errorMessage(err, tt("toasts.registerFailed"));
+        throw new Error(errMsg);
+      }
+    },
+    [navigate, applyCredits],
+  );
+
+  const registerResendOtp = useCallback(async (otpId) => {
+    try {
+      const { data } = await api.post("/api/auth/register/resend-otp", {
+        otpId,
+      });
+      return data;
     } catch (err) {
-      console.error("Register failed: ", err);
       const errMsg = errorMessage(err, tt("toasts.registerFailed"));
-      toast.error(errMsg);
       throw new Error(errMsg);
     }
-  };
+  }, []);
 
   // Google / GitHub sign-in. Supabase only proves who the user is: the access
   // token is exchanged for the app's own HttpOnly session cookie, so everything
@@ -727,7 +766,7 @@ export function AppContextProvider({ children }) {
         loadingUser,
         setLoadingUser,
         login,
-        register,
+        // register,
         loginWithSupabase,
         projects,
         loadingProjects,
@@ -759,6 +798,9 @@ export function AppContextProvider({ children }) {
         cancelBrief,
         addBriefExtra,
         removeBriefExtra,
+        registerRequestOtp,
+        registerVerifyOtp,
+        registerResendOtp,
       }}>
       {children}
     </AppContext.Provider>

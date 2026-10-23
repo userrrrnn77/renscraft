@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { EyeIcon, EyeOffIcon, Loader2Icon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "../context/AppContext";
 import OAuthButtons from "../components/OAuthButtons";
+import { normalizeReferralCode } from "../api/referral";
 
 const GRID_STYLE = {
   backgroundImage:
@@ -90,11 +91,17 @@ const AuthBackground = () => (
   </div>
 );
 
+const INPUT_CLS =
+  "w-full rounded-lg border border-white/10 bg-white/2 px-3 py-2.5 text-sm text-zinc-50 placeholder-zinc-500 outline-none transition focus:border-white/30 focus:bg-white/4 focus:ring-1 focus:ring-white/20";
+
+const OTP_INPUT_CLS =
+  "w-full rounded-lg border border-white/10 bg-white/2 px-3 py-4 text-center text-2xl font-semibold tracking-[0.4em] text-zinc-50 placeholder-zinc-600 outline-none transition focus:border-white/30 focus:bg-white/4 focus:ring-1 focus:ring-white/20";
+
 const AuthPage = ({ mode }) => {
   const isLogin = mode === "login";
   const { t } = useTranslation();
-
-  const { login, register } = useAppContext();
+  const { login, registerRequestOtp, registerVerifyOtp, registerResendOtp } =
+    useAppContext();
 
   const location = useLocation();
   const [error, setError] = useState(location.state?.authError || "");
@@ -105,24 +112,144 @@ const AuthPage = ({ mode }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [agreed, setAgreed] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!isLogin && !agreed) return;
-    setError("");
-    setLoading(true);
+  // Referral code is captured ONCE from the URL. It survives step changes.
+  const [referralFromUrl] = useState(() => {
+    if (isLogin) return null;
+    const params = new URLSearchParams(location.search);
+    return normalizeReferralCode(params.get("referral"));
+  });
 
-    try {
-      if (mode === "login") {
+  // ── OTP step state ────────────────────────────────────────────────────
+  const [step, setStep] = useState("form"); // "form" | "otp"
+  const [otpId, setOtpId] = useState(null);
+  const [otpEmail, setOtpEmail] = useState("");
+  const [otpCode, setOtpCode] = useState("");
+  const [otpExpiresAt, setOtpExpiresAt] = useState(null);
+  const [resendAvailableAt, setResendAvailableAt] = useState(null);
+  const [resending, setResending] = useState(false);
+  const [now, setNow] = useState(Date.now());
+
+  // 1-second tick for countdowns (only while on the OTP step)
+  useEffect(() => {
+    if (step !== "otp") return;
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, [step]);
+
+  const resendWaitMs = resendAvailableAt
+    ? Math.max(0, new Date(resendAvailableAt).getTime() - now)
+    : 0;
+  const resendWaitSec = Math.ceil(resendWaitMs / 1000);
+  const canResend = resendWaitSec === 0 && !resending;
+
+  const expiresInMs = otpExpiresAt
+    ? Math.max(0, new Date(otpExpiresAt).getTime() - now)
+    : 0;
+  const expiresInSec = Math.ceil(expiresInMs / 1000);
+  const expiryLabel = `${Math.floor(expiresInSec / 60)}:${String(
+    expiresInSec % 60,
+  ).padStart(2, "0")}`;
+  const isExpired = otpExpiresAt !== null && expiresInSec <= 0;
+
+  const resetOtpFlow = () => {
+    setStep("form");
+    setOtpId(null);
+    setOtpEmail("");
+    setOtpCode("");
+    setOtpExpiresAt(null);
+    setResendAvailableAt(null);
+    setError("");
+  };
+
+  // ── Step 1: form submit ───────────────────────────────────────────────
+  const handleSubmitForm = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (isLogin) {
+      setLoading(true);
+      try {
         await login(email, password);
-      } else {
-        await register(name, email, password);
+      } catch (err) {
+        setError(err.message || t("errors.AUTH_INVALID_CREDENTIALS"));
+      } finally {
+        setLoading(false);
       }
+      return;
+    }
+
+    if (!agreed) return;
+    setLoading(true);
+    try {
+      const data = await registerRequestOtp({
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        password,
+        referralCode: referralFromUrl,
+      });
+      setOtpId(data.otpId);
+      setOtpEmail(data.email);
+      setOtpExpiresAt(data.expiresAt);
+      setResendAvailableAt(data.resendAvailableAt);
+      setOtpCode("");
+      setNow(Date.now());
+      setStep("otp");
     } catch (err) {
-      setError(err.message || t("errors.AUTH_INVALID_CREDENTIALS"));
+      setError(err.message || t("toasts.registerFailed"));
     } finally {
       setLoading(false);
     }
   };
+
+  // ── Step 2: verify OTP ────────────────────────────────────────────────
+  const handleVerifyOtp = async (e) => {
+    e?.preventDefault?.();
+    const trimmed = otpCode.trim();
+    if (!/^\d{4,8}$/.test(trimmed)) {
+      setError(t("errors.OTP_INVALID_FORMAT"));
+      return;
+    }
+    setError("");
+    setLoading(true);
+    try {
+      await registerVerifyOtp(otpId, trimmed);
+      // Success toasts + navigate happen inside registerVerifyOtp
+    } catch (err) {
+      setError(err.message || t("toasts.registerFailed"));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (!canResend) return;
+    setResending(true);
+    setError("");
+    try {
+      const data = await registerResendOtp(otpId);
+      setResendAvailableAt(data.resendAvailableAt);
+      setOtpExpiresAt(data.expiresAt);
+      setOtpCode("");
+      setNow(Date.now());
+    } catch (err) {
+      setError(err.message || t("auth.otpResendFailed"));
+    } finally {
+      setResending(false);
+    }
+  };
+
+  // ── Header text depends on step ───────────────────────────────────────
+  let headerTitle;
+  let headerSubtitle;
+  if (step === "otp") {
+    headerTitle = t("auth.otpTitle");
+    headerSubtitle = t("auth.otpSubtitle", { email: otpEmail });
+  } else {
+    headerTitle = isLogin ? t("auth.welcomeBack") : t("auth.createAccount");
+    headerSubtitle = isLogin
+      ? t("auth.signInSubtitle")
+      : t("auth.registerSubtitle");
+  }
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-zinc-950 text-zinc-50 font-sans">
@@ -140,11 +267,9 @@ const AuthPage = ({ mode }) => {
               </span>
             </Link>
             <h1 className="text-3xl font-medium tracking-tight text-zinc-50">
-              {isLogin ? t("auth.welcomeBack") : t("auth.createAccount")}
+              {headerTitle}
             </h1>
-            <p className="mt-2 text-sm text-zinc-400">
-              {isLogin ? t("auth.signInSubtitle") : t("auth.registerSubtitle")}
-            </p>
+            <p className="mt-2 text-sm text-zinc-400">{headerSubtitle}</p>
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-white/3 p-7 backdrop-blur-2xl shadow-2xl shadow-black/40">
@@ -154,144 +279,226 @@ const AuthPage = ({ mode }) => {
               </div>
             )}
 
-            <OAuthButtons
-              disabled={loading}
-              onError={setError}
-              onStart={() => setError("")}
-            />
-
-            <form className="space-y-5" onSubmit={handleSubmit}>
-              {!isLogin && (
+            {step === "otp" ? (
+              <form className="space-y-5" onSubmit={handleVerifyOtp}>
                 <div>
                   <label className="block text-[11px] font-semibold text-zinc-500 uppercase tracking-widest mb-2">
-                    {t("auth.fullName")}
+                    {t("auth.otpVerify")}
                   </label>
                   <input
-                    className="w-full rounded-lg border border-white/10 bg-white/2 px-3 py-2.5 text-sm text-zinc-50 placeholder-zinc-500 outline-none transition focus:border-white/30 focus:bg-white/4 focus:ring-1 focus:ring-white/20"
                     type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    value={otpCode}
+                    onChange={(e) =>
+                      setOtpCode(e.target.value.replace(/\D/g, ""))
+                    }
+                    maxLength={8}
+                    placeholder="••••••"
+                    autoFocus
                     required
-                    placeholder="John Doe"
+                    className={OTP_INPUT_CLS}
                   />
+                  <p className="mt-2 text-center text-[11px] text-zinc-500">
+                    {isExpired
+                      ? t("auth.otpExpired")
+                      : t("auth.otpExpiresIn", { time: expiryLabel })}
+                  </p>
                 </div>
-              )}
 
-              <div>
-                <label className="block text-[11px] font-semibold text-zinc-500 uppercase tracking-widest mb-2">
-                  {t("auth.email")}
-                </label>
-                <input
-                  className="w-full rounded-lg border border-white/10 bg-white/2 px-3 py-2.5 text-sm text-zinc-50 placeholder-zinc-500 outline-none transition focus:border-white/30 focus:bg-white/4 focus:ring-1 focus:ring-white/20"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="johndoe@gmail.com"
-                />
-              </div>
+                <button
+                  className="w-full rounded-lg bg-white py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-zinc-200 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
+                  type="submit"
+                  disabled={loading || otpCode.length < 4 || isExpired}>
+                  {loading && (
+                    <Loader2Icon className="animate-spin h-3.5 w-3.5 mr-2" />
+                  )}
+                  {loading ? t("auth.otpVerifying") : t("auth.otpVerify")}
+                </button>
 
-              <div>
-                <label className="block text-[11px] font-semibold text-zinc-500 uppercase tracking-widest mb-2">
-                  {t("auth.password")}
-                </label>
-                <div className="relative">
-                  <input
-                    className="w-full rounded-lg border border-white/10 bg-white/2 px-3 py-2.5 pr-10 text-sm text-zinc-50 placeholder-zinc-500 outline-none transition focus:border-white/30 focus:bg-white/4 focus:ring-1 focus:ring-white/20"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    placeholder="••••••••"
-                  />
+                <div className="flex items-center justify-between gap-3 text-xs">
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-200 flex items-center justify-center cursor-pointer transition-colors"
-                    aria-label={
-                      showPassword
-                        ? t("auth.hidePassword")
-                        : t("auth.showPassword")
-                    }>
-                    {showPassword ? (
-                      <EyeOffIcon size={15} />
-                    ) : (
-                      <EyeIcon size={15} />
-                    )}
+                    onClick={resetOtpFlow}
+                    disabled={loading}
+                    className="cursor-pointer text-zinc-400 hover:text-zinc-200 transition-colors">
+                    ← {t("auth.otpBack")}
                   </button>
+                  {isExpired ? (
+                    <button
+                      type="button"
+                      onClick={resetOtpFlow}
+                      disabled={loading}
+                      className="cursor-pointer text-zinc-200 hover:text-white font-medium transition-colors">
+                      {t("auth.otpStartOver")}
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleResend}
+                      disabled={!canResend || loading}
+                      className="cursor-pointer text-zinc-400 hover:text-zinc-200 disabled:opacity-40 transition-colors">
+                      {resending
+                        ? t("auth.otpResending")
+                        : resendWaitSec > 0
+                          ? t("auth.otpResendIn", { seconds: resendWaitSec })
+                          : t("auth.otpResend")}
+                    </button>
+                  )}
                 </div>
-              </div>
+              </form>
+            ) : (
+              <>
+                <OAuthButtons
+                  disabled={loading}
+                  onError={setError}
+                  onStart={() => setError("")}
+                />
 
-              {!isLogin && (
-                <label className="flex items-start gap-2.5 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={agreed}
-                    onChange={(e) => setAgreed(e.target.checked)}
-                    className="mt-0.5 size-3.5 shrink-0 cursor-pointer rounded border-white/20 bg-white/5 text-white accent-white focus:ring-1 focus:ring-white/30"
-                  />
-                  <span className="text-[11px] leading-relaxed text-zinc-400">
-                    {t("auth.agreePrefix")}{" "}
-                    <Link
-                      to="/terms"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-medium text-zinc-200 underline underline-offset-2 hover:text-white">
-                      {t("auth.agreeTerms")}
-                    </Link>{" "}
-                    {t("auth.agreeAnd")}{" "}
-                    <Link
-                      to="/privacy"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-medium text-zinc-200 underline underline-offset-2 hover:text-white">
-                      {t("auth.agreePrivacy")}
-                    </Link>
-                    {t("auth.agreeSuffix")}{" "}
-                    <Link
-                      to="/refund"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-medium text-zinc-200 underline underline-offset-2 hover:text-white">
-                      {t("auth.agreeRefund")}
-                    </Link>
-                    .
-                  </span>
-                </label>
-              )}
+                <form className="space-y-5" onSubmit={handleSubmitForm}>
+                  {referralFromUrl && !isLogin && (
+                    <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-[11px] text-emerald-300">
+                      🎁 {t("auth.referredChip")} — {referralFromUrl}
+                    </div>
+                  )}
 
-              <button
-                className="w-full rounded-lg bg-white py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-zinc-200 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer mt-2"
-                type="submit"
-                disabled={loading || (!isLogin && !agreed)}>
-                {loading && (
-                  <Loader2Icon className="animate-spin h-3.5 w-3.5 mr-2" />
-                )}
-                {isLogin ? t("auth.signIn") : t("auth.createAccountBtn")}
-              </button>
-            </form>
+                  {!isLogin && (
+                    <div>
+                      <label className="block text-[11px] font-semibold text-zinc-500 uppercase tracking-widest mb-2">
+                        {t("auth.fullName")}
+                      </label>
+                      <input
+                        className={INPUT_CLS}
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                        placeholder="John Doe"
+                      />
+                    </div>
+                  )}
 
-            <p className="mt-6 pt-5 border-t border-white/5 text-center text-xs text-zinc-500">
-              {isLogin ? (
-                <>
-                  {t("auth.newHere")}{" "}
-                  <Link
-                    to="/register"
-                    className="font-medium text-zinc-200 hover:underline">
-                    {t("auth.createAccountBtn")}
-                  </Link>
-                </>
-              ) : (
-                <>
-                  {t("auth.haveAccount")}{" "}
-                  <Link
-                    to="/login"
-                    className="font-medium text-zinc-200 hover:underline">
-                    {t("auth.signIn")}
-                  </Link>
-                </>
-              )}
-            </p>
+                  <div>
+                    <label className="block text-[11px] font-semibold text-zinc-500 uppercase tracking-widest mb-2">
+                      {t("auth.email")}
+                    </label>
+                    <input
+                      className={INPUT_CLS}
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      placeholder="johndoe@gmail.com"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-zinc-500 uppercase tracking-widest mb-2">
+                      {t("auth.password")}
+                    </label>
+                    <div className="relative">
+                      <input
+                        className={`${INPUT_CLS} pr-10`}
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        placeholder="••••••••"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-200 flex items-center justify-center cursor-pointer transition-colors"
+                        aria-label={
+                          showPassword
+                            ? t("auth.hidePassword")
+                            : t("auth.showPassword")
+                        }>
+                        {showPassword ? (
+                          <EyeOffIcon size={15} />
+                        ) : (
+                          <EyeIcon size={15} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  {!isLogin && (
+                    <label className="flex items-start gap-2.5 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={agreed}
+                        onChange={(e) => setAgreed(e.target.checked)}
+                        className="mt-0.5 size-3.5 shrink-0 cursor-pointer rounded border-white/20 bg-white/5 text-white accent-white focus:ring-1 focus:ring-white/30"
+                      />
+                      <span className="text-[11px] leading-relaxed text-zinc-400">
+                        {t("auth.agreePrefix")}{" "}
+                        <Link
+                          to="/terms"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-zinc-200 underline underline-offset-2 hover:text-white">
+                          {t("auth.agreeTerms")}
+                        </Link>{" "}
+                        {t("auth.agreeAnd")}{" "}
+                        <Link
+                          to="/privacy"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-zinc-200 underline underline-offset-2 hover:text-white">
+                          {t("auth.agreePrivacy")}
+                        </Link>
+                        {t("auth.agreeSuffix")}{" "}
+                        <Link
+                          to="/refund"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-zinc-200 underline underline-offset-2 hover:text-white">
+                          {t("auth.agreeRefund")}
+                        </Link>
+                        .
+                      </span>
+                    </label>
+                  )}
+
+                  <button
+                    className="w-full rounded-lg bg-white py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-zinc-200 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer mt-2"
+                    type="submit"
+                    disabled={loading || (!isLogin && !agreed)}>
+                    {loading && (
+                      <Loader2Icon className="animate-spin h-3.5 w-3.5 mr-2" />
+                    )}
+                    {isLogin
+                      ? t("auth.signIn")
+                      : loading
+                        ? t("auth.sendingCode")
+                        : t("auth.createAccountBtn")}
+                  </button>
+                </form>
+
+                <p className="mt-6 pt-5 border-t border-white/5 text-center text-xs text-zinc-500">
+                  {isLogin ? (
+                    <>
+                      {t("auth.newHere")}{" "}
+                      <Link
+                        to="/register"
+                        className="font-medium text-zinc-200 hover:underline">
+                        {t("auth.createAccountBtn")}
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      {t("auth.haveAccount")}{" "}
+                      <Link
+                        to="/login"
+                        className="font-medium text-zinc-200 hover:underline">
+                        {t("auth.signIn")}
+                      </Link>
+                    </>
+                  )}
+                </p>
+              </>
+            )}
           </div>
 
           <p className="mt-6 text-center text-[11px] text-zinc-600">

@@ -117,6 +117,15 @@
     "MANUAL_PROOF_DUPLICATE": "This screenshot was already used for another order",
     "MANUAL_ATTACH_FAILED": "Could not attach proof",
 
+    "EMAIL_SEND_FAILED": "Could not send the verification email, try again",
+    "OTP_REQUIRED": "Verification code is required",
+    "OTP_INVALID_FORMAT": "Verification code must be 4-8 digits",
+    "OTP_NOT_FOUND": "Verification code not found, please start over",
+    "OTP_EXPIRED": "Verification code expired, please request a new one",
+    "OTP_TOO_MANY_ATTEMPTS": "Too many attempts, please start over",
+    "OTP_WRONG_CODE": "Incorrect verification code",
+    "OTP_RESEND_LIMITED": "Please wait before requesting another code, or start over",
+
     "INTERNAL_ERROR": "Something went wrong on our side. Please try again.",
     "RATE_LIMITED": "Too many requests. Please try again in a moment.",
     "BAD_REQUEST": "Invalid request.",
@@ -181,6 +190,20 @@
   },
 
   "auth": {
+    "otpTitle": "Check your email",
+    "otpSubtitle": "We sent a verification code to {{email}}",
+    "otpVerify": "Verify code",
+    "otpVerifying": "Verifying…",
+    "otpExpiresIn": "Code expires in {{time}}",
+    "otpExpired": "Code expired. Request a new one.",
+    "otpResend": "Resend code",
+    "otpResending": "Sending…",
+    "otpResendIn": "Resend in {{seconds}}s",
+    "otpBack": "Use a different email",
+    "otpResendFailed": "Could not resend the code, try again",
+    "otpStartOver": "Code expired — start over",
+    "referredChip": "Referred by a friend",
+    "sendingCode": "Sending code…",
     "welcomeBack": "Welcome back",
     "createAccount": "Create your account",
     "signInSubtitle": "Sign in to continue crafting.",
@@ -275,7 +298,19 @@
     "signOut": "Sign out",
     "signOutNote": "You will need to sign in again to open your projects.",
     "memberSince": "Member since {{date}}",
-    "back": "Back"
+    "back": "Back",
+    "referral": "Referral",
+    "referralSub": "Share your code. Your friend gets 10 credits, you get 15.",
+    "referralCode": "Your code",
+    "referralCopyCode": "Copy code",
+    "referralCopyLink": "Copy link",
+    "referralEarned": "{{count}} credit earned",
+    "referralEarned_plural": "{{count}} credits earned",
+    "referralRedemptions": "{{count}} friend joined",
+    "referralRedemptions_plural": "{{count}} friends joined",
+    "referralEmpty": "Nobody has used your code yet. Share it to start earning.",
+    "referralLoadFailed": "Could not load your referral code",
+    "referralLoading": "Loading referral…"
   },
 
   "publish": {
@@ -694,6 +729,9 @@
     "contactUs": "Contact us"
   },
   "toasts": {
+    "accountCreatedReferral": "Welcome! Your friend's referral gave you {{count}} credits.",
+    "referralCodeCopied": "Referral code copied",
+    "referralLinkCopied": "Referral link copied",
     "briefClassifyTimeout": "The server is taking too long to process. Please try again in a moment.",
     "briefExtraFailed": "Failed to add extra info",
     "sessionExpired": "Session expired, please sign in again.",

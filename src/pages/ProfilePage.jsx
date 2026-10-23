@@ -1,18 +1,150 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeftIcon, CoinsIcon, LogOutIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  CheckIcon,
+  CoinsIcon,
+  CopyIcon,
+  GiftIcon,
+  Link2Icon,
+  Loader2Icon,
+  LogOutIcon,
+} from "lucide-react";
 import moment from "moment";
+import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "../context/AppContext";
-// import { openBuyCredits } from "../utils/billing";
 import ThemeToggle from "../components/ThemeToggle";
 import LanguageToggle from "../components/LanguageToggle";
 import { openTopUp } from "../utils/topup";
-import { useState } from "react";
-import { GiftIcon, Loader2Icon } from "lucide-react";
-import toast from "react-hot-toast";
 import { errorMessage } from "../api/api";
 import { redeemCode } from "../api/redeem";
+import { getMyReferral } from "../api/referral";
+
+// ─── Referral card ─────────────────────────────────────────────────────────
+
+const ReferralCard = () => {
+  const { t } = useTranslation();
+  const [state, setState] = useState({ loading: true });
+  const [copied, setCopied] = useState(null); // "code" | "link" | null
+
+  useEffect(() => {
+    let cancelled = false;
+    getMyReferral()
+      .then((data) => {
+        if (!cancelled) setState({ loading: false, data });
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setState({
+            loading: false,
+            error: errorMessage(err, t("profile.referralLoadFailed")),
+          });
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [t]);
+
+  const copy = async (text, kind, toastKey) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(kind);
+      toast.success(t(toastKey));
+      setTimeout(() => setCopied(null), 2000);
+    } catch {
+      toast.error(t("common.copy") + " failed");
+    }
+  };
+
+  if (state.loading) {
+    return (
+      <section className="bg-white border border-zinc-200 rounded-2xl p-6 dark:bg-zinc-900 dark:border-zinc-800">
+        <div className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+          <Loader2Icon size={14} className="animate-spin" />
+          {t("profile.referralLoading")}
+        </div>
+      </section>
+    );
+  }
+
+  if (state.error) {
+    return (
+      <section className="bg-white border border-zinc-200 rounded-2xl p-6 dark:bg-zinc-900 dark:border-zinc-800">
+        <p className="text-sm text-red-600 dark:text-red-400">{state.error}</p>
+      </section>
+    );
+  }
+
+  const { code, redemptionCount = 0, totalEarned = 0 } = state.data;
+  const link =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/register?referral=${code}`
+      : "";
+
+  return (
+    <section className="bg-white border border-zinc-200 rounded-2xl p-6 dark:bg-zinc-900 dark:border-zinc-800">
+      <div className="flex items-center gap-2 mb-1">
+        <GiftIcon size={15} className="text-zinc-500 dark:text-zinc-400" />
+        <p className="text-sm font-medium">{t("profile.referral")}</p>
+      </div>
+      <p className="text-xs text-zinc-500 dark:text-zinc-400">
+        {t("profile.referralSub")}
+      </p>
+
+      <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-3 dark:border-zinc-800 dark:bg-zinc-950">
+        <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+          {t("profile.referralCode")}
+        </p>
+        <p className="mt-0.5 font-mono text-lg font-semibold tracking-wider text-zinc-900 dark:text-zinc-50">
+          {code}
+        </p>
+      </div>
+
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          onClick={() => copy(code, "code", "toasts.referralCodeCopied")}
+          className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-zinc-200 px-3 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800">
+          {copied === "code" ? <CheckIcon size={12} /> : <CopyIcon size={12} />}
+          {t("profile.referralCopyCode")}
+        </button>
+        <button
+          type="button"
+          onClick={() => copy(link, "link", "toasts.referralLinkCopied")}
+          className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-zinc-950 px-3 py-2 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200">
+          {copied === "link" ? (
+            <CheckIcon size={12} />
+          ) : (
+            <Link2Icon size={12} />
+          )}
+          {t("profile.referralCopyLink")}
+        </button>
+      </div>
+
+      <div className="mt-4 flex items-center justify-between gap-3 rounded-lg border border-zinc-200 px-3 py-2 dark:border-zinc-800">
+        <div>
+          <p className="text-[10px] uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+            {t("profile.referralRedemptions", { count: redemptionCount })}
+          </p>
+          <p className="mt-0.5 text-sm font-medium text-zinc-900 dark:text-zinc-50">
+            {t("profile.referralEarned", { count: totalEarned })}
+          </p>
+        </div>
+        <CoinsIcon size={16} className="text-zinc-400 dark:text-zinc-500" />
+      </div>
+
+      {redemptionCount === 0 && (
+        <p className="mt-3 text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500">
+          {t("profile.referralEmpty")}
+        </p>
+      )}
+    </section>
+  );
+};
+
+// ─── Page ──────────────────────────────────────────────────────────────────
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -114,6 +246,8 @@ const ProfilePage = () => {
             </button>
           </div>
         </section>
+
+        <ReferralCard />
 
         <section className="bg-white border border-zinc-200 rounded-2xl p-6 dark:bg-zinc-900 dark:border-zinc-800">
           <div className="flex items-center gap-2 mb-1">
