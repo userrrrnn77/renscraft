@@ -329,6 +329,12 @@ function Summary({
         {t("brief.summarySub")}
       </p>
 
+      {brief.sampleData && (
+        <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] leading-relaxed text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">
+          {t("brief.sampleDataHint")}
+        </div>
+      )}
+
       <div className="mt-4 divide-y divide-zinc-200 dark:divide-white/10 max-h-[50vh] overflow-y-auto pr-1">
         {brief.slots.map((slot) => {
           const filled = slot.value != null && slot.value !== "";

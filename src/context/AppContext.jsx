@@ -453,7 +453,7 @@ export function AppContextProvider({ children }) {
         // Server-side timeout 45s + 1 retry (maxRetries=1 di classifier.js)
         // → worst case ~90s. Kalau lewat dari ini, ada bug / hang di server.
         if (status === "classifying") {
-          const DEADLINE_MS = 60_000;
+          const DEADLINE_MS = 180_000;
           const startedAt = Date.now();
 
           while (Date.now() - startedAt < DEADLINE_MS) {
@@ -476,6 +476,14 @@ export function AppContextProvider({ children }) {
             }
 
             if (state.status !== "classifying") {
+              // Server sudah menyelesaikan retry loop. Kalau status "failed",
+              // 3 attempt gagal — jangan jatuh ke wizard generic, minta user
+              // submit ulang. Prompt input tetap ada, gak di-clear.
+              if (state.status === "failed") {
+                clearStoredBrief();
+                toast.error(tt("toasts.briefClassifyFailed"));
+                return false;
+              }
               if (state.autoStart) {
                 // Semua slot udah ke-extract / kategori nggak butuh slot.
                 // storeBrief dulu biar kalau createFromPrompt gagal di tengah
@@ -612,10 +620,16 @@ export function AppContextProvider({ children }) {
 
   const cancelBrief = useCallback(() => dropBrief(), [dropBrief]);
 
+  // R4: kalau server bilang autoStart (questionKeys kosong karena semua
+  // must-have udah ke-extract), langsung generate — jangan balik ke wizard
+  // walau user refresh di tengah proses.
   // Lanjutkan wizard setelah refresh halaman.
   // R4: kalau server bilang autoStart (questionKeys kosong karena semua
   // must-have udah ke-extract), langsung generate — jangan balik ke wizard
   // walau user refresh di tengah proses.
+  //
+  // status "failed" = 3 attempt classifier gagal. Bersihin storage diam-diam
+  // (jangan toast lagi, user baru buka tab). User tinggal submit ulang.
   useEffect(() => {
     if (!user) return;
     const id = readStoredBrief();
@@ -625,6 +639,11 @@ export function AppContextProvider({ children }) {
     getBrief(id)
       .then((state) => {
         if (cancelled) return;
+
+        if (state.status === "failed") {
+          clearStoredBrief();
+          return;
+        }
 
         if (state.autoStart) {
           createFromPrompt(null, id);
