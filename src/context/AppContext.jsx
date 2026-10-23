@@ -228,7 +228,7 @@ export function AppContextProvider({ children }) {
   // after this (/api/auth/me, 401 handling, logout) works as for a password login.
   // Errors are thrown (not toasted): AuthCallbackPage sends the user back to
   // /login and shows the message there. err.code is e.g. "EMAIL_ACCOUNT_EXISTS".
-  const loginWithSupabase = async (accessToken) => {
+  const loginWithSupabase = async (accessToken, referralCode = null) => {
     try {
       const { data } = await api.post("/api/auth/supabase/session", {
         accessToken,
