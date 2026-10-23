@@ -53,6 +53,12 @@ const AuthCallbackPage = () => {
         return;
       }
 
+      let pendingReferral = null;
+      try {
+        pendingReferral = sessionStorage.getItem("renscraft:pendingReferral");
+        sessionStorage.removeItem("renscraft:pendingReferral");
+      } catch {}
+
       try {
         const { data, error } =
           await supabase.auth.exchangeCodeForSession(code);
@@ -62,7 +68,7 @@ const AuthCallbackPage = () => {
           fail(t("auth.callbackFailed"));
           return;
         }
-        await loginWithSupabase(accessToken);
+        await loginWithSupabase(accessToken, pendingReferral);
       } catch (err) {
         fail(err.message || t("auth.callbackFailed"));
       } finally {

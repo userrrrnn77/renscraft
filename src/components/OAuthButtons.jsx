@@ -56,6 +56,13 @@ const OAuthButtons = ({ disabled = false, onStart, onError }) => {
     onStart?.();
     setPending(provider);
     try {
+      // Simpan referral — OAuth redirect full-page, URL query bisa saja
+      // nggak ikut kalau Supabase dashboard cuma whitelist path exact.
+      if (referralCode) {
+        try {
+          sessionStorage.setItem("renscraft:pendingReferral", referralCode);
+        } catch {}
+      }
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: { redirectTo: `${window.location.origin}/auth/callback` },
@@ -64,6 +71,9 @@ const OAuthButtons = ({ disabled = false, onStart, onError }) => {
     } catch (err) {
       console.error("OAuth start failed: ", err);
       setPending(null);
+      try {
+        sessionStorage.removeItem("renscraft:pendingReferral");
+      } catch {}
       onError?.(t("auth.oauthStartFailed"));
     }
   };

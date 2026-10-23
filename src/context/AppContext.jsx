@@ -232,10 +232,24 @@ export function AppContextProvider({ children }) {
     try {
       const { data } = await api.post("/api/auth/supabase/session", {
         accessToken,
+        ...(referralCode ? { referralCode } : {}),
       });
       setUser(data.user);
       applyCredits(data.user?.credits);
-      toast.success(tt("toasts.signedIn"));
+
+      if (data.creditsSource === "referral") {
+        toast.success(
+          tt("toasts.accountCreatedReferral", { count: data.creditsAwarded }),
+        );
+      } else if (data.creditsSource === "free_signup") {
+        toast.success(
+          tt("toasts.accountCreatedFreeCredits", {
+            count: data.creditsAwarded,
+          }),
+        );
+      } else {
+        toast.success(tt("toasts.signedIn"));
+      }
       navigate("/chat");
     } catch (err) {
       console.error("Supabase sign-in failed: ", err);

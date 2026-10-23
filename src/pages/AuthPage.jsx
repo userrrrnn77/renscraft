@@ -353,6 +353,7 @@ const AuthPage = ({ mode }) => {
                   disabled={loading}
                   onError={setError}
                   onStart={() => setError("")}
+                  referralCode={referralFromUrl}
                 />
 
                 <form className="space-y-5" onSubmit={handleSubmitForm}>
