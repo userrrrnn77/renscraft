@@ -18,7 +18,6 @@ import SiteNav from "../components/SiteNav";
 import { useAppContext } from "../context/AppContext";
 import usePageMeta from "../utils/usePageMeta";
 import DisplayProjects from "../components/DisplayProjects";
-import FeaturedBadges from "../components/FeaturedBadges";
 
 const GRID_STYLE_LIGHT = {
   backgroundImage:
@@ -503,11 +502,8 @@ const LandingPage = () => {
             </div>
           </div>
 
-          <div className="mt-12 border-t border-zinc-200 dark:border-zinc-800">
-            <FeaturedBadges />
-          </div>
 
-          <div className="mt-12 md:mt-16 flex flex-col items-center justify-between gap-4 border-t border-zinc-200 pt-6 md:pt-8 sm:flex-row dark:border-zinc-800">
+          <div className="mt-12 md:mt-16 flex flex-col items-center justify-between gap-4 pt-6 md:pt-8 sm:flex-row ">
             <p className="text-[10px] md:text-xs text-zinc-500 dark:text-zinc-400 text-center sm:text-left">
               {t("landing.footerCopyright", { year: new Date().getFullYear() })}
             </p>

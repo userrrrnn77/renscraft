@@ -7,8 +7,14 @@
     <!-- Favicons & Theme -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/og-image.png" />
-    <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
+    <meta
+      name="theme-color"
+      content="#fafafa"
+      media="(prefers-color-scheme: light)" />
+    <meta
+      name="theme-color"
+      content="#09090b"
+      media="(prefers-color-scheme: dark)" />
     <meta name="color-scheme" content="light dark" />
 
     <!-- Primary Meta Tags -->
@@ -16,14 +22,14 @@
     <meta name="title" content="Renscraft — AI Website Builder" />
     <meta
       name="description"
-      content="AI website builder that writes real React code. Describe your site in plain words, watch it get built, revise it by chat, then publish a live link or export the code."
-    />
+      content="AI website builder that writes real React code. Describe your site in plain words, watch it get built, revise it by chat, then publish a live link or export the code." />
     <meta
       name="keywords"
-      content="AI website builder, AI website generator, bikin website dengan AI, buat website tanpa coding, React website generator, AI web builder Indonesia, website builder Indonesia, Renscraft, Rensdev, generate website AI, publish website gratis, export React code"
-    />
+      content="AI website builder, AI website generator, bikin website dengan AI, buat website tanpa coding, React website generator, AI web builder Indonesia, website builder Indonesia, Renscraft, Rensdev, generate website AI, publish website gratis, export React code" />
     <meta name="author" content="Rensdev" />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow" />
     <link rel="canonical" href="https://ai.rensdev.my.id/" />
 
@@ -34,14 +40,17 @@
     <meta property="og:title" content="Renscraft — AI Website Builder" />
     <meta
       property="og:description"
-      content="Describe your website, watch it get built instantly, revise it by chat, then publish a live link or export clean React code."
-    />
+      content="Describe your website, watch it get built instantly, revise it by chat, then publish a live link or export clean React code." />
     <meta property="og:image" content="https://ai.rensdev.my.id/og-image.png" />
-    <meta property="og:image:secure_url" content="https://ai.rensdev.my.id/og-image.png" />
+    <meta
+      property="og:image:secure_url"
+      content="https://ai.rensdev.my.id/og-image.png" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Renscraft — AI Website Builder preview" />
+    <meta
+      property="og:image:alt"
+      content="Renscraft — AI Website Builder preview" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:locale:alternate" content="id_ID" />
 
@@ -52,9 +61,10 @@
     <meta name="twitter:title" content="Renscraft — AI Website Builder" />
     <meta
       name="twitter:description"
-      content="AI writes the React code, you preview live, revise by chat, then publish or export. Credits never expire."
-    />
-    <meta name="twitter:image" content="https://ai.rensdev.my.id/og-image.png" />
+      content="AI writes the React code, you preview live, revise by chat, then publish or export. Credits never expire." />
+    <meta
+      name="twitter:image"
+      content="https://ai.rensdev.my.id/og-image.png" />
     <meta name="twitter:image:alt" content="Renscraft — AI Website Builder" />
 
     <!-- Preconnect -->
@@ -140,7 +150,113 @@
     </script>
   </head>
   <body>
+    <!-- Aplikasi React lo bakal dirender di dalam div ini -->
     <div id="root"></div>
+
+    <!-- ================= STATIC BADGES UNTUK BOT ================= -->
+    <style>
+      .bot-badges-wrapper {
+        padding: 24px 16px;
+        background-color: #ffffff;
+        border-top: 1px solid #e4e4e7;
+      }
+      .bot-badges-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      /* Dark mode CSS murni */
+      @media (prefers-color-scheme: dark) {
+        .bot-badges-wrapper {
+          background-color: #09090b;
+          border-top-color: #27272a;
+        }
+        .badge-light {
+          display: none !important;
+        }
+        .badge-dark {
+          display: block !important;
+        }
+      }
+      .badge-dark {
+        display: none;
+      }
+    </style>
+
+    <div class="bot-badges-wrapper">
+      <div class="bot-badges-container">
+        <!-- NxGn -->
+        <a
+          href="https://www.nxgntools.com/tools/renscraft?utm_source=renscraft"
+          target="_blank"
+          rel="noopener noreferrer">
+          <img
+            src="https://www.nxgntools.com/api/embed/renscraft?type=FEATURED_ON&hideUpvotes=true"
+            alt="Featured on NxGn Tools"
+            style="height: 48px; width: auto" />
+        </a>
+
+        <!-- LaunchBuff -->
+        <a
+          href="https://launchbuff.com/products/renscraft-5gwz1l"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Featured on LaunchBuff">
+          <img
+            src="https://launchbuff.com/badge-featured-light.svg"
+            alt="Featured on LaunchBuff"
+            class="badge-light"
+            style="height: 48px; width: auto" />
+          <img
+            src="https://launchbuff.com/badge-featured-dark.svg"
+            alt="Featured on LaunchBuff"
+            class="badge-dark"
+            style="height: 48px; width: auto" />
+        </a>
+
+        <!-- LaunchNest -->
+        <a
+          href="https://launchnest.io/p/renscraft"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Renscraft on LaunchNest">
+          <img
+            src="https://launchnest.io/badge/renscraft.svg?variant=featured&theme=light"
+            alt="Renscraft on LaunchNest"
+            class="badge-light"
+            style="height: 48px; width: auto" />
+          <img
+            src="https://launchnest.io/badge/renscraft.svg?variant=featured"
+            alt="Renscraft on LaunchNest"
+            class="badge-dark"
+            style="height: 48px; width: auto" />
+        </a>
+
+        <!-- Launchstag -->
+        <a
+          href="https://launchstag.com/p/renscraft"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Featured on Launchstag">
+          <img
+            src="https://launchstag.com/badge-light.svg"
+            alt="Featured on Launchstag"
+            class="badge-light"
+            style="height: 48px; width: auto" />
+          <img
+            src="https://launchstag.com/badge-dark.svg"
+            alt="Featured on Launchstag"
+            class="badge-dark"
+            style="height: 48px; width: auto" />
+        </a>
+      </div>
+    </div>
+    <!-- =========================================================== -->
+
     <noscript>
       <h1>Renscraft — AI Website Builder</h1>
       <p>

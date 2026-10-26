@@ -1,3 +1,5 @@
+// src/App.jsx
+
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { AuthLayout, GuestLayout } from "./pages/Layout";
@@ -31,8 +33,6 @@ const App = () => {
 
   return (
     <>
-      {/* Reset scroll tiap pindah halaman. Taruh di atas <Routes> biar
-          ke-trigger setiap kali lokasi berubah, sebelum konten baru render. */}
       <ScrollToTop />
       <Toaster />
       <BuyCreditsHost /> <ManualPaymentHost />

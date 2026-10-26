@@ -5,13 +5,7 @@ import prerender from "vite-plugin-prerender-spa";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(),
-    prerender({
-      routes: ["/"],
-    }),
-  ],
+  plugins: [react(), tailwindcss()],
   server: {
     host: true,
     port: 5173,
