@@ -1,6 +1,6 @@
 // src/App.jsx
 
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { AuthLayout, GuestLayout } from "./pages/Layout";
 import AuthPage from "./pages/AuthPage";
@@ -27,9 +27,23 @@ import { useEffect } from "react";
 import WebPublicPage from "./pages/WebPublicPage";
 
 const App = () => {
+  const location = useLocation();
+
   useEffect(() => {
     getPaymentMethods();
   }, []);
+
+  useEffect(() => {
+    const badgeEl = document.getElementById("static-badges-for-bot");
+    if (badgeEl) {
+      // Cuma tampilin kalau di Landing Page (/)
+      if (location.pathname === "/") {
+        badgeEl.style.display = "block";
+      } else {
+        badgeEl.style.display = "none";
+      }
+    }
+  }, [location.pathname]);
 
   return (
     <>
