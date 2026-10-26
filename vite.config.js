@@ -1,14 +1,21 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
+import prerender from "vite-plugin-prerender-spa";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    prerender({
+      routes: ["/"],
+    }),
+  ],
   server: {
-    host: true, // wajib biar bisa diakses cloudflared
+    host: true,
     port: 5173,
-    allowedHosts: [".trycloudflare.com"], // biar gak ganti2 tiap url random
+    allowedHosts: [".trycloudflare.com"],
     cors: true,
     proxy: {
       "/api": "http://localhost:3000",
