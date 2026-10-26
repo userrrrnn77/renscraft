@@ -16,11 +16,12 @@ const FeaturedBadges = () => {
           href="https://www.nxgntools.com/tools/renscraft?utm_source=renscraft"
           target="_blank"
           rel="noopener noreferrer"
-          className="transition-transform duration-200 hover:scale-105">
+          title="Featured on NxGn Tools"
+          className="inline-block w-auto transition-transform duration-200 hover:scale-105">
           <img
-            src="https://www.nxgntools.com/api/embed/renscraft?type=FEATURED_ON"
+            src="https://www.nxgntools.com/api/embed/renscraft?type=FEATURED_ON&hideUpvotes=true"
             alt="Featured on NxGn Tools"
-            className="h-10 sm:h-12 w-auto"
+            className="h-12 w-auto"
           />
         </a>
 
