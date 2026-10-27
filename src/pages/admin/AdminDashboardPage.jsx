@@ -1259,7 +1259,11 @@ const AdminDashboardPage = () => {
   const [checking, setChecking] = useState(true);
   const [tab, setTab] = useState("overview");
 
-  usePageMeta({ title: "Admin — Renscraft", description: "Admin dashboard" });
+  usePageMeta({
+    title: "Admin — Renscraft",
+    description: "Admin login",
+    noIndex: true,
+  });
 
   useEffect(() => {
     let cancelled = false;

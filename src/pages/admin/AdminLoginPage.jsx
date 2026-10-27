@@ -12,7 +12,7 @@ const AdminLoginPage = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  usePageMeta({ title: "Admin — Renscraft", description: "Admin login" });
+  usePageMeta({ title: "Admin — Renscraft", description: "Admin login", noIndex: true });
 
   const onSubmit = async (e) => {
     e.preventDefault();

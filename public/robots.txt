@@ -1,4 +1,4 @@
-# robots.txt for Renscraft (ai.rensdev.my.id)
+# robots.txt for Renscraft (renscraft.web.id)
 # Part of the Rensdev network — https://rensdev.my.id
 
 User-agent: *
@@ -27,7 +27,7 @@ Disallow: /admin/
 # Don't crawl JSON endpoints
 Disallow: /*.json$
 
-# AI crawlers — opt out of training (hapus blok ini kalau mau di-train)
+# AI crawlers — opt out of training
 User-agent: GPTBot
 Disallow: /
 
@@ -46,4 +46,4 @@ Disallow: /
 User-agent: CCBot
 Disallow: /
 
-Sitemap: https://ai.rensdev.my.id/sitemap.xml
+Sitemap: https://renscraft.web.id/sitemap.xml

@@ -18,8 +18,8 @@ export function useAdminNotifications() {
       const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
       const host = import.meta.env.VITE_BASE_URL
         ? import.meta.env.VITE_BASE_URL.replace(/^https?:\/\//, "")
-        : window.location.hostname === "ai.rensdev.my.id"
-          ? "api.rensdev.my.id"
+        : window.location.hostname === "renscraft.web.id"
+          ? "api.renscraft.web.id"
           : "localhost:3000";
 
       const wsUrl = `${protocol}//${host}/api/admin/ws`;

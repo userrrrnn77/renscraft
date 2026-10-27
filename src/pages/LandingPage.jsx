@@ -76,7 +76,7 @@ const BuildMock = () => {
           <div className="ml-2 md:ml-3 flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-2 py-0.5 dark:border-zinc-800 dark:bg-zinc-900">
             <span className="size-1.5 rounded-full bg-emerald-500" />
             <span className="text-[9px] md:text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
-              ai.rensdev.my.id
+              renscraft.web.id
             </span>
           </div>
         </div>
@@ -501,7 +501,6 @@ const LandingPage = () => {
               </ul>
             </div>
           </div>
-
 
           <div className="mt-12 md:mt-16 flex flex-col items-center justify-between gap-4 pt-6 md:pt-8 sm:flex-row ">
             <p className="text-[10px] md:text-xs text-zinc-500 dark:text-zinc-400 text-center sm:text-left">

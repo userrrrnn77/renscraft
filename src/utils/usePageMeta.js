@@ -1,7 +1,7 @@
 // src/utils/usePageMeta.js
 import { useEffect } from "react";
 
-const SITE_URL = "https://ai.rensdev.my.id";
+const SITE_URL = "https://renscraft.web.id";
 const SITE_NAME = "Renscraft";
 const DEFAULT_IMAGE = `${SITE_URL}/og-image.png`;
 const DEFAULT_ROBOTS =
