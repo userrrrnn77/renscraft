@@ -26,6 +26,7 @@ import { getPaymentMethods } from "./utils/topup";
 import { useEffect } from "react";
 import WebPublicPage from "./pages/WebPublicPage";
 import DynamicAppPage from "./pages/DynamicAppPage";
+import SubdomainPage from "./pages/SubdomainPage"; // <-- IMPORT BARU
 
 const App = () => {
   const location = useLocation();
@@ -43,8 +44,6 @@ const App = () => {
   useEffect(() => {
     const badgeEl = document.getElementById("static-badges-for-bot");
     if (badgeEl) {
-      // Cuma tampilin kalau di Landing Page asli (/),
-      // BUKAN di dynamic subdomain, BUKAN di preview/publish page
       const isLanding =
         location.pathname === "/" &&
         !isDynamicSubdomain &&
@@ -80,7 +79,7 @@ const App = () => {
         {/* Public */}
         <Route
           path="/"
-          element={isDynamicSubdomain ? <DynamicAppPage /> : <LandingPage />}
+          element={isDynamicSubdomain ? <SubdomainPage /> : <LandingPage />}
         />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/publish/:name" element={<PublishPage />} />

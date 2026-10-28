@@ -1,3 +1,5 @@
+// src/pages/BuilderPage.jsx
+
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { useEffect, useState } from "react";
@@ -9,31 +11,28 @@ import {
   MessageSquareIcon,
   MonitorPlayIcon,
   MenuIcon,
-  DatabaseIcon,
 } from "lucide-react";
 import ChatPanel from "../components/ChatPanel";
 import FileExplorer from "../components/FileExplorer";
 import PreviewPanel from "../components/PreviewPanel";
 import AgentProgressDashboard from "../components/AgentProgressDashboard";
-import PublishModal from "../components/PublishModal";
 import BuilderImageUploader from "../components/BuilderImageUploader";
-import api from "../api/api";
-import toast from "react-hot-toast";
-import { exportProjectZip } from "../utils/exportProject";
 import BuilderDataTab from "../components/BuilderDataTab";
+import SubdomainModal from "../components/SubdomainModal"; // <-- Modal Baru
+import { exportProjectZip } from "../utils/exportProject";
+import api, { errorMessage, isInsufficientCredits } from "../api/api";
+import toast from "react-hot-toast";
 
 const BuilderPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [letfTab, setLeftTab] = useState("chat");
-  const [mobileView, setMobileView] = useState("chat"); // "chat" atau "preview"
+  const [mobileView, setMobileView] = useState("chat");
 
-  // STATE BARU: Buat nampilin/nyembunyiin sidebar di desktop
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
-  const [publishing, setPublishing] = useState(false);
-  const [publishUrl, setPublishUrl] = useState(null);
+  const [showSubdomainModal, setShowSubdomainModal] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
   const {
     activeProject,
@@ -48,7 +47,7 @@ const BuilderPage = () => {
     handleChat,
     getLatestFiles,
     createFromPrompt,
-    dynamicAppsEnabled
+    refreshCredits, // 
   } = useAppContext();
 
   useEffect(() => {
@@ -61,27 +60,34 @@ const BuilderPage = () => {
     window.open(`/preview/${id}`, "_blank");
   };
 
-  const handlePublish = async () => {
+  // Ganti nama fungsi jadi handleOpenSubdomain
+  const handleOpenSubdomain = () => {
     if (!id) return;
-
-    setPublishing(true);
-    try {
-      const { data } = await api.post(`/api/projects/${id}/publish`);
-      const key = data?.slug ?? data?.name ?? activeProject?.name ?? id;
-      const url = `${window.location.origin}/publish/${encodeURIComponent(key)}`;
-      setPublishUrl(url);
-      toast.success("Website publish successfully");
-    } catch (err) {
-      console.error("Publish Failed: ", err);
-      toast.error(err?.response?.data?.error || "Publish Failed");
-    } finally {
-      setPublishing(false);
-    }
+    setShowSubdomainModal(true);
   };
 
-  const handleDownload = () => {
-    if (!activeProject) return;
-    exportProjectZip({ ...activeProject, files: getLatestFiles() });
+  const handleDownload = async () => {
+    if (!activeProject || exporting) return;
+    setExporting(true);
+    try {
+      // 1. Tembak API buat potong kredit
+      await api.post(`/api/projects/${activeProject._id}/export`);
+
+      // 2. Update saldo kredit di UI
+      await refreshCredits();
+
+      // 3. Generate & Download ZIP
+      exportProjectZip({ ...activeProject, files: getLatestFiles() });
+      toast.success("Export berhasil!");
+    } catch (err) {
+      if (isInsufficientCredits(err)) {
+        toast.error(errorMessage(err, "Kredit tidak cukup untuk export."));
+      } else {
+        toast.error(errorMessage(err, "Gagal export project."));
+      }
+    } finally {
+      setExporting(false);
+    }
   };
 
   const handleRetryWithSamePrompt = async () => {
@@ -110,7 +116,8 @@ const BuilderPage = () => {
     activeProject.status === "generating" ||
     isFailed;
 
-  const showDataTab = dynamicAppsEnabled && activeProject.status === "completed";
+  // Karena fitur dynamic app di-hold, tab data kita sembunyiin dulu
+  const showDataTab = false; // dynamicAppsEnabled && activeProject.status === "completed";
 
   const TABS = [
     { id: "chat", label: "Chat", Icon: MessageSquareIcon },
@@ -126,13 +133,14 @@ const BuilderPage = () => {
         version={activeProject.version}
         credits={credits}
         showCode={showCode}
-        publishing={publishing}
         isSidebarOpen={isSidebarOpen}
         onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         onToggleShowCode={() => setShowCode(!showCode)}
         onOpenPreview={handleOpenPreview}
-        onPublish={handlePublish}
+        onPublish={handleOpenSubdomain}
+        publishing={false}
         onDonwload={handleDownload}
+        exporting={exporting}
         onBack={() => navigate("/chat")}
         onProfile={() => navigate("/profile")}
         onMyProjects={() => navigate("/my-projects")}
@@ -160,10 +168,8 @@ const BuilderPage = () => {
       </div>
 
       <div className="flex-1 flex overflow-hidden">
-        {/* Left sidebar (Chat/Files/Images) */}
         <div
           className={`shrink-0 flex-col border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950 transition-all duration-300 ease-in-out ${
-            // Di Mobile: pakai logika tab. Di Desktop: pakai state isSidebarOpen
             mobileView === "chat" ? "flex w-full" : "hidden md:flex"
           } ${
             isSidebarOpen
@@ -221,7 +227,6 @@ const BuilderPage = () => {
           </div>
         </div>
 
-        {/* Right content (Preview / Progress) */}
         <div
           className={`flex-1 overflow-hidden bg-zinc-50 dark:bg-zinc-900 ${
             mobileView === "preview"
@@ -245,10 +250,15 @@ const BuilderPage = () => {
         </div>
       </div>
 
-      {publishUrl && (
-        <PublishModal
-          publishUrl={publishUrl}
-          onClose={() => setPublishUrl(null)}
+      {/* TAMPILIN MODAL SUBDOMAIN */}
+      {showSubdomainModal && (
+        <SubdomainModal
+          project={activeProject}
+          onClose={() => setShowSubdomainModal(false)}
+          onSuccess={() => {
+            // Refresh project biar data customSubdomain-nya keupdate
+            loadProject(id, true);
+          }}
         />
       )}
     </div>
