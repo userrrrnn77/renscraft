@@ -2,7 +2,13 @@
 //
 // Thin wrappers over /api/dynamic. No state, no toasts. Errors are
 // { error, code, params } — read them with errorMessage() from ./api.
+import axios from "axios";
 import api from "./api";
+
+const publicApi = axios.create({
+  baseURL: import.meta.env.VITE_BASE_URL || "",
+  withCredentials: false,
+});
 
 // ── Apps ─────────────────────────────────────────────────────────────────────
 export const listApps = async () => {
@@ -90,7 +96,7 @@ export const deleteDocument = async (appId, cid, docId) => {
 
 // ── Public ──────────────────────────────────────────────────────────────────
 export const getPublicApp = async (slug) => {
-  const { data } = await api.get(
+  const { data } = await publicApi.get(
     `/api/dynamic/public/${encodeURIComponent(slug)}`,
   );
   return data;

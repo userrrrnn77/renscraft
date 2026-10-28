@@ -54,6 +54,14 @@ const suggestSlug = (name) => {
   return base || "app";
 };
 
+// Pastikan identifier collection/key aman (alnum + underscore, gak diawali angka)
+const sanitizeIdentifier = (str, fallback) => {
+  const res = String(str || "")
+    .replace(/[^a-zA-Z0-9_]/g, "_")
+    .replace(/^[^a-zA-Z]+/, "");
+  return res || fallback;
+};
+
 // ─── Create App form ────────────────────────────────────────────────────────
 
 const CreateAppForm = ({ project, onCreated }) => {
@@ -82,16 +90,31 @@ const CreateAppForm = ({ project, onCreated }) => {
       });
       let created = 0;
       for (const c of proposed) {
-        await createCollection(app._id, {
-          name: c.name,
-          label: c.label || c.name,
-          fields: (c.fields ?? []).map((f) => ({
-            key: f.key,
-            label: f.label,
-            type: f.type,
+        // Paksa nama collection dan key jadi format yang aman
+        const safeName = sanitizeIdentifier(c.name, "collection");
+
+        const safeFields = (c.fields ?? []).map((f) => {
+          let safeType = f.type;
+          const safeOptions = f.options ?? [];
+
+          // Kalau tipe select tapi kosong, fallback ke string biar gak error 400
+          if (safeType === "select" && safeOptions.length === 0) {
+            safeType = "string";
+          }
+
+          return {
+            key: sanitizeIdentifier(f.key, "field"),
+            label: f.label || f.key || "Field",
+            type: safeType,
             required: !!f.required,
-            options: f.options ?? [],
-          })),
+            options: safeOptions,
+          };
+        });
+
+        await createCollection(app._id, {
+          name: safeName,
+          label: c.label || safeName,
+          fields: safeFields,
           policy: "private", // safe default; user can change later
         });
         created++;
@@ -320,7 +343,6 @@ const CollectionCard = ({ appId, col, onUpdated }) => {
 
 // ─── Main tab ───────────────────────────────────────────────────────────────
 
-// Cari function BuilderDataTab, ganti full dengan ini:
 const BuilderDataTab = ({ project }) => {
   const { t } = useTranslation();
   const [state, setState] = useState({ phase: "loading" });
@@ -416,11 +438,14 @@ const BuilderDataTab = ({ project }) => {
           ? "appStatusArchived"
           : "appStatusDraft";
 
-  // Link ke halaman publik
-  const publicUrl =
-    window.location.hostname === "localhost"
-      ? `/app/${app.slug}` // Fallback buat localhost
-      : `https://${app.slug}.renscraft.cyou`;
+  // Link ke halaman publik — href selalu valid, label selalu ke-render benar
+  const isLocal = window.location.hostname === "localhost";
+  const publicHref = isLocal
+    ? `/app/${app.slug}`
+    : `https://${app.slug}.renscraft.cyou`;
+  const publicLabel = isLocal
+    ? `${window.location.origin}${publicHref}`
+    : publicHref;
 
   return (
     <div className="space-y-3 overflow-y-auto p-3">
@@ -459,17 +484,15 @@ const BuilderDataTab = ({ project }) => {
           </p>
         )}
 
-        {/* Tampilkan Link Publik kalau udah published */}
         {app.status === "published" && (
           <div className="mt-3 rounded-md bg-emerald-50 px-2 py-1.5 text-[10px] leading-relaxed text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-300">
-            <p className="font-semibold mb-1">{t("data.liveAt")}:</p>
+            <p className="mb-1 font-semibold">{t("data.liveAt")}:</p>
             <a
-              href={publicUrl}
+              href={publicHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline font-mono break-all hover:text-emerald-900 dark:hover:text-emerald-100">
-              {window.location.origin}
-              {publicUrl}
+              className="break-all font-mono underline hover:text-emerald-900 dark:hover:text-emerald-100">
+              {publicLabel}
             </a>
           </div>
         )}
