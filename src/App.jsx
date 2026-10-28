@@ -25,9 +25,16 @@ import ManualPaymentHost from "./components/ManualPaymentHost";
 import { getPaymentMethods } from "./utils/topup";
 import { useEffect } from "react";
 import WebPublicPage from "./pages/WebPublicPage";
+import DynamicAppPage from "./pages/DynamicAppPage";
 
 const App = () => {
   const location = useLocation();
+
+  const hostname = window.location.hostname;
+  const isDynamicSubdomain =
+    hostname.endsWith("renscraft.cyou") &&
+    hostname !== "renscraft.cyou" &&
+    hostname !== "www.renscraft.cyou";
 
   useEffect(() => {
     getPaymentMethods();
@@ -67,11 +74,17 @@ const App = () => {
         </Route>
 
         {/* Public */}
-        <Route path="/" element={<LandingPage />} />
+        <Route
+          path="/"
+          element={isDynamicSubdomain ? <DynamicAppPage /> : <LandingPage />}
+        />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/publish/:name" element={<PublishPage />} />
         <Route path="/webpub" element={<WebPublicPage />} />
         <Route path="/auth/callback" element={<AuthCallbackPage />} />
+
+        {/* Dynamic App Public Route */}
+        <Route path="/app/:slug" element={<DynamicAppPage />} />
 
         {/* Legal */}
         <Route path="/terms" element={<TermsPage />} />

@@ -17,6 +17,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import debounce from "lodash.debounce";
 import { showInsufficientCreditsToast } from "../utils/billingToast";
+import { getDynamicConfig } from "../api/dynamicApps";
 import i18n from "../i18n";
 
 const AppContext = createContext(undefined);
@@ -80,6 +81,7 @@ export function AppContextProvider({ children }) {
   const [generatingProject, setgeneratingProject] = useState(false);
   const [activeFile, setActiveFile] = useState("/App.js");
   const [showCode, setShowCode] = useState(false);
+  const [dynamicAppsEnabled, setDynamicAppsEnabled] = useState(false);
 
   // Brief / wizard: state dari server (null = tidak ada wizard aktif)
   const [brief, setBrief] = useState(null);
@@ -119,6 +121,12 @@ export function AppContextProvider({ children }) {
 
   useEffect(() => {
     checkSession();
+  }, []);
+
+  useEffect(() => {
+    getDynamicConfig()
+      .then((data) => setDynamicAppsEnabled(Boolean(data?.enabled)))
+      .catch(() => setDynamicAppsEnabled(false));
   }, []);
 
   useEffect(() => {
@@ -834,6 +842,7 @@ export function AppContextProvider({ children }) {
         registerRequestOtp,
         registerVerifyOtp,
         registerResendOtp,
+        dynamicAppsEnabled,
       }}>
       {children}
     </AppContext.Provider>

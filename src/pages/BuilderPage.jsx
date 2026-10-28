@@ -9,6 +9,7 @@ import {
   MessageSquareIcon,
   MonitorPlayIcon,
   MenuIcon,
+  DatabaseIcon,
 } from "lucide-react";
 import ChatPanel from "../components/ChatPanel";
 import FileExplorer from "../components/FileExplorer";
@@ -19,6 +20,7 @@ import BuilderImageUploader from "../components/BuilderImageUploader";
 import api from "../api/api";
 import toast from "react-hot-toast";
 import { exportProjectZip } from "../utils/exportProject";
+import BuilderDataTab from "../components/BuilderDataTab";
 
 const BuilderPage = () => {
   const { id } = useParams();
@@ -46,6 +48,7 @@ const BuilderPage = () => {
     handleChat,
     getLatestFiles,
     createFromPrompt,
+    dynamicAppsEnabled
   } = useAppContext();
 
   useEffect(() => {
@@ -107,10 +110,13 @@ const BuilderPage = () => {
     activeProject.status === "generating" ||
     isFailed;
 
+  const showDataTab = dynamicAppsEnabled && activeProject.status === "completed";
+
   const TABS = [
     { id: "chat", label: "Chat", Icon: MessageSquareIcon },
     { id: "files", label: "Files", Icon: FolderTreeIcon },
     { id: "images", label: "Images", Icon: ImageIcon },
+    ...(showDataTab ? [{ id: "data", label: "Data", Icon: DatabaseIcon }] : []),
   ];
 
   return (
@@ -189,7 +195,6 @@ const BuilderPage = () => {
                 onSend={handleChat}
                 loading={chatLoading}
                 disabled={isFailed}
-                // Bisa ditutup dari dalam ChatPanel (khusus desktop)
                 onClose={() => setIsSidebarOpen(false)}
               />
             ) : letfTab === "files" ? (
@@ -202,6 +207,8 @@ const BuilderPage = () => {
                   if (window.innerWidth < 768) setMobileView("preview");
                 }}
               />
+            ) : letfTab === "data" ? (
+              <BuilderDataTab project={activeProject} />
             ) : (
               <BuilderImageUploader
                 projectId={activeProject._id}
