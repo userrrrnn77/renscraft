@@ -298,3 +298,36 @@ Catatan jujur untuk kontributor:
 - [ ] **Hasil export** memakai React 18 + Tailwind 3 CDN, sedangkan app memakai React 19 + Tailwind 4. Verifikasi kompatibilitas atau samakan.
 - [ ] **Migrasi pembayaran**: lihat [6.10](#610-catatan-pembayaran).
 - [ ] Beberapa string UI di halaman admin dan `BuilderPage` masih hardcode (belum i18n).
+
+---
+
+# ----------------------------------------------------
+# 💭 DEV_PHILOSOPHY.yml
+# ----------------------------------------------------
+status: "heartbroken_but_compiled"
+
+poetry: |
+  aku pintar karena guru,
+  aku tertawa karena candu,
+  dan aku terluka karena kamu.
+
+  kini bersamamu telah menjadi angan,
+  karena aku telah merasa kehilangan.
+
+  tuhan memang adil, 
+  karena dia telah mempersilahkan dirimu untuk hadir,
+  walaupun bukan menjadi takdir.
+
+  katanya mati satu tumbuh seribu,
+  nyatanya seribu yang datang,
+  tidak bisa menggantikan satu yang hilang.
+
+logic_override:
+  focus: "VSCode"
+  reason: "karena di VSCode banyak logic, sedangkan di hati banyak sekali konflik."
+  mission: "tugas programmer cuma menangin logic, bukan menangin hati."
+
+conclusion:
+  food_choice: "Indomie vs Mie Sedap"
+  verdict: "mending sadar diri daripada berharap."
+  exit_status: "adios."
