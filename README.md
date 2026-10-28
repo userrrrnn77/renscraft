@@ -20,6 +20,7 @@ Repo ini **hanya berisi client** (SPA React). Server/API ada di repo terpisah da
 8. [Deployment](#8-deployment)
 9. [Aturan Kontribusi & Keamanan](#9-aturan-kontribusi--keamanan)
 10. [Known Issues & TODO](#10-known-issues--todo)
+11. [Curhatan Isi Hati Developer](#11-curhatan-isi-hati-si-dev)
 
 ---
 
@@ -301,35 +302,44 @@ Catatan jujur untuk kontributor:
 
 ---
 
-```yaml
-# ----------------------------------------------------
-# 💭 DEV_PHILOSOPHY.yml
-# ----------------------------------------------------
-status: "heartbroken_but_compiled"
+## 11. Curhatan Isi Hati si Dev
 
-poetry: |
-  aku pintar karena guru,
-  aku tertawa karena candu,
-  dan aku terluka karena kamu.
+<div align="center">
 
-  kini bersamamu telah menjadi angan,
-  karena aku telah merasa kehilangan.
+> ### 📜 *The Sadboy Developer Manifesto*
+>
+> *aku pintar karena guru,*<br>
+> *aku tertawa karena candu,*<br>
+> *dan aku terluka karena kamu.*
+>
+> *kini bersamamu telah menjadi angan,*<br>
+> *karena aku telah merasa kehilangan.*
+>
+> *tuhan memang adil,*<br>
+> *karena dia telah mempersilahkan dirimu untuk hadir,*<br>
+> *walaupun bukan menjadi takdir.*
+>
+> *katanya mati satu tumbuh seribu,*<br>
+> *nyatanya seribu yang datang,*<br>
+> *tidak bisa menggantikan satu yang hilang.*
+>
+> ---
+>
+> 💻 **Logic vs Hati** 💻
+>
+> *mending pusing di **VSCode**,*<br>
+> *daripada pusing di **hati**,*<br>
+> *karena di VSCode banyak **logic**,*<br>
+> *sedangkan di hati banyak sekali **konflik**.*
+>
+> *tugas programmer cuma menangin **logic**,*<br>
+> *bukan menangin **hati**.*
+>
+> 🍜 **Indomie vs Sedap** 🍜
+>
+> *mending indomie atau mie sedap?*<br>
+> *ya mending **sadar diri** daripada **berharap**.*
+>
+> `adios.`
 
-  tuhan memang adil, 
-  karena dia mepersilahkan dirimu untuk hadir,
-  walaupun bukan menjadi takdir.
-
-  katanya mati satu tumbuh seribu,
-  nyatanya seribu yang datang,
-  tidak bisa menggantikan satu yang hilang.
-
-logic_override:
-  focus: "VSCode"
-  reason: "karena di VSCode banyak logic, sedangkan di hati banyak sekali konflik."
-  mission: "tugas programmer cuma menangin logic, bukan menangin hati."
-
-conclusion:
-  food_choice: "Indomie vs Mie Sedap"
-  verdict: "mending sadar diri daripada berharap."
-  exit_status: "adios."
-```
+</div>
