@@ -301,6 +301,7 @@ Catatan jujur untuk kontributor:
 
 ---
 
+```yaml
 # ----------------------------------------------------
 # 💭 DEV_PHILOSOPHY.yml
 # ----------------------------------------------------
@@ -315,7 +316,7 @@ poetry: |
   karena aku telah merasa kehilangan.
 
   tuhan memang adil, 
-  karena dia telah mempersilahkan dirimu untuk hadir,
+  karena dia mepersilahkan dirimu untuk hadir,
   walaupun bukan menjadi takdir.
 
   katanya mati satu tumbuh seribu,
@@ -331,3 +332,4 @@ conclusion:
   food_choice: "Indomie vs Mie Sedap"
   verdict: "mending sadar diri daripada berharap."
   exit_status: "adios."
+```
