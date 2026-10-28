@@ -1,6 +1,6 @@
 // src/pages/DynamicAppPage.jsx
 import { useEffect, useState } from "react";
-import { Link, useParams, Link, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { AlertCircleIcon, ArrowLeftIcon, Loader2Icon } from "lucide-react";
 import { getPublicApp } from "../api/dynamicApps";
 import { errorMessage } from "../api/api";
