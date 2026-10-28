@@ -43,14 +43,18 @@ const App = () => {
   useEffect(() => {
     const badgeEl = document.getElementById("static-badges-for-bot");
     if (badgeEl) {
-      // Cuma tampilin kalau di Landing Page (/)
-      if (location.pathname === "/") {
-        badgeEl.style.display = "block";
-      } else {
-        badgeEl.style.display = "none";
-      }
+      // Cuma tampilin kalau di Landing Page asli (/),
+      // BUKAN di dynamic subdomain, BUKAN di preview/publish page
+      const isLanding =
+        location.pathname === "/" &&
+        !isDynamicSubdomain &&
+        !location.pathname.startsWith("/app/") &&
+        !location.pathname.startsWith("/publish/") &&
+        !location.pathname.startsWith("/preview/");
+
+      badgeEl.style.display = isLanding ? "block" : "none";
     }
-  }, [location.pathname]);
+  }, [location.pathname, isDynamicSubdomain]);
 
   return (
     <>
