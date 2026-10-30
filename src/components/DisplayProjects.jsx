@@ -21,6 +21,29 @@ const MAX_MOUNTED_PAGES = 2;
 const PROJECTS_KEY = "renscraft:publicProjects";
 const PAGE_KEY = "renscraft:publicProjectsPage";
 
+// ─── Resolve URL publik ────────────────────────────────────────────────────
+// Project dengan subdomain aktif tampil di https://<slug>.renscraft.cyou.
+// Project lama / subdomain expired tetap di /publish/<name> (SPA route lama).
+//
+// CATATAN: claimSubdomain() di server juga set `published: true`, jadi
+// /publish/<name> tetap valid untuk project yang punya subdomain. Itu sebabnya
+// iframe preview tetap boleh pakai rute same-origin (lebih murah, cache shared).
+const resolvePublicUrl = (project) => {
+  const hasActiveSubdomain =
+    project.customSubdomain &&
+    project.subdomainExpiresAt &&
+    new Date(project.subdomainExpiresAt) > new Date();
+
+  return {
+    href: hasActiveSubdomain
+      ? `https://${project.customSubdomain}.renscraft.cyou`
+      : `/publish/${encodeURIComponent(project.name)}`,
+    label: hasActiveSubdomain
+      ? `${project.customSubdomain}.renscraft.cyou`
+      : project.name,
+  };
+};
+
 const readProjects = () => {
   try {
     const raw = sessionStorage.getItem(PROJECTS_KEY);
@@ -121,7 +144,10 @@ export const ProjectCard = memo(({ project, hidden = false }) => {
   const [ready, setReady] = useState(false);
   const [visible, setVisible] = useState(true);
 
-  const publishPath = `/publish/${encodeURIComponent(project.name)}`;
+  const previewSrc = `/publish/${encodeURIComponent(project.name)}`;
+
+  // Link keluar: subdomain kalau aktif, else /publish/<name>.
+  const publicUrl = resolvePublicUrl(project);
 
   useEffect(() => {
     const container = previewRef.current;
@@ -187,7 +213,7 @@ export const ProjectCard = memo(({ project, hidden = false }) => {
               className="shrink-0 text-zinc-400 dark:text-zinc-500"
             />
             <span className="truncate text-[10px] text-zinc-500 dark:text-zinc-400">
-              {project.name}
+              {publicUrl.label}
             </span>
           </div>
         </div>
@@ -198,7 +224,7 @@ export const ProjectCard = memo(({ project, hidden = false }) => {
           <iframe
             ref={iframeRef}
             key={`${project._id || project.name}-${project.version ?? 0}`}
-            src={publishPath}
+            src={previewSrc}
             title={t("displayProjects.previewOf", { name: project.name })}
             loading="lazy"
             scrolling="no"
@@ -246,24 +272,24 @@ export const ProjectCard = memo(({ project, hidden = false }) => {
             </p>
           </div>
 
-          <Link
-            to={publishPath}
+          <a
+            href={publicUrl.href}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={t("displayProjects.viewWebsite")}
             className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-zinc-200 text-zinc-600 transition hover:border-zinc-900 hover:bg-zinc-950 hover:text-white dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-50 dark:hover:bg-zinc-50 dark:hover:text-zinc-950">
             <ArrowUpRightIcon size={17} />
-          </Link>
+          </a>
         </div>
 
-        <Link
-          to={publishPath}
+        <a
+          href={publicUrl.href}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-zinc-950 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200">
           {t("displayProjects.viewWebsite")}
           <ArrowUpRightIcon size={14} />
-        </Link>
+        </a>
       </div>
     </article>
   );
