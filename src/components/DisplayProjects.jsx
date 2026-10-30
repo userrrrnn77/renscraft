@@ -247,8 +247,8 @@ export const ProjectCard = memo(({ project, hidden = false }) => {
             </div>
           </div>
 
-          <Link
-            to={publishPath}
+          <a
+            href={publicUrl.href}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={t("displayProjects.openInNewTab", {
@@ -294,6 +294,7 @@ export const ProjectCard = memo(({ project, hidden = false }) => {
     </article>
   );
 });
+
 ProjectCard.displayName = "ProjectCard";
 
 const DisplayProjects = () => {
