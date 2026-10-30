@@ -18,20 +18,26 @@ import PreviewPanel from "../components/PreviewPanel";
 import AgentProgressDashboard from "../components/AgentProgressDashboard";
 import BuilderImageUploader from "../components/BuilderImageUploader";
 import BuilderDataTab from "../components/BuilderDataTab";
-import SubdomainModal from "../components/SubdomainModal"; // <-- Modal Baru
+import SubdomainModal from "../components/SubdomainModal";
+import { useTranslation } from "react-i18next";
+import ConfirmModal from "../components/ConfirmModal";
 import { exportProjectZip } from "../utils/exportProject";
 import api, { errorMessage, isInsufficientCredits } from "../api/api";
 import toast from "react-hot-toast";
 
+const DEFAULT_EXPORT_COST = 30;
+
 const BuilderPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [letfTab, setLeftTab] = useState("chat");
   const [mobileView, setMobileView] = useState("chat");
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [showSubdomainModal, setShowSubdomainModal] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
   const [exporting, setExporting] = useState(false);
 
   const {
@@ -47,8 +53,10 @@ const BuilderPage = () => {
     handleChat,
     getLatestFiles,
     createFromPrompt,
-    refreshCredits, // 
+    refreshCredits, //
   } = useAppContext();
+
+  const exportCost = activeProject?.exportCost ?? DEFAULT_EXPORT_COST;
 
   useEffect(() => {
     if (!id) return;
@@ -66,25 +74,27 @@ const BuilderPage = () => {
     setShowSubdomainModal(true);
   };
 
+  const openExportModal = () => {
+    if (!activeProject || exporting) return;
+    setShowExportModal(true);
+  };
+
   const handleDownload = async () => {
     if (!activeProject || exporting) return;
     setExporting(true);
     try {
-      // 1. Tembak API buat potong kredit
       await api.post(`/api/projects/${activeProject._id}/export`);
-
-      // 2. Update saldo kredit di UI
       await refreshCredits();
-
-      // 3. Generate & Download ZIP
       exportProjectZip({ ...activeProject, files: getLatestFiles() });
       toast.success("Export berhasil!");
+      setShowExportModal(false);
     } catch (err) {
       if (isInsufficientCredits(err)) {
         toast.error(errorMessage(err, "Kredit tidak cukup untuk export."));
       } else {
         toast.error(errorMessage(err, "Gagal export project."));
       }
+      setShowExportModal(false);
     } finally {
       setExporting(false);
     }
@@ -139,7 +149,7 @@ const BuilderPage = () => {
         onOpenPreview={handleOpenPreview}
         onPublish={handleOpenSubdomain}
         publishing={false}
-        onDonwload={handleDownload}
+        onDonwload={openExportModal}
         exporting={exporting}
         onBack={() => navigate("/chat")}
         onProfile={() => navigate("/profile")}
@@ -261,6 +271,17 @@ const BuilderPage = () => {
           }}
         />
       )}
+      <ConfirmModal
+        open={showExportModal}
+        title={t("builder.exportConfirmTitle")}
+        description={t("builder.exportConfirmBody", { cost: exportCost })}
+        confirmLabel={t("builder.exportConfirmButton")}
+        cancelLabel={t("common.cancel")}
+        busyLabel={t("builder.exporting")}
+        busy={exporting}
+        onConfirm={handleDownload}
+        onClose={() => setShowExportModal(false)}
+      />
     </div>
   );
 };

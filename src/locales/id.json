@@ -245,6 +245,10 @@
   },
 
   "builder": {
+    "exportConfirmTitle": "Export project sebagai ZIP?",
+    "exportConfirmBody": "Ini akan memakai {{cost}} kredit. Kredit tidak bisa dikembalikan, tapi file ZIP langsung diunduh setelah konfirmasi.",
+    "exportConfirmButton": "Export",
+    "exporting": "Mengekspor...",
     "code": "Kode",
     "preview": "Preview",
     "openPreview": "Buka Preview",

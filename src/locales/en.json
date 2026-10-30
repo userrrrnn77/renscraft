@@ -246,6 +246,10 @@
   },
 
   "builder": {
+    "exportConfirmTitle": "Export project as ZIP?",
+    "exportConfirmBody": "This will use {{cost}} credits. Credits are non-refundable, but the ZIP file downloads immediately after confirmation.",
+    "exportConfirmButton": "Export",
+    "exporting": "Exporting...",
     "code": "Code",
     "preview": "Preview",
     "openPreview": "Open Preview",
