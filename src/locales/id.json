@@ -145,8 +145,18 @@
     "BRIEF_EXTRA_SLOT_VALUE_INVALID": "\"{{label}}\": {{detail}}",
     "ADMIN_INVALID_APP_ID": "ID app tidak valid",
     "ADMIN_APP_NOT_FOUND": "App tidak ditemukan",
+    "BUNDLE_ERROR": "Kode yang di-generate tidak bisa di-bundle. Coba generate ulang.",
+    "ROOT_EMPTY": "Halaman yang di-generate kosong. Coba generate ulang.",
+    "PAGE_ERROR": "Halaman yang di-generate crash saat runtime. Coba generate ulang.",
+    "CONSOLE_ERROR": "Halaman yang di-generate ada error runtime.",
+    "REVISION_ABORTED": "Revisi dibatalkan karena ada operasi yang gagal. Project tidak berubah dan kredit sudah dikembalikan.",
+    "INVALID_VERSION": "Nomor versi tidak valid.",
+    "VERSION_NOT_FOUND": "Versi tidak ditemukan.",
     "ADMIN_APP_NOT_SUSPENDABLE": "App sudah berstatus {{status}}",
-    "ADMIN_APP_NOT_RESTORABLE": "App berstatus {{status}}, bukan suspended"
+    "ADMIN_APP_NOT_RESTORABLE": "App berstatus {{status}}, bukan suspended",
+    "QUALITY_FAILED": "Project ini gagal quality check dan tidak bisa dipublish. Coba generate ulang.",
+    "BUDGET_EXCEEDED": "Revisi memakai terlalu banyak panggilan AI dan sudah di-refund. Coba permintaan yang lebih kecil.",
+    "SEMAPHORE_TIMEOUT": "Layanan AI sedang sibuk. Coba lagi sebentar."
   },
 
   "projectErrors": {
