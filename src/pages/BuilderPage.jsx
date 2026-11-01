@@ -54,7 +54,7 @@ const BuilderPage = () => {
     handleChat,
     getLatestFiles,
     createFromPrompt,
-    refreshCredits, //
+    refreshCredits,
   } = useAppContext();
 
   const exportCost = activeProject?.exportCost ?? DEFAULT_EXPORT_COST;
@@ -69,7 +69,6 @@ const BuilderPage = () => {
     window.open(`/preview/${id}`, "_blank");
   };
 
-  // Ganti nama fungsi jadi handleOpenSubdomain
   const handleOpenSubdomain = () => {
     if (!id) return;
     setShowSubdomainModal(true);
@@ -86,7 +85,7 @@ const BuilderPage = () => {
     try {
       await api.post(`/api/projects/${activeProject._id}/export`);
       await refreshCredits();
-      exportProjectZip({ ...activeProject, files: getLatestFiles() });
+      await exportProjectZip({ ...activeProject, files: getLatestFiles() });
       toast.success(t("builder.exportSuccess"));
       setShowExportModal(false);
     } catch (err) {

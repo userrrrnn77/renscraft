@@ -29,7 +29,7 @@ const BuilderHeader = ({
   onToggleShowCode,
   onOpenPreview,
   onPublish,
-  onDonwload,
+  onDownload,
   onBack,
   onProfile,
   onMyProjects,
@@ -132,11 +132,15 @@ const BuilderHeader = ({
         </button>
 
         <button
-          onClick={onDonwload}
+          onClick={onDownload}
           disabled={exporting}
           title={t("builder.export")}
-          className="hidden md:inline-flex items-center justify-center gap-1.5 py-1.5 px-3 border border-zinc-200 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 text-xs font-medium rounded-lg cursor-pointer bg-white dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-50">
-          <DownloadCloud size={13} />{" "}
+          className="hidden md:inline-flex items-center justify-center gap-1.5 py-1.5 px-3 border border-zinc-200 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 text-xs font-medium rounded-lg cursor-pointer bg-white disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-50">
+          {exporting ? (
+            <Loader2Icon size={13} className="animate-spin" />
+          ) : (
+            <DownloadCloud size={13} />
+          )}{" "}
           <span className="hidden lg:inline">{t("builder.export")}</span>
         </button>
 
