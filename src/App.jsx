@@ -26,16 +26,15 @@ import { getPaymentMethods } from "./utils/topup";
 import { useEffect } from "react";
 import WebPublicPage from "./pages/WebPublicPage";
 import DynamicAppPage from "./pages/DynamicAppPage";
-import SubdomainPage from "./pages/SubdomainPage"; // <-- IMPORT BARU
+import SubdomainPage from "./pages/SubdomainPage";
+import { getSubdomainFromHostname } from "./utils/subdomain";
 
 const App = () => {
   const location = useLocation();
 
-  const hostname = window.location.hostname;
-  const isDynamicSubdomain =
-    hostname.endsWith("renscraft.cyou") &&
-    hostname !== "renscraft.cyou" &&
-    hostname !== "www.renscraft.cyou";
+  // Helper tunggal (utils/subdomain): cuma "<slug>.renscraft.cyou" yang lolos,
+  // bukan "notrenscraft.cyou", "www.", atau domain utama.
+  const isDynamicSubdomain = getSubdomainFromHostname() !== null;
 
   useEffect(() => {
     getPaymentMethods();

@@ -21,6 +21,12 @@ import moment from "moment";
 import SiteNav from "../components/SiteNav";
 import { useAppContext } from "../context/AppContext";
 import usePageMeta from "../utils/usePageMeta";
+import SubdomainModal from "../components/SubdomainModal";
+import {
+  SUBDOMAIN_ROOT,
+  getPublicHref,
+  getSubdomainStatus,
+} from "../utils/subdomain";
 
 const GRID_STYLE_LIGHT = {
   backgroundImage:
@@ -82,6 +88,51 @@ const categoryOf = (project) =>
       : BUSY_STATUSES.has(project.status)
         ? "busy"
         : "draft";
+
+const SUBDOMAIN_TONE = {
+  active:
+    "bg-emerald-50 text-emerald-700 ring-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-500/20",
+  expiring:
+    "bg-amber-50 text-amber-700 ring-amber-100 dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-500/20",
+  expired:
+    "bg-red-50 text-red-700 ring-red-100 dark:bg-red-500/10 dark:text-red-300 dark:ring-red-500/20",
+};
+
+// Badge subdomain + sisa hari. Tombol "Perpanjang" muncul kalau sisa <= 7 hari
+// atau sudah expired; kalau masih lama cuma "Kelola".
+const SubdomainBadge = ({ project, onManage }) => {
+  const { t } = useTranslation();
+  const status = getSubdomainStatus(project);
+  if (status.state === "none") return null;
+
+  const needsRenew = status.state !== "active";
+
+  return (
+    <div className="mt-3 flex flex-wrap items-center gap-2">
+      <span
+        className={`inline-flex max-w-full items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium ring-1 ${SUBDOMAIN_TONE[status.state]}`}>
+        <Globe2Icon size={10} className="shrink-0" />
+        <span className="truncate">
+          {status.slug}.{SUBDOMAIN_ROOT}
+        </span>
+        {status.state === "expiring" && (
+          <span className="shrink-0">
+            · {t("subdomain.daysLeft", { count: status.days })}
+          </span>
+        )}
+        {status.state === "expired" && (
+          <span className="shrink-0">· {t("subdomain.badge.expired")}</span>
+        )}
+      </span>
+      <button
+        type="button"
+        onClick={() => onManage(project)}
+        className="cursor-pointer text-[11px] font-medium text-sky-600 hover:text-sky-500 dark:text-sky-400 dark:hover:text-sky-300">
+        {needsRenew ? t("subdomain.badge.renew") : t("subdomain.badge.manage")}
+      </button>
+    </div>
+  );
+};
 
 const PREVIEW_WIDTH = 1280;
 const PREVIEW_HEIGHT = 800;
@@ -161,7 +212,7 @@ const ProjectThumbnail = ({ project, mode = "grid" }) => {
   );
 };
 
-const ProjectGridCard = ({ project, onDelete }) => {
+const ProjectGridCard = ({ project, onDelete, onManageSubdomain }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const cat = categoryOf(project);
@@ -213,6 +264,8 @@ const ProjectGridCard = ({ project, onDelete }) => {
           </span>
         </div>
 
+        <SubdomainBadge project={project} onManage={onManageSubdomain} />
+
         <div className="mt-4 flex items-center gap-3">
           <button
             type="button"
@@ -223,14 +276,14 @@ const ProjectGridCard = ({ project, onDelete }) => {
           </button>
 
           {canView && (
-            <Link
-              to={`/publish/${encodeURIComponent(project.name)}`}
+            <a
+              href={getPublicHref(project)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-xs sm:text-sm font-medium text-sky-600 hover:text-sky-500 dark:text-sky-400 dark:hover:text-sky-300">
               {t("myProjects.viewProject")}
               <ArrowRightIcon size={13} />
-            </Link>
+            </a>
           )}
 
           <Link
@@ -247,7 +300,7 @@ const ProjectGridCard = ({ project, onDelete }) => {
   );
 };
 
-const ProjectListRow = ({ project, onDelete }) => {
+const ProjectListRow = ({ project, onDelete, onManageSubdomain }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const cat = categoryOf(project);
@@ -292,19 +345,21 @@ const ProjectListRow = ({ project, onDelete }) => {
           </span>
           <span>v{project.version}</span>
         </div>
+
+        <SubdomainBadge project={project} onManage={onManageSubdomain} />
       </div>
 
       <div className="flex shrink-0 items-center justify-between sm:justify-end gap-1 border-t sm:border-t-0 border-zinc-100 pt-2 sm:pt-0 dark:border-zinc-800">
         <div className="flex items-center gap-1">
           {project.published && (
-            <Link
-              to={`/publish/${encodeURIComponent(project.name)}`}
+            <a
+              href={getPublicHref(project)}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={t("myProjects.openLiveAria")}
               className="inline-flex size-8 items-center justify-center rounded-md text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200">
               <Globe2Icon size={14} />
-            </Link>
+            </a>
           )}
           <button
             type="button"
@@ -325,7 +380,13 @@ const ProjectListRow = ({ project, onDelete }) => {
   );
 };
 
-const Section = ({ section, projects, viewMode, onDelete }) => {
+const Section = ({
+  section,
+  projects,
+  viewMode,
+  onDelete,
+  onManageSubdomain,
+}) => {
   const { t } = useTranslation();
   const Icon = section.icon;
 
@@ -352,13 +413,23 @@ const Section = ({ section, projects, viewMode, onDelete }) => {
       {viewMode === "grid" ? (
         <div className="mt-4 md:mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
           {projects.map((p) => (
-            <ProjectGridCard key={p._id} project={p} onDelete={onDelete} />
+            <ProjectGridCard
+              key={p._id}
+              project={p}
+              onDelete={onDelete}
+              onManageSubdomain={onManageSubdomain}
+            />
           ))}
         </div>
       ) : (
         <div className="mt-4 md:mt-5 space-y-2">
           {projects.map((p) => (
-            <ProjectListRow key={p._id} project={p} onDelete={onDelete} />
+            <ProjectListRow
+              key={p._id}
+              project={p}
+              onDelete={onDelete}
+              onManageSubdomain={onManageSubdomain}
+            />
           ))}
         </div>
       )}
@@ -434,6 +505,7 @@ const MyProjects = () => {
   const [filter, setFilter] = useState("all");
   const [viewMode, setViewMode] = useState(readStoredView);
   const [pendingDelete, setPendingDelete] = useState(null);
+  const [subdomainProject, setSubdomainProject] = useState(null);
   const [deleting, setDeleting] = useState(false);
   const navigate = useNavigate();
 
@@ -685,6 +757,7 @@ const MyProjects = () => {
                 projects={section.projects}
                 viewMode={viewMode}
                 onDelete={setPendingDelete}
+                onManageSubdomain={setSubdomainProject}
               />
             ))}
 
@@ -695,6 +768,14 @@ const MyProjects = () => {
           )}
         </main>
       </div>
+
+      {subdomainProject && (
+        <SubdomainModal
+          project={subdomainProject}
+          onClose={() => setSubdomainProject(null)}
+          onSuccess={() => loadProjects()}
+        />
+      )}
 
       {pendingDelete && (
         <DeleteConfirm

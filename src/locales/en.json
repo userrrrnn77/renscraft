@@ -13,7 +13,6 @@
     "copy": "Copy",
     "or": "or"
   },
-
   "errors": {
     "AUTH_INVALID_CREDENTIALS": "Invalid email or password",
     "AUTH_EMAIL_EXISTS": "An account with this email already exists",
@@ -25,7 +24,6 @@
     "AUTH_SUPABASE_OAUTH_ONLY": "Only Google and GitHub OAuth accounts are supported",
     "AUTH_SUPABASE_NO_EMAIL": "Supabase did not provide a usable email for this account",
     "AUTH_EMAIL_ACCOUNT_EXISTS": "An account already uses this email. Sign in to that account first.",
-
     "ADMIN_NOT_CONFIGURED": "Admin auth is not configured",
     "ADMIN_INVALID_CREDENTIALS": "Invalid credentials",
     "ADMIN_TOO_MANY_ATTEMPTS": "Too many login attempts. Try again in 15 minutes.",
@@ -41,10 +39,8 @@
     "ADMIN_USER_MISSING": "User no longer exists",
     "ADMIN_APPROVE_FAILED": "Approve failed",
     "ADMIN_REASON_REQUIRED": "Reason is required",
-
     "INSUFFICIENT_CREDITS": "Not enough credits: this needs {{required}}, you have {{credits}}",
     "ACCOUNT_NOT_FOUND": "Account not found, please sign in again.",
-
     "PROJECT_NOT_FOUND": "Project not found",
     "PROJECT_PROMPT_REQUIRED": "Prompt is required",
     "PROJECT_PROMPT_TOO_LONG": "Prompt is too long (max {{max}} characters)",
@@ -60,14 +56,18 @@
     "PROJECT_PUBLIC_NOT_AVAILABLE": "This website is not available or is not published yet.",
     "PROJECT_BRIEF_NOT_FOUND": "Brief not found or already expired",
     "PROJECT_BRIEF_USED": "Brief has already been used",
-
+    "PROJECT_NOT_COMPLETED": "The website must finish generating first.",
+    "PROJECT_HAS_SUBDOMAIN": "This project already has an active subdomain. Release it first before claiming a new one.",
+    "INVALID_SUBDOMAIN": "Slug must be 3-30 characters: lowercase letters, numbers, dashes.",
+    "SUBDOMAIN_RESERVED": "This slug is reserved and cannot be used.",
+    "SUBDOMAIN_TAKEN": "This subdomain is already taken by someone else.",
+    "NO_SUBDOMAIN": "Claim a subdomain first.",
     "PROJECT_IMAGE_R2_MISSING": "Image upload is not configured",
     "PROJECT_IMAGE_EMPTY": "Empty image body",
     "PROJECT_IMAGE_TOO_LARGE": "Image too large (max {{max}}MB)",
     "PROJECT_IMAGE_UNSUPPORTED": "Unsupported image type. Use JPEG, PNG, WebP, GIF, or AVIF.",
     "PROJECT_IMAGE_UPLOAD_FAILED": "Upload to storage failed, try again.",
     "PROJECT_IMAGE_URL_REQUIRED": "Image URL is required",
-
     "BRIEF_PROMPT_REQUIRED": "Prompt is required",
     "BRIEF_PROMPT_TOO_LONG": "Prompt is too long (max {{max}} characters)",
     "BRIEF_TOO_MANY_ATTEMPTS": "Too many attempts. Try again later.",
@@ -75,17 +75,14 @@
     "BRIEF_ANSWERS_INVALID": "Answers must be an object",
     "BRIEF_TOO_MANY_ANSWERS": "Too many answers (max {{max}} keys)",
     "BRIEF_UNKNOWN_CATEGORY": "Unknown category",
-
     "BRIEF_EXTRA_SLOTS_INVALID": "Invalid extra slot format.",
     "BRIEF_TOO_MANY_EXTRA_SLOTS": "Max {{max}} extra slots.",
     "BRIEF_EXTRA_SLOT_LABEL_INVALID": "Field name must be {{min}}–{{max}} characters.",
     "BRIEF_EXTRA_SLOT_KIND_INVALID": "Unsupported field type.",
     "BRIEF_EXTRA_SLOT_VALUE_INVALID": "\"{{label}}\": {{detail}}",
-
     "CHAT_PROMPT_REQUIRED": "Prompt is required",
     "CHAT_PROMPT_TOO_LONG": "Prompt is too long (max {{max}} characters)",
     "CHAT_FAILED": "Failed to process the revision. Please try again.",
-
     "PAYMENTS_DISABLED": "Payments are temporarily disabled",
     "PAYMENTS_NOT_AUTHENTICATED": "You are not signed in",
     "PAYMENTS_UNKNOWN_PACKAGE": "Unknown package",
@@ -99,7 +96,6 @@
     "PAYMENTS_UNKNOWN_ORDER": "Unknown order",
     "PAYMENTS_STATUS_UNAVAILABLE": "Could not confirm the payment yet",
     "PAYMENTS_TEMP_ERROR": "Temporary error, please retry",
-
     "MANUAL_DISABLED": "Manual transfer is temporarily disabled",
     "MANUAL_NOT_AUTHENTICATED": "You are not signed in",
     "MANUAL_UNKNOWN_PACKAGE": "Unknown package",
@@ -116,7 +112,6 @@
     "MANUAL_ORDER_WRONG_STATUS": "This order is no longer accepting proofs",
     "MANUAL_PROOF_DUPLICATE": "This screenshot was already used for another order",
     "MANUAL_ATTACH_FAILED": "Could not attach proof",
-
     "EMAIL_SEND_FAILED": "Could not send the verification email, try again",
     "OTP_REQUIRED": "Verification code is required",
     "OTP_INVALID_FORMAT": "Verification code must be 4-8 digits",
@@ -135,7 +130,6 @@
     "REVISION_ABORTED": "The revision was aborted because some operations failed. Your project is unchanged and the credits were refunded.",
     "INVALID_VERSION": "Invalid version number.",
     "VERSION_NOT_FOUND": "Version not found.",
-
     "INTERNAL_ERROR": "Something went wrong on our side. Please try again.",
     "RATE_LIMITED": "Too many requests. Please try again in a moment.",
     "BAD_REQUEST": "Invalid request.",
@@ -158,15 +152,71 @@
     "ADMIN_APP_NOT_SUSPENDABLE": "App is already {{status}}",
     "ADMIN_APP_NOT_RESTORABLE": "App is {{status}}, not suspended"
   },
-
+  "subdomain": {
+    "title": "Premium Subdomain",
+    "subtitle": "Get an exclusive link: yourname.{{domain}}",
+    "chooseLabel": "Choose a subdomain",
+    "placeholder": "yourname",
+    "hint": "Lowercase letters, numbers, and hyphens ({{min}}-{{max}} characters).",
+    "price": "Price: {{cost}} credits / {{days}} days.",
+    "priceNoDays": "Price: {{cost}} credits.",
+    "autoCharge": "Credits are deducted from your balance automatically.",
+    "creditsShort": "{{count}} credits",
+    "creditsShort_one": "1 credit",
+    "claim": "Claim now",
+    "renew": "Renew",
+    "renewDays": "Renew for {{count}} days",
+    "processing": "Processing...",
+    "activeTitle": "Subdomain active",
+    "activeUntil": "Active until {{date}}",
+    "daysLeft": "{{count}} days left",
+    "daysLeft_one": "1 day left",
+    "expiringSoon": "Expiring soon. Renew so your link doesn't go down.",
+    "expiredTitle": "Subdomain expired",
+    "expiredBody": "{{domain}} has expired and its link no longer works. Renew to bring it back, or pick another subdomain.",
+    "chooseOther": "Choose another subdomain",
+    "release": "Release subdomain",
+    "releaseConfirmTitle": "Release subdomain?",
+    "releaseConfirmBody": "{{domain}} will be released and your website can no longer be opened from this link. Credits already spent are not refunded.",
+    "releaseConfirmButton": "Yes, release",
+    "releasing": "Releasing...",
+    "badge": {
+      "manage": "Manage",
+      "renew": "Renew",
+      "expired": "Expired"
+    },
+    "errors": {
+      "tooShort": "At least {{min}} characters.",
+      "tooLong": "At most {{max}} characters.",
+      "format": "Use lowercase letters, numbers, and hyphens. No hyphen at the start, at the end, or twice in a row.",
+      "claimFailed": "Failed to claim subdomain.",
+      "renewFailed": "Failed to renew subdomain.",
+      "releaseFailed": "Failed to release subdomain."
+    },
+    "toasts": {
+      "claimed": "Subdomain claimed!",
+      "renewed": "Subdomain renewed!",
+      "released": "Subdomain released.",
+      "copied": "URL copied!",
+      "copyFailed": "Couldn't copy the URL."
+    }
+  },
+  "subdomainPage": {
+    "unavailableTitle": "Website Unavailable",
+    "unavailableBody": "This website doesn't exist, isn't published, or its subdomain subscription has ended.",
+    "loadFailedTitle": "Couldn't Load Website",
+    "loadFailedBody": "Something went wrong while fetching this website. Please try again in a moment.",
+    "backHome": "Back to Renscraft"
+  },
   "projectErrors": {
     "GENERATION_FAILED": "Generation failed. The credits have been refunded.",
     "GENERATION_TIMEOUT": "Generation timed out. Please try again.",
     "REVISION_TIMEOUT": "The revision timed out and was not applied. Please try again.",
     "REVISION_NO_CHANGE": "The AI did not apply any change. Try rewording your request, or specify the file you want to edit.",
-    "NO_APP_JS": "The AI could not generate the entry point (/App.js). Please try again."
+    "NO_APP_JS": "The AI could not generate the entry point (/App.js). Please try again.",
+    "REVISION_ABORTED": "The revision was aborted because some operations failed. Your project is unchanged and the credits were refunded.",
+    "CHAT_FAILED": "Failed to process the revision. Your project is unchanged and the credits were refunded."
   },
-
   "nav": {
     "home": "Home",
     "pricing": "Pricing",
@@ -178,7 +228,6 @@
     "profile": "Profile",
     "webpub": "Explore"
   },
-
   "webpub": {
     "metaTitle": "Published Websites — Renscraft",
     "metaDescription": "Browse websites built and published with Renscraft.",
@@ -196,13 +245,11 @@
     "next": "Next page",
     "page": "Page {{current}} of {{total}}"
   },
-
   "language": {
     "switchTo": "Switch to {{lang}}",
     "en": "English",
     "id": "Indonesia"
   },
-
   "auth": {
     "otpTitle": "Check your email",
     "otpSubtitle": "We sent a verification code to {{email}}",
@@ -246,7 +293,6 @@
     "callbackNotConfigured": "Google and GitHub sign-in are not configured.",
     "callbackFailed": "Sign-in could not be completed. Please try again."
   },
-
   "home": {
     "title": "Let's build your app together",
     "subtitle": "Describe your idea and watch AI design, structure and launch your website instantly. No coding required.",
@@ -254,12 +300,15 @@
     "noCredits": "No credits left",
     "creditsCount": "{{count}} credits"
   },
-
   "builder": {
     "exportConfirmTitle": "Export project as ZIP?",
     "exportConfirmBody": "This will use {{cost}} credits. Credits are non-refundable, but the ZIP file downloads immediately after confirmation.",
     "exportConfirmButton": "Export",
     "exporting": "Exporting...",
+    "exportSuccess": "Export successful!",
+    "exportInsufficientCredits": "Not enough credits for export.",
+    "exportFailed": "Failed to export project.",
+    "originalPromptMissing": "Original prompt is missing, please start fresh.",
     "code": "Code",
     "preview": "Preview",
     "openPreview": "Open Preview",
@@ -273,7 +322,6 @@
     "publishSuccess": "Website published successfully",
     "publishFailed": "Publish failed"
   },
-
   "progress": {
     "failed": "Failed",
     "planning": "Planning",
@@ -298,15 +346,16 @@
     "done": "done",
     "filesCount": "{{done}} / {{total}} files"
   },
-
   "chat": {
     "emptyState": "Ask AI to modify your website",
     "you": "You",
     "ai": "AI",
     "placeholder": "Ask AI to modify...",
-    "placeholderDisabled": "Generation failed. Start a new project."
+    "placeholderDisabled": "Generation failed. Start a new project.",
+    "panelTitle": "AI Chat",
+    "closePanel": "Close panel",
+    "revising": "AI is revising your website..."
   },
-
   "profile": {
     "title": "Profile",
     "credits": "Credits",
@@ -330,7 +379,6 @@
     "referralLoadFailed": "Could not load your referral code",
     "referralLoading": "Loading referral…"
   },
-
   "publish": {
     "title": "Your website is live!",
     "subtitle": "Anyone with the link below can view your published site.",
@@ -339,7 +387,6 @@
     "openSite": "Open Site",
     "copied": "Public link copied to clipboard"
   },
-
   "payment": {
     "topUpTitle": "Top up credits",
     "youHave": "You have {{count}} credits",
@@ -364,25 +411,21 @@
     "manualHintSub": "Bank transfer + upload proof. Credits arrive after confirmation.",
     "payManual": "Pay manually"
   },
-
   "theme": {
     "lightMode": "Light mode",
     "darkMode": "Dark mode",
     "enableLight": "Enable light mode",
     "enableDark": "Enable dark mode"
   },
-
   "files": {
     "filesLabel": "FILES"
   },
-
   "preview": {
     "preparing": "Preparing your preview…",
     "stillPreparing": "Still preparing…",
     "bundling": "Bundling React and dependencies",
     "largeProject": "Large project — this can take up to 30 seconds"
   },
-
   "images": {
     "title": "Uploaded images",
     "uploading": "Uploading...",
@@ -397,7 +440,6 @@
     "removeFailed": "Failed to remove image",
     "removeAria": "Remove image"
   },
-
   "displayProjects": {
     "label": "Made with Renscraft",
     "title1": "Websites built with AI.",
@@ -419,7 +461,6 @@
     "previewOf": "Preview of {{name}}",
     "openInNewTab": "Open {{name}} in a new tab"
   },
-
   "buyCredits": {
     "loading": "Loading...",
     "loadFailed": "Could not load the top-up options.",
@@ -454,7 +495,6 @@
     "midtransSoonBody": "Midtrans is not live yet. Top up with a manual bank transfer — credits are added after the proof is approved.",
     "payManualNow": "Pay with manual transfer"
   },
-
   "manual": {
     "title": "Manual transfer",
     "subtitle": "Transfer to our account, upload the proof, credits are added after confirmation.",
@@ -501,7 +541,6 @@
     "uploadFailed": "Upload failed",
     "couldNotCheck": "Could not check status right now"
   },
-
   "brief": {
     "addExtra": "Add info",
     "extraLabelPlaceholder": "Field name (e.g. Opening hours, Instagram)",
@@ -529,7 +568,6 @@
     "questionOf": "Question {{current}} of {{total}}",
     "backToQuestions": "Back to questions"
   },
-
   "landing": {
     "heroTitle1": "Describe a website.",
     "heroTitle2": "Get a real one.",
@@ -552,7 +590,7 @@
       },
       "change": {
         "title": "Change it by chat",
-        "text": "Ask for edits like \u201cmake the hero darker\u201d, or open the code and edit it yourself."
+        "text": "Ask for edits like “make the hero darker”, or open the code and edit it yourself."
       },
       "ship": {
         "title": "Publish or export",
@@ -604,7 +642,6 @@
     "footerCopyright": "© {{year}} Renscraft. All rights reserved.",
     "footerBuiltBy": "Built with passion by"
   },
-
   "pricing": {
     "manualTitle": "Paid by manual transfer",
     "manualText": "Transfer to our bank account and upload the proof. Credits are added once the admin approves it.",
@@ -631,7 +668,6 @@
     "haveAccount": "Already have an account?",
     "signIn": "Sign in"
   },
-
   "myProjects": {
     "label": "Projects",
     "title": "Things I've built.",
@@ -643,19 +679,29 @@
       "busy": "Building",
       "failed": "Failed"
     },
-
     "emptyExampleTitles": {
       "portfolio": "Portfolio",
       "landing": "Landing page",
       "culinary": "Culinary",
       "wedding": "Wedding invitation"
     },
-
     "sections": {
-      "published": { "label": "Published", "sub": "Live" },
-      "draft": { "label": "Drafts", "sub": "Private" },
-      "busy": { "label": "Building", "sub": "In progress" },
-      "failed": { "label": "Failed", "sub": "Needs retry" }
+      "published": {
+        "label": "Published",
+        "sub": "Live"
+      },
+      "draft": {
+        "label": "Drafts",
+        "sub": "Private"
+      },
+      "busy": {
+        "label": "Building",
+        "sub": "In progress"
+      },
+      "failed": {
+        "label": "Failed",
+        "sub": "Needs retry"
+      }
     },
     "status": {
       "published": "Published",
@@ -698,7 +744,6 @@
       "deleting": "Deleting..."
     }
   },
-
   "contact": {
     "backToHome": "Back to home",
     "label": "Contact",
@@ -724,7 +769,6 @@
     "accountTitle": "Account issue?",
     "accountText": "Send from the email you signed up with, so we can find you faster."
   },
-
   "publishPage": {
     "errorTitle": "Website unavailable",
     "errorFallback": "This website is not available or is not published yet.",

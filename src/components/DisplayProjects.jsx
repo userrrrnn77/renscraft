@@ -9,6 +9,11 @@ import {
   RefreshCwIcon,
 } from "lucide-react";
 import api, { errorMessage } from "../api/api";
+import {
+  SUBDOMAIN_ROOT,
+  getPublicHref,
+  isSubdomainActive,
+} from "../utils/subdomain";
 
 const PAGE_SIZE = 3;
 const PREVIEW_WIDTH = 1280;
@@ -28,21 +33,12 @@ const PAGE_KEY = "renscraft:publicProjectsPage";
 // CATATAN: claimSubdomain() di server juga set `published: true`, jadi
 // /publish/<name> tetap valid untuk project yang punya subdomain. Itu sebabnya
 // iframe preview tetap boleh pakai rute same-origin (lebih murah, cache shared).
-const resolvePublicUrl = (project) => {
-  const hasActiveSubdomain =
-    project.customSubdomain &&
-    project.subdomainExpiresAt &&
-    new Date(project.subdomainExpiresAt) > new Date();
-
-  return {
-    href: hasActiveSubdomain
-      ? `https://${project.customSubdomain}.renscraft.cyou`
-      : `/publish/${encodeURIComponent(project.name)}`,
-    label: hasActiveSubdomain
-      ? `${project.customSubdomain}.renscraft.cyou`
-      : project.name,
-  };
-};
+const resolvePublicUrl = (project) => ({
+  href: getPublicHref(project),
+  label: isSubdomainActive(project)
+    ? `${project.customSubdomain}.${SUBDOMAIN_ROOT}`
+    : project.name,
+});
 
 const readProjects = () => {
   try {
@@ -516,3 +512,4 @@ const DisplayProjects = () => {
 };
 
 export default DisplayProjects;
+-e;

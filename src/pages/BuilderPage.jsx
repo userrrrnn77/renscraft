@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import BuilderHeader from "../components/BuilderHeader";
 import {
+  DatabaseIcon,
   FolderTreeIcon,
   ImageIcon,
   MessageSquareIcon,
@@ -32,7 +33,7 @@ const BuilderPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const [letfTab, setLeftTab] = useState("chat");
+  const [leftTab, setLeftTab] = useState("chat");
   const [mobileView, setMobileView] = useState("chat");
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -86,13 +87,13 @@ const BuilderPage = () => {
       await api.post(`/api/projects/${activeProject._id}/export`);
       await refreshCredits();
       exportProjectZip({ ...activeProject, files: getLatestFiles() });
-      toast.success("Export berhasil!");
+      toast.success(t("builder.exportSuccess"));
       setShowExportModal(false);
     } catch (err) {
       if (isInsufficientCredits(err)) {
-        toast.error(errorMessage(err, "Kredit tidak cukup untuk export."));
+        toast.error(errorMessage(err, t("builder.exportInsufficientCredits")));
       } else {
-        toast.error(errorMessage(err, "Gagal export project."));
+        toast.error(errorMessage(err, t("builder.exportFailed")));
       }
       setShowExportModal(false);
     } finally {
@@ -104,7 +105,7 @@ const BuilderPage = () => {
     if (!activeProject) return;
     const prompt = activeProject.description;
     if (!prompt) {
-      toast.error("Original prompt is missing, please start fresh.");
+      toast.error(t("builder.originalPromptMissing"));
       navigate("/chat");
       return;
     }
@@ -149,7 +150,7 @@ const BuilderPage = () => {
         onOpenPreview={handleOpenPreview}
         onPublish={handleOpenSubdomain}
         publishing={false}
-        onDonwload={openExportModal}
+        onDownload={openExportModal}
         exporting={exporting}
         onBack={() => navigate("/chat")}
         onProfile={() => navigate("/profile")}
@@ -188,7 +189,7 @@ const BuilderPage = () => {
           } h-full`}>
           <div className="flex border-b border-zinc-100 dark:border-zinc-800 shrink-0 w-full md:w-[320px]">
             {TABS.map(({ id: tabId, label, Icon }) => {
-              const active = letfTab === tabId;
+              const active = leftTab === tabId;
               return (
                 <button
                   key={tabId}
@@ -205,7 +206,7 @@ const BuilderPage = () => {
           </div>
 
           <div className="flex-1 overflow-hidden w-full md:w-[320px]">
-            {letfTab === "chat" ? (
+            {leftTab === "chat" ? (
               <ChatPanel
                 messages={activeProject.messages}
                 onSend={handleChat}
@@ -213,7 +214,7 @@ const BuilderPage = () => {
                 disabled={isFailed}
                 onClose={() => setIsSidebarOpen(false)}
               />
-            ) : letfTab === "files" ? (
+            ) : leftTab === "files" ? (
               <FileExplorer
                 files={activeProject.files}
                 activeFile={activeFile}
@@ -223,7 +224,7 @@ const BuilderPage = () => {
                   if (window.innerWidth < 768) setMobileView("preview");
                 }}
               />
-            ) : letfTab === "data" ? (
+            ) : leftTab === "data" ? (
               <BuilderDataTab project={activeProject} />
             ) : (
               <BuilderImageUploader

@@ -13,7 +13,6 @@
     "copy": "Salin",
     "or": "atau"
   },
-
   "errors": {
     "AUTH_INVALID_CREDENTIALS": "Email atau password salah",
     "AUTH_EMAIL_EXISTS": "Email ini sudah terdaftar",
@@ -25,7 +24,6 @@
     "AUTH_SUPABASE_OAUTH_ONLY": "Hanya akun Google dan GitHub yang didukung",
     "AUTH_SUPABASE_NO_EMAIL": "Supabase tidak memberikan email yang bisa dipakai",
     "AUTH_EMAIL_ACCOUNT_EXISTS": "Email ini sudah dipakai akun lain. Login dulu ke akun itu.",
-
     "ADMIN_NOT_CONFIGURED": "Autentikasi admin belum diatur",
     "ADMIN_INVALID_CREDENTIALS": "Nomor atau password admin salah",
     "ADMIN_TOO_MANY_ATTEMPTS": "Terlalu banyak percobaan login. Coba lagi dalam 15 menit.",
@@ -41,10 +39,8 @@
     "ADMIN_USER_MISSING": "User sudah tidak ada",
     "ADMIN_APPROVE_FAILED": "Approve gagal",
     "ADMIN_REASON_REQUIRED": "Alasan wajib diisi",
-
     "INSUFFICIENT_CREDITS": "Kredit kurang: butuh {{required}}, punya kamu {{credits}}",
     "ACCOUNT_NOT_FOUND": "Akun tidak ditemukan, silakan login lagi.",
-
     "PROJECT_NOT_FOUND": "Project tidak ditemukan",
     "PROJECT_PROMPT_REQUIRED": "Prompt wajib diisi",
     "PROJECT_PROMPT_TOO_LONG": "Prompt terlalu panjang (maks {{max}} karakter)",
@@ -60,14 +56,12 @@
     "PROJECT_PUBLIC_NOT_AVAILABLE": "Website ini tidak tersedia atau belum dipublish.",
     "PROJECT_BRIEF_NOT_FOUND": "Brief tidak ditemukan atau sudah kedaluwarsa",
     "PROJECT_BRIEF_USED": "Brief sudah dipakai",
-
     "PROJECT_IMAGE_R2_MISSING": "Upload gambar belum dikonfigurasi",
     "PROJECT_IMAGE_EMPTY": "Gambarnya kosong",
     "PROJECT_IMAGE_TOO_LARGE": "Gambar terlalu besar (maks {{max}}MB)",
     "PROJECT_IMAGE_UNSUPPORTED": "Tipe gambar tidak didukung. Pakai JPEG, PNG, WebP, GIF, atau AVIF.",
     "PROJECT_IMAGE_UPLOAD_FAILED": "Upload ke storage gagal, coba lagi.",
     "PROJECT_IMAGE_URL_REQUIRED": "URL gambar wajib diisi",
-
     "BRIEF_PROMPT_REQUIRED": "Prompt wajib diisi",
     "BRIEF_PROMPT_TOO_LONG": "Prompt terlalu panjang (maks {{max}} karakter)",
     "BRIEF_TOO_MANY_ATTEMPTS": "Terlalu banyak percobaan. Coba lagi nanti.",
@@ -75,11 +69,9 @@
     "BRIEF_ANSWERS_INVALID": "Jawaban harus berupa objek",
     "BRIEF_TOO_MANY_ANSWERS": "Terlalu banyak jawaban (maks {{max}} key)",
     "BRIEF_UNKNOWN_CATEGORY": "Kategori tidak dikenal",
-
     "CHAT_PROMPT_REQUIRED": "Prompt wajib diisi",
     "CHAT_PROMPT_TOO_LONG": "Prompt terlalu panjang (maks {{max}} karakter)",
     "CHAT_FAILED": "Gagal memproses revisi. Coba lagi ya.",
-
     "PAYMENTS_DISABLED": "Pembayaran sedang dimatikan",
     "PAYMENTS_NOT_AUTHENTICATED": "Kamu belum login",
     "PAYMENTS_UNKNOWN_PACKAGE": "Paket tidak dikenal",
@@ -93,7 +85,6 @@
     "PAYMENTS_UNKNOWN_ORDER": "Order tidak dikenal",
     "PAYMENTS_STATUS_UNAVAILABLE": "Belum bisa konfirmasi pembayarannya",
     "PAYMENTS_TEMP_ERROR": "Error sementara, coba lagi",
-
     "MANUAL_DISABLED": "Transfer manual sedang dimatikan",
     "MANUAL_NOT_AUTHENTICATED": "Kamu belum login",
     "MANUAL_UNKNOWN_PACKAGE": "Paket tidak dikenal",
@@ -110,7 +101,6 @@
     "MANUAL_ORDER_WRONG_STATUS": "Order ini sudah tidak menerima bukti",
     "MANUAL_PROOF_DUPLICATE": "Screenshot ini sudah pernah dipakai untuk order lain",
     "MANUAL_ATTACH_FAILED": "Gagal melampirkan bukti",
-
     "EMAIL_SEND_FAILED": "Gagal mengirim email verifikasi, coba lagi",
     "OTP_REQUIRED": "Kode verifikasi wajib diisi",
     "OTP_INVALID_FORMAT": "Kode verifikasi harus 4-8 digit",
@@ -119,7 +109,6 @@
     "OTP_TOO_MANY_ATTEMPTS": "Terlalu banyak percobaan, mulai ulang",
     "OTP_WRONG_CODE": "Kode verifikasi salah",
     "OTP_RESEND_LIMITED": "Tunggu dulu sebelum minta kode lagi, atau mulai ulang",
-
     "INTERNAL_ERROR": "Ada masalah di sisi kami. Coba lagi ya.",
     "RATE_LIMITED": "Terlalu banyak permintaan. Coba lagi sebentar.",
     "BAD_REQUEST": "Permintaan tidak valid.",
@@ -130,7 +119,6 @@
     "REDEEM_ALREADY_USED": "Kamu sudah pernah menukar kode ini",
     "REDEEM_TOO_MANY_ATTEMPTS": "Terlalu banyak percobaan, coba lagi dalam 15 menit",
     "REDEEM_FAILED": "Gagal menukar kode",
-
     "ADMIN_REDEEM_CODE_INVALID": "Kode harus 3-64 karakter: A-Z, 0-9, _ atau -",
     "ADMIN_REDEEM_CREDITS_INVALID": "Kredit harus 1-10000",
     "ADMIN_REDEEM_MAX_INVALID": "maxRedemptions harus 1-10000",
@@ -158,15 +146,15 @@
     "BUDGET_EXCEEDED": "Revisi memakai terlalu banyak panggilan AI dan sudah di-refund. Coba permintaan yang lebih kecil.",
     "SEMAPHORE_TIMEOUT": "Layanan AI sedang sibuk. Coba lagi sebentar."
   },
-
   "projectErrors": {
     "GENERATION_FAILED": "Generate gagal. Kredit sudah dikembalikan.",
     "GENERATION_TIMEOUT": "Generate timeout. Coba lagi ya.",
     "REVISION_TIMEOUT": "Revisi timeout dan tidak diterapkan. Coba lagi ya.",
     "REVISION_NO_CHANGE": "AI tidak menerapkan perubahan apa pun. Coba ubah kalimatnya, atau sebutkan file mana yang mau diubah.",
-    "NO_APP_JS": "AI tidak berhasil membuat file utama (/App.js). Coba lagi ya."
+    "NO_APP_JS": "AI tidak berhasil membuat file utama (/App.js). Coba lagi ya.",
+    "REVISION_ABORTED": "Revisi dibatalkan karena ada operasi yang gagal. Project tidak berubah dan kredit sudah dikembalikan.",
+    "CHAT_FAILED": "Gagal memproses revisi. Project tidak berubah dan kredit sudah dikembalikan."
   },
-
   "nav": {
     "home": "Beranda",
     "pricing": "Harga",
@@ -195,13 +183,65 @@
     "next": "Halaman berikutnya",
     "page": "Halaman {{current}} dari {{total}}"
   },
-
+  "subdomain": {
+    "title": "Premium Subdomain",
+    "subtitle": "Dapetin link eksklusif namamu.{{domain}}",
+    "chooseLabel": "Pilih Subdomain",
+    "placeholder": "namamu",
+    "hint": "Huruf kecil, angka, dan strip ({{min}}-{{max}} karakter).",
+    "price": "Harga: {{cost}} kredit / {{days}} hari.",
+    "priceNoDays": "Harga: {{cost}} kredit.",
+    "autoCharge": "Kredit akan otomatis terpotong dari saldo Anda.",
+    "creditsShort": "{{count}} kredit",
+    "claim": "Klaim Sekarang",
+    "renew": "Perpanjang",
+    "renewDays": "Perpanjang {{count}} hari",
+    "processing": "Memproses...",
+    "activeTitle": "Subdomain Aktif",
+    "activeUntil": "Aktif sampai {{date}}",
+    "daysLeft": "Sisa {{count}} hari",
+    "expiringSoon": "Masa aktif hampir habis. Perpanjang supaya link tidak mati.",
+    "expiredTitle": "Subdomain Expired",
+    "expiredBody": "{{domain}} sudah habis masa aktifnya dan link-nya tidak bisa dibuka. Perpanjang untuk mengaktifkan lagi, atau pilih subdomain lain.",
+    "chooseOther": "Pilih subdomain lain",
+    "release": "Lepas subdomain",
+    "releaseConfirmTitle": "Lepas subdomain?",
+    "releaseConfirmBody": "{{domain}} akan dilepas dan website tidak bisa lagi dibuka lewat link ini. Kredit yang sudah dipakai tidak dikembalikan.",
+    "releaseConfirmButton": "Ya, lepas",
+    "releasing": "Melepas...",
+    "badge": {
+      "manage": "Kelola",
+      "renew": "Perpanjang",
+      "expired": "Expired"
+    },
+    "errors": {
+      "tooShort": "Minimal {{min}} karakter.",
+      "tooLong": "Maksimal {{max}} karakter.",
+      "format": "Pakai huruf kecil, angka, dan strip. Strip tidak boleh di awal, di akhir, atau berurutan.",
+      "claimFailed": "Gagal klaim subdomain.",
+      "renewFailed": "Gagal perpanjang subdomain.",
+      "releaseFailed": "Gagal melepas subdomain."
+    },
+    "toasts": {
+      "claimed": "Subdomain berhasil diklaim!",
+      "renewed": "Subdomain diperpanjang!",
+      "released": "Subdomain dilepas.",
+      "copied": "URL disalin!",
+      "copyFailed": "Gagal menyalin URL."
+    }
+  },
+  "subdomainPage": {
+    "unavailableTitle": "Website Tidak Tersedia",
+    "unavailableBody": "Website tidak ditemukan, belum dipublish, atau langganan subdomain sudah habis.",
+    "loadFailedTitle": "Gagal Memuat Website",
+    "loadFailedBody": "Terjadi masalah saat mengambil website ini. Coba lagi sebentar lagi.",
+    "backHome": "Balik ke Renscraft"
+  },
   "language": {
     "switchTo": "Ganti ke {{lang}}",
     "en": "English",
     "id": "Indonesia"
   },
-
   "auth": {
     "otpTitle": "Cek email kamu",
     "otpSubtitle": "Kode verifikasi sudah dikirim ke {{email}}",
@@ -245,7 +285,6 @@
     "callbackNotConfigured": "Login Google dan GitHub belum dikonfigurasi.",
     "callbackFailed": "Login tidak berhasil diselesaikan. Coba lagi ya."
   },
-
   "home": {
     "title": "Yuk, bikin app-mu bersama",
     "subtitle": "Tulis idemu, dan biarkan AI merancang, menyusun, dan meluncurkan website kamu dalam sekejap. Tanpa perlu coding.",
@@ -253,8 +292,11 @@
     "noCredits": "Kredit habis",
     "creditsCount": "{{count}} kredit"
   },
-
   "builder": {
+    "exportSuccess": "Ekspor berhasil!",
+    "exportInsufficientCredits": "Kredit tidak mencukupi untuk ekspor.",
+    "exportFailed": "Gagal mengekspor proyek.",
+    "originalPromptMissing": "Permintaan awal tidak ada, silakan mulai dari awal.",
     "exportConfirmTitle": "Export project sebagai ZIP?",
     "exportConfirmBody": "Ini akan memakai {{cost}} kredit. Kredit tidak bisa dikembalikan, tapi file ZIP langsung diunduh setelah konfirmasi.",
     "exportConfirmButton": "Export",
@@ -272,7 +314,6 @@
     "publishSuccess": "Website berhasil dipublish",
     "publishFailed": "Gagal mempublish"
   },
-
   "progress": {
     "failed": "Gagal",
     "planning": "Merancang",
@@ -297,15 +338,16 @@
     "done": "selesai",
     "filesCount": "{{done}} / {{total}} file"
   },
-
   "chat": {
     "emptyState": "Minta AI mengubah website kamu",
     "you": "Kamu",
     "ai": "AI",
     "placeholder": "Minta AI mengubah...",
-    "placeholderDisabled": "Generate gagal. Mulai project baru."
+    "placeholderDisabled": "Generate gagal. Mulai project baru.",
+    "panelTitle": "AI Chat",
+    "closePanel": "Ttutp panel",
+    "revising": "AI sedang merevisi website kamu..."
   },
-
   "profile": {
     "referral": "Referral",
     "referralSub": "Bagikan kodemu. Temanmu dapat 10 kredit, kamu dapat 15.",
@@ -329,7 +371,6 @@
     "memberSince": "Member sejak {{date}}",
     "back": "Kembali"
   },
-
   "publish": {
     "title": "Website kamu sudah live!",
     "subtitle": "Siapa pun yang punya link di bawah bisa lihat website kamu.",
@@ -338,7 +379,6 @@
     "openSite": "Buka Website",
     "copied": "Link publik disalin ke clipboard"
   },
-
   "payment": {
     "topUpTitle": "Top up kredit",
     "youHave": "Kamu punya {{count}} kredit",
@@ -363,25 +403,21 @@
     "manualHintSub": "Transfer bank + upload bukti. Kredit masuk setelah dikonfirmasi.",
     "payManual": "Bayar manual"
   },
-
   "theme": {
     "lightMode": "Mode terang",
     "darkMode": "Mode gelap",
     "enableLight": "Aktifkan mode terang",
     "enableDark": "Aktifkan mode gelap"
   },
-
   "files": {
     "filesLabel": "FILE"
   },
-
   "preview": {
     "preparing": "Menyiapkan preview…",
     "stillPreparing": "Masih menyiapkan…",
     "bundling": "Membundel React dan dependensi",
     "largeProject": "Project besar — bisa sampai 30 detik"
   },
-
   "images": {
     "title": "Gambar yang diupload",
     "uploading": "Mengunggah...",
@@ -396,7 +432,6 @@
     "removeFailed": "Gagal hapus gambar",
     "removeAria": "Hapus gambar"
   },
-
   "displayProjects": {
     "label": "Dibikin pakai Renscraft",
     "title1": "Website hasil AI.",
@@ -417,7 +452,6 @@
     "previewOf": "Preview {{name}}",
     "openInNewTab": "Buka {{name}} di tab baru"
   },
-
   "buyCredits": {
     "midtransSoonTitle": "Pembayaran otomatis segera hadir",
     "midtransSoonBody": "Midtrans belum aktif. Top up dulu lewat transfer bank manual — kredit masuk setelah bukti disetujui.",
@@ -452,7 +486,6 @@
     "creditsAdded": "+{{count}} kredit masuk",
     "lostConnection": "Koneksi terputus saat cek pembayaran. Order kamu tersimpan di bawah."
   },
-
   "manual": {
     "title": "Transfer manual",
     "subtitle": "Transfer ke rekening kami, upload bukti, kredit masuk setelah dikonfirmasi.",
@@ -499,7 +532,6 @@
     "uploadFailed": "Upload gagal",
     "couldNotCheck": "Belum bisa cek status sekarang"
   },
-
   "brief": {
     "back": "Kembali",
     "skip": "Lewati",
@@ -526,7 +558,6 @@
     "kindLongtext": "Paragraf",
     "kindList": "Daftar (satu per baris)"
   },
-
   "landing": {
     "heroTitle1": "Tulis websitenya.",
     "heroTitle2": "Dapet yang beneran.",
@@ -549,7 +580,7 @@
       },
       "change": {
         "title": "Ubah lewat chat",
-        "text": "Minta ubah seperti \u201cbuat hero-nya lebih gelap\u201d, atau buka kodenya dan edit sendiri."
+        "text": "Minta ubah seperti “buat hero-nya lebih gelap”, atau buka kodenya dan edit sendiri."
       },
       "ship": {
         "title": "Publish atau export",
@@ -601,7 +632,6 @@
     "footerCopyright": "© {{year}} Renscraft. Seluruh hak cipta dilindungi.",
     "footerBuiltBy": "Dibikin dengan sepenuh hati oleh"
   },
-
   "pricing": {
     "manualTitle": "Dibayar lewat transfer manual",
     "manualText": "Transfer ke rekening kami dan upload buktinya. Kredit masuk setelah disetujui admin.",
@@ -628,7 +658,6 @@
     "haveAccount": "Sudah punya akun?",
     "signIn": "Login"
   },
-
   "myProjects": {
     "label": "Project",
     "title": "Yang udah aku bikin.",
@@ -647,10 +676,22 @@
       "wedding": "Wedding invitation"
     },
     "sections": {
-      "published": { "label": "Published", "sub": "Live" },
-      "draft": { "label": "Draft", "sub": "Private" },
-      "busy": { "label": "Sedang Dibangun", "sub": "Berjalan" },
-      "failed": { "label": "Gagal", "sub": "Perlu dicoba lagi" }
+      "published": {
+        "label": "Published",
+        "sub": "Live"
+      },
+      "draft": {
+        "label": "Draft",
+        "sub": "Private"
+      },
+      "busy": {
+        "label": "Sedang Dibangun",
+        "sub": "Berjalan"
+      },
+      "failed": {
+        "label": "Gagal",
+        "sub": "Perlu dicoba lagi"
+      }
     },
     "status": {
       "published": "Published",
@@ -691,7 +732,6 @@
       "deleting": "Menghapus..."
     }
   },
-
   "contact": {
     "backToHome": "Balik ke beranda",
     "label": "Kontak",
@@ -717,7 +757,6 @@
     "accountTitle": "Masalah akun?",
     "accountText": "Kirim dari email yang kamu pakai buat daftar, biar kami bisa nemuin kamu lebih cepat."
   },
-
   "publishPage": {
     "errorTitle": "Website tidak tersedia",
     "errorFallback": "Website ini tidak tersedia atau belum dipublish.",

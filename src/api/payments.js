@@ -7,11 +7,38 @@
 import api from "./api";
 
 // GET /api/payments/packages  (PUBLIC, no login: used by the pricing page)
-// -> { packages: [{ id, credits, amount, label }], costs: { generate, revision }, freeCredits }
+// -> { packages: [{ id, credits, amount, label }], costs: { generate, revision, subdomain: { cost, days } }, freeCredits, methods }
 // 503 { error: "Payments are disabled" } when the server runs with PAYMENTS_ENABLED=false
 export const getPublicPackages = async () => {
   const { data } = await api.get("/api/payments/packages");
   return data;
+};
+
+// Harga + durasi subdomain dari server (bukan hardcode di client).
+// -> { cost: number, days: number | null } atau null kalau belum tersedia.
+// Satu-satunya tempat yang tahu bentuk `costs.subdomain`: kalau backend beda
+// bentuk, cukup ubah normalizeSubdomainPricing.
+const normalizeSubdomainPricing = (raw) => {
+  if (typeof raw === "number" && raw > 0) return { cost: raw, days: null };
+  if (raw && typeof raw === "object" && Number(raw.cost) > 0) {
+    const days = Number(raw.days);
+    return { cost: Number(raw.cost), days: days > 0 ? days : null };
+  }
+  return null;
+};
+
+let subdomainPricingPromise = null;
+
+export const getSubdomainPricing = () => {
+  if (subdomainPricingPromise) return subdomainPricingPromise;
+  subdomainPricingPromise = getPublicPackages()
+    .then((data) => normalizeSubdomainPricing(data?.costs?.subdomain))
+    .catch(() => {
+      // Jangan cache kegagalan: buka modal berikutnya boleh coba lagi.
+      subdomainPricingPromise = null;
+      return null;
+    });
+  return subdomainPricingPromise;
 };
 
 // GET /api/payments/config
