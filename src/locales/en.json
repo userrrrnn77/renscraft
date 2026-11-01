@@ -226,7 +226,8 @@
     "openBuilder": "Open builder",
     "topUp": "Top up credits",
     "profile": "Profile",
-    "webpub": "Explore"
+    "webpub": "Explore",
+    "status": "Status"
   },
   "webpub": {
     "metaTitle": "Published Websites — Renscraft",
