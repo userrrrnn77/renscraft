@@ -512,4 +512,3 @@ const DisplayProjects = () => {
 };
 
 export default DisplayProjects;
--e;
