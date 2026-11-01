@@ -498,6 +498,13 @@ const LandingPage = () => {
                     {t("contact.label")}
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    to="/status"
+                    className="hover:text-zinc-950 dark:hover:text-zinc-50 transition-colors">
+                    {t("status.label")}
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>

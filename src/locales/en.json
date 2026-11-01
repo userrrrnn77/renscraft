@@ -886,5 +886,51 @@
     "unavailableTitle": "App Unavailable",
     "unavailableFallback": "This app is not available or not published yet.",
     "backToRenscraft": "Back to Renscraft"
+  },
+  "status": {
+    "label": "Status",
+    "metaTitle": "System Status — Renscraft",
+    "metaDescription": "Live status and 30-day uptime history of Renscraft services.",
+    "title": "System status",
+    "subtitle": "Live health of Renscraft services and their last 30 days.",
+    "banner": {
+      "operational": "All systems operational",
+      "degraded": "Some services are slower than usual",
+      "outage": "We're experiencing an outage",
+      "maintenance": "Maintenance in progress",
+      "unknown": "Status unavailable"
+    },
+    "state": {
+      "operational": "Operational",
+      "degraded": "Degraded",
+      "outage": "Outage",
+      "maintenance": "Maintenance",
+      "nodata": "No data",
+      "unknown": "Unknown"
+    },
+    "services": {
+      "website": "Website",
+      "api": "API",
+      "database": "Database",
+      "published": "Published sites"
+    },
+    "uptime": "{{value}}% uptime",
+    "latency": "{{ms}} ms",
+    "checks": "{{count}} checks",
+    "daysAgo": "30 days ago",
+    "today": "Today",
+    "updatedAt": "Updated {{time}}",
+    "stale": "Monitoring data is delayed. The status shown may be outdated.",
+    "loadError": "Couldn't load status. The monitoring service may be unreachable.",
+    "notConfigured": "Status page is not configured.",
+    "retry": "Retry",
+    "maintenanceUntil": "Expected to finish around {{time}}",
+    "incidents": {
+      "title": "Recent incidents",
+      "none": "No incidents in the last 30 days.",
+      "ongoing": "Ongoing",
+      "started": "Started {{time}}",
+      "resolved": "Resolved {{time}}"
+    }
   }
 }

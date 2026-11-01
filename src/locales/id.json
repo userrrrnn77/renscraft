@@ -874,5 +874,51 @@
     "unavailableTitle": "App Tidak Tersedia",
     "unavailableFallback": "App ini tidak tersedia atau belum dipublish.",
     "backToRenscraft": "Balik ke Renscraft"
+  },
+  "status": {
+    "label": "Status",
+    "metaTitle": "Status Sistem — Renscraft",
+    "metaDescription": "Status langsung dan riwayat uptime 30 hari layanan Renscraft.",
+    "title": "Status sistem",
+    "subtitle": "Kesehatan layanan Renscraft secara langsung dan 30 hari terakhir.",
+    "banner": {
+      "operational": "Semua sistem normal",
+      "degraded": "Sebagian layanan lebih lambat dari biasanya",
+      "outage": "Sedang terjadi gangguan layanan",
+      "maintenance": "Sedang dalam pemeliharaan",
+      "unknown": "Status tidak tersedia"
+    },
+    "state": {
+      "operational": "Normal",
+      "degraded": "Melambat",
+      "outage": "Gangguan",
+      "maintenance": "Pemeliharaan",
+      "nodata": "Tanpa data",
+      "unknown": "Tidak diketahui"
+    },
+    "services": {
+      "website": "Situs web",
+      "api": "API",
+      "database": "Basis data",
+      "published": "Situs terbit"
+    },
+    "uptime": "Uptime {{value}}%",
+    "latency": "{{ms}} ms",
+    "checks": "{{count}} pemeriksaan",
+    "daysAgo": "30 hari lalu",
+    "today": "Hari ini",
+    "updatedAt": "Diperbarui {{time}}",
+    "stale": "Data pemantauan tertunda. Status yang ditampilkan mungkin sudah tidak akurat.",
+    "loadError": "Tidak bisa memuat status. Layanan pemantauan mungkin tidak terjangkau.",
+    "notConfigured": "Halaman status belum dikonfigurasi.",
+    "retry": "Coba lagi",
+    "maintenanceUntil": "Diperkirakan selesai sekitar {{time}}",
+    "incidents": {
+      "title": "Insiden terbaru",
+      "none": "Tidak ada insiden dalam 30 hari terakhir.",
+      "ongoing": "Berlangsung",
+      "started": "Dimulai {{time}}",
+      "resolved": "Selesai {{time}}"
+    }
   }
 }

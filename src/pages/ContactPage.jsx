@@ -206,6 +206,13 @@ const ContactPage = () => {
                   {t("auth.agreeRefund")}
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/status"
+                  className="hover:text-zinc-900 dark:hover:text-zinc-50">
+                  {t("status.label")}
+                </Link>
+              </li>
             </ul>
           </footer>
         </main>

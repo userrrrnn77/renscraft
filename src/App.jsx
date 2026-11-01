@@ -28,6 +28,7 @@ import WebPublicPage from "./pages/WebPublicPage";
 import DynamicAppPage from "./pages/DynamicAppPage";
 import SubdomainPage from "./pages/SubdomainPage";
 import { getSubdomainFromHostname } from "./utils/subdomain";
+import StatusPage from "./pages/StatusPage";
 
 const App = () => {
   const location = useLocation();
@@ -81,6 +82,7 @@ const App = () => {
           element={isDynamicSubdomain ? <SubdomainPage /> : <LandingPage />}
         />
         <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/status" element={<StatusPage />} />
         <Route path="/publish/:name" element={<PublishPage />} />
         <Route path="/webpub" element={<WebPublicPage />} />
         <Route path="/auth/callback" element={<AuthCallbackPage />} />
