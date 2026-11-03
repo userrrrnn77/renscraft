@@ -2,8 +2,15 @@
 import { useTranslation } from "react-i18next";
 import { STATUS_STYLES } from "./statusStyles";
 
+const MAX_INCIDENTS = 5;
+
 const IncidentList = ({ incidents }) => {
   const { t, i18n } = useTranslation();
+
+  // Terbaru dulu, ambil 5 saja
+  const latest = [...(incidents ?? [])]
+    .sort((a, b) => new Date(b.started_at) - new Date(a.started_at))
+    .slice(0, MAX_INCIDENTS);
 
   const fmt = (iso) => {
     if (!iso) return "";
@@ -25,13 +32,13 @@ const IncidentList = ({ incidents }) => {
       <h2 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
         {t("status.incidents.title")}
       </h2>
-      {(!incidents || incidents.length === 0) && (
+      {latest.length === 0 && (
         <p className="mt-3 text-xs text-zinc-500 dark:text-zinc-400">
           {t("status.incidents.none")}
         </p>
       )}
       <ul className="mt-3 space-y-2">
-        {incidents?.map((inc) => {
+        {latest.map((inc) => {
           const style = STATUS_STYLES[inc.status] || STATUS_STYLES.unknown;
           return (
             <li
