@@ -1,6 +1,6 @@
 // src/pages/ContactPage.jsx
 
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowLeftIcon, ArrowUpRightIcon, MailIcon } from "lucide-react";
 import { FaGithub, FaInstagram, FaTiktok } from "react-icons/fa6";
@@ -68,6 +68,8 @@ const TONE = {
 
 const ContactPage = () => {
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
+  const reportId = searchParams.get("report");
 
   usePageMeta({
     title: t("meta.contactTitle", "Contact — Renscraft"),
@@ -115,6 +117,12 @@ const ContactPage = () => {
               {t("contact.subtitle")}
             </p>
           </header>
+
+          {reportId && (
+            <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-relaxed text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">
+              {t("contact.reportContext", { id: reportId })}
+            </div>
+          )}
 
           <section className="mt-10 grid gap-3 sm:grid-cols-2">
             {CHANNELS.map((c) => {

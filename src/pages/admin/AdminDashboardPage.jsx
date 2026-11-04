@@ -23,6 +23,8 @@ import {
   adminCreateRedeemCode,
   adminDeleteRedeemCode,
   adminListRedeemCodes,
+  adminListRemakes,
+  adminUnpublishProject,
 } from "../../api/admin";
 import { errorMessage } from "../../api/api";
 import usePageMeta from "../../utils/usePageMeta";
@@ -36,8 +38,6 @@ const fmtIdr = (n) =>
     currency: "IDR",
     maximumFractionDigits: 0,
   }).format(n || 0);
-
-// ─── Reusable ───────────────────────────────────────────────────────────────
 
 const Pagination = ({ page, totalPages, onPage }) => {
   if (totalPages <= 1) return null;
@@ -681,7 +681,7 @@ const OrdersTab = () => {
 
 const ManualTab = () => {
   const [state, setState] = useState({ loading: true, status: "review" });
-  const [actionOrder, setActionOrder] = useState(null); // { order, action: "approve"|"reject" }
+  const [actionOrder, setActionOrder] = useState(null);
 
   const load = async (status = "review") => {
     setState((s) => ({ ...s, loading: true }));
@@ -1153,6 +1153,209 @@ const RedeemTab = () => {
   );
 };
 
+// ─── Remakes (takedown) ─────────────────────────────────────────────────────
+//
+// Cari project yang ditandai remake per domain sumber. Tombol Unpublish
+// memakai endpoint yang sama dengan publish manual owner: set published=false.
+// Subdomain publik sudah menolak published=false, jadi tautan langsung mati
+// setelah admin unpublish.
+
+const RemakesTab = () => {
+  const [state, setState] = useState({ loading: true, page: 1, domain: "" });
+  const [search, setSearch] = useState("");
+  const [pendingUnpublish, setPendingUnpublish] = useState(null);
+  const [busyUnpublish, setBusyUnpublish] = useState(false);
+
+  const load = async (page = 1, domain = "") => {
+    setState((s) => ({ ...s, loading: true }));
+    try {
+      const data = await adminListRemakes({ page, limit: 25, domain });
+      setState({ loading: false, page, domain, ...data });
+    } catch (err) {
+      setState({
+        loading: false,
+        page,
+        domain,
+        error: errorMessage(err, "Failed to load remakes"),
+      });
+    }
+  };
+
+  useEffect(() => {
+    load(1, "");
+  }, []);
+
+  const onSearch = (e) => {
+    e.preventDefault();
+    load(1, search.trim());
+  };
+
+  const confirmUnpublish = async () => {
+    if (!pendingUnpublish) return;
+    setBusyUnpublish(true);
+    try {
+      await adminUnpublishProject(pendingUnpublish._id);
+      toast.success(`Unpublished "${pendingUnpublish.name}"`);
+      setPendingUnpublish(null);
+      load(state.page, state.domain);
+    } catch (err) {
+      toast.error(errorMessage(err, "Failed to unpublish"));
+    } finally {
+      setBusyUnpublish(false);
+    }
+  };
+
+  const totalPages = Math.max(1, Math.ceil((state.total || 0) / 25));
+
+  return (
+    <div className="space-y-4">
+      <form onSubmit={onSearch} className="flex gap-2">
+        <div className="relative flex-1">
+          <SearchIcon
+            size={14}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"
+          />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Filter by source domain (e.g. example.com)"
+            className="w-full rounded-lg border border-zinc-200 bg-white pl-9 pr-3 py-2 text-sm outline-none focus:border-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50"
+          />
+        </div>
+        <button
+          type="submit"
+          className="cursor-pointer rounded-lg border border-zinc-200 px-3 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-800">
+          Search
+        </button>
+      </form>
+
+      <div className="overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">
+        <table className="w-full text-sm">
+          <thead className="bg-zinc-50 text-[10px] font-semibold uppercase tracking-widest text-zinc-500 dark:bg-zinc-900 dark:text-zinc-400">
+            <tr>
+              <th className="px-4 py-2.5 text-left">Project</th>
+              <th className="px-4 py-2.5 text-left">Owner</th>
+              <th className="px-4 py-2.5 text-left">Remake of</th>
+              <th className="px-4 py-2.5 text-left">Status</th>
+              <th className="px-4 py-2.5"></th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
+            {state.loading ? (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="px-4 py-10 text-center text-zinc-400">
+                  <Loader2Icon className="inline animate-spin" />
+                </td>
+              </tr>
+            ) : state.projects?.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="px-4 py-10 text-center text-xs text-zinc-400">
+                  {state.domain
+                    ? `No remakes of "${state.domain}".`
+                    : "No remake projects yet."}
+                </td>
+              </tr>
+            ) : (
+              state.projects?.map((p) => (
+                <tr
+                  key={p._id}
+                  className="hover:bg-zinc-50 dark:hover:bg-zinc-900/50">
+                  <td className="px-4 py-3">
+                    <p className="font-medium text-zinc-900 dark:text-zinc-50">
+                      {p.name}
+                    </p>
+                    <p className="text-[10px] text-zinc-500 dark:text-zinc-500">
+                      {moment(p.createdAt).format("DD MMM YYYY")}
+                    </p>
+                  </td>
+                  <td className="px-4 py-3 text-xs">
+                    <p className="text-zinc-700 dark:text-zinc-300">
+                      {p.owner?.name || "—"}
+                    </p>
+                    <p className="text-zinc-500 dark:text-zinc-500">
+                      {p.owner?.email || "—"}
+                    </p>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex flex-wrap gap-1">
+                      {(p.remakeOf || []).map((d) => (
+                        <span
+                          key={d}
+                          className="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                          {d}
+                        </span>
+                      ))}
+                    </div>
+                    {p.customSubdomain && (
+                      <p className="mt-1 font-mono text-[10px] text-zinc-500 dark:text-zinc-500">
+                        {p.customSubdomain}.renscraft.cyou
+                      </p>
+                    )}
+                  </td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider ${
+                        p.published
+                          ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300"
+                          : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
+                      }`}>
+                      {p.published ? "published" : "unpublished"}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <button
+                      type="button"
+                      onClick={() => setPendingUnpublish(p)}
+                      disabled={!p.published}
+                      className="inline-flex cursor-pointer items-center gap-1 rounded-md border border-red-200 px-2 py-1 text-[11px] font-medium text-red-700 hover:bg-red-50 disabled:opacity-40 disabled:cursor-not-allowed dark:border-red-500/30 dark:text-red-300 dark:hover:bg-red-500/10">
+                      Unpublish
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <Pagination
+        page={state.page}
+        totalPages={totalPages}
+        onPage={(p) => load(p, state.domain)}
+      />
+
+      <ConfirmModal
+        open={Boolean(pendingUnpublish)}
+        title="Unpublish this project?"
+        description={
+          <>
+            <span className="font-semibold text-zinc-700 dark:text-zinc-300">
+              {pendingUnpublish?.name}
+            </span>{" "}
+            will no longer be reachable at its public URL or subdomain. This is
+            reversible — the owner can publish it again.
+          </>
+        }
+        confirmLabel="Unpublish"
+        busyLabel="Unpublishing..."
+        tone="danger"
+        busy={busyUnpublish}
+        onConfirm={confirmUnpublish}
+        onClose={() => {
+          if (!busyUnpublish) setPendingUnpublish(null);
+        }}
+      />
+    </div>
+  );
+};
+
+// ─── Manual action modal ────────────────────────────────────────────────────
+
 const AdminManualActionModal = ({ order, action, onClose, onSuccess }) => {
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
@@ -1160,7 +1363,7 @@ const AdminManualActionModal = ({ order, action, onClose, onSuccess }) => {
   const submit = async () => {
     setBusy(true);
     try {
-      const label = "rendy"; // Ganti kalau multi-admin
+      const label = "rendy";
       if (action === "approve") {
         await (
           await import("../../api/api")
@@ -1250,6 +1453,7 @@ const TABS = [
   { id: "orders", label: "Orders" },
   { id: "manual", label: "Manual" },
   { id: "redeem", label: "Redeem" },
+  { id: "remakes", label: "Remakes" },
 ];
 
 const AdminDashboardPage = () => {
@@ -1336,7 +1540,7 @@ const AdminDashboardPage = () => {
       </header>
 
       <main className="mx-auto max-w-7xl px-6 py-8">
-        <nav className="flex gap-1.5 border-b border-zinc-200 pb-2 dark:border-zinc-800">
+        <nav className="flex flex-wrap gap-1.5 border-b border-zinc-200 pb-2 dark:border-zinc-800">
           {TABS.map((t) => (
             <button
               key={t.id}
@@ -1359,6 +1563,7 @@ const AdminDashboardPage = () => {
           {tab === "orders" && <OrdersTab />}
           {tab === "manual" && <ManualTab />}
           {tab === "redeem" && <RedeemTab />}
+          {tab === "remakes" && <RemakesTab />}
         </div>
       </main>
     </div>

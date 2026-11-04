@@ -27,8 +27,6 @@ import { useProject } from "./ProjectContext";
 
 const BriefContext = createContext(undefined);
 
-// briefId disimpan supaya wizard bisa dilanjutkan setelah refresh halaman.
-// try/catch: sessionStorage bisa melempar (mode privat, storage diblokir).
 const BRIEF_KEY = "renscraft:briefId";
 const readStoredBrief = () => {
   try {
@@ -52,23 +50,21 @@ const clearStoredBrief = () => {
   }
 };
 
-// Server membalas PATCH dengan state + errors. `errors` bukan bagian state.
 const stripErrors = ({ errors, ...state }) => state;
 
-// Helper buat toast ber-translate. Dipakai di luar render, jadi pakai
-// i18n.t langsung (bukan useTranslation). Interpolasi params dioper
-// sebagai argumen kedua.
 const tt = (key, params) => i18n.t(key, params);
+
+// Jangan auto-start saat brief butuh langkah Referensi tapi mode belum dipilih.
+// needsReference true + refMode kosong => user harus lewat wizard dulu.
+const blocksAutoStart = (state) => !!state?.needsReference && !state?.refMode;
 
 export function BriefProvider({ children }) {
   const { user, onSessionReset } = useAuth();
   const { createFromPrompt, registerBriefDrop } = useProject();
 
-  // Brief / wizard: state dari server (null = tidak ada wizard aktif)
   const [brief, setBrief] = useState(null);
   const [briefLoading, setBriefLoading] = useState(false);
 
-  // Brief hilang di server (kedaluwarsa / sudah dipakai): bersihkan wizard
   const dropBrief = useCallback(() => {
     setBrief(null);
     clearStoredBrief();
@@ -77,10 +73,6 @@ export function BriefProvider({ children }) {
   useEffect(() => onSessionReset(dropBrief), [onSessionReset, dropBrief]);
   useEffect(() => registerBriefDrop(dropBrief), [registerBriefDrop, dropBrief]);
 
-  // ─── Brief / wizard ────────────────────────────────────────────────────────
-
-  // Pintu masuk prompt bebas (PromptInput + chip tag).
-  // true = berhasil (PromptInput mengosongkan teks), false = gagal.
   const startBrief = useCallback(
     async (prompt) => {
       if (!user) return false;
@@ -88,10 +80,6 @@ export function BriefProvider({ children }) {
       try {
         const { briefId, status } = await createBrief(prompt);
 
-        // ─── Classifying: poll dengan deadline ──────────────────────────────
-        // Classifier jalan di background (server balikin "classifying" duluan).
-        // Server-side timeout 45s + 1 retry (maxRetries=1 di classifier.js)
-        // → worst case ~90s. Kalau lewat dari ini, ada bug / hang di server.
         if (status === "classifying") {
           const DEADLINE_MS = 180_000;
           const startedAt = Date.now();
@@ -103,31 +91,22 @@ export function BriefProvider({ children }) {
             try {
               state = await getBrief(briefId);
             } catch (pollErr) {
-              // 404 = brief hilang/expired di server. Bukan network error.
               if (pollErr?.response?.status === 404) {
                 clearStoredBrief();
                 toast.error(tt("toasts.briefExpired"));
                 return false;
               }
-              // Network hiccup sesaat: lanjut polling, jangan bail langsung.
-              // Deadline loop tetap yang jadi pengaman terakhir.
               console.warn("getBrief poll failed: ", pollErr);
               continue;
             }
 
             if (state.status !== "classifying") {
-              // Server sudah menyelesaikan retry loop. Kalau status "failed",
-              // 3 attempt gagal — jangan jatuh ke wizard generic, minta user
-              // submit ulang. Prompt input tetap ada, gak di-clear.
               if (state.status === "failed") {
                 clearStoredBrief();
                 toast.error(tt("toasts.briefClassifyFailed"));
                 return false;
               }
-              if (state.autoStart) {
-                // Semua slot udah ke-extract / kategori nggak butuh slot.
-                // storeBrief dulu biar kalau createFromPrompt gagal di tengah
-                // jalan (mis. 402), refresh masih bisa recover wizard-nya.
+              if (state.autoStart && !blocksAutoStart(state)) {
                 storeBrief(briefId);
                 return Boolean(await createFromPrompt(null, briefId));
               }
@@ -137,26 +116,18 @@ export function BriefProvider({ children }) {
             }
           }
 
-          // Deadline lewat: status masih "classifying" di DB. Jangan biarkan
-          // user stuck di spinner. Bersihin storage biar refresh tidak
-          // restore state rusak ini.
           clearStoredBrief();
           toast.error(tt("toasts.briefClassifyTimeout"));
           return false;
         }
 
-        // ─── Non-classifying: server udah balikin state final ──────────────
-        // Saat ini unreachable (controller selalu balikin "classifying"),
-        // tapi disiapkan buat future kalau classifier dijadikan sync.
         const state = await getBrief(briefId);
 
         if (state.mode === "direct") {
-          // Classifier gagal total: fallback ke jalur lama (generate langsung
-          // pakai prompt mentah, tanpa wizard).
           return Boolean(await createFromPrompt(prompt));
         }
 
-        if (state.autoStart) {
+        if (state.autoStart && !blocksAutoStart(state)) {
           storeBrief(briefId);
           return Boolean(await createFromPrompt(null, briefId));
         }
@@ -212,9 +183,6 @@ export function BriefProvider({ children }) {
     [brief, dropBrief],
   );
 
-  // Kirim jawaban. Mengembalikan { [slotKey]: "pesan" } (kosong = sukses).
-  // Kegagalan jaringan dikembalikan sebagai { __error } supaya wizard tetap
-  // di pertanyaan yang sama.
   const answerBrief = useCallback(
     async (answers) => {
       if (!brief) return { __error: tt("toasts.briefNotActive") };
@@ -252,15 +220,41 @@ export function BriefProvider({ children }) {
     [brief, dropBrief],
   );
 
+  // Simpan pilihan langkah Referensi. `refConsent === true` hanya dikirim untuk
+  // mode remake; mode inspiration tidak butuh consent.
+  const saveBriefReference = useCallback(
+    async (refMode, refConsent) => {
+      if (!brief) return { ok: false, error: tt("toasts.briefNotActive") };
+      if (refMode !== "inspiration" && refMode !== "remake") {
+        return { ok: false, error: tt("errors.BRIEF_REF_MODE_INVALID") };
+      }
+      if (refMode === "remake" && refConsent !== true) {
+        return { ok: false, error: tt("errors.BRIEF_REF_CONSENT_REQUIRED") };
+      }
+      try {
+        const body = { refMode };
+        if (refConsent === true) body.refConsent = true;
+        const data = await patchBrief(brief.briefId, body);
+        setBrief(stripErrors(data));
+        return { ok: true };
+      } catch (err) {
+        console.error("Failed to save brief reference: ", err);
+        if (err?.response?.status === 404) {
+          dropBrief();
+          return { ok: false, error: tt("toasts.briefExpired") };
+        }
+        return {
+          ok: false,
+          error: errorMessage(err, tt("toasts.briefReferenceFailed")),
+        };
+      }
+    },
+    [brief, dropBrief],
+  );
+
   const cancelBrief = useCallback(() => dropBrief(), [dropBrief]);
 
-  // R4: kalau server bilang autoStart (questionKeys kosong karena semua
-  // must-have udah ke-extract), langsung generate — jangan balik ke wizard
-  // walau user refresh di tengah proses.
   // Lanjutkan wizard setelah refresh halaman.
-  //
-  // status "failed" = 3 attempt classifier gagal. Bersihin storage diam-diam
-  // (jangan toast lagi, user baru buka tab). User tinggal submit ulang.
   useEffect(() => {
     if (!user) return;
     const id = readStoredBrief();
@@ -276,7 +270,7 @@ export function BriefProvider({ children }) {
           return;
         }
 
-        if (state.autoStart) {
+        if (state.autoStart && !blocksAutoStart(state)) {
           createFromPrompt(null, id);
           return;
         }
@@ -284,7 +278,6 @@ export function BriefProvider({ children }) {
         setBrief(state);
       })
       .catch((err) => {
-        // 404 = kedaluwarsa / sudah dipakai: hapus diam-diam
         if (err?.response?.status === 404) clearStoredBrief();
       });
 
@@ -304,6 +297,7 @@ export function BriefProvider({ children }) {
         cancelBrief,
         addBriefExtra,
         removeBriefExtra,
+        saveBriefReference,
       }}>
       {children}
     </BriefContext.Provider>

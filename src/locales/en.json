@@ -80,6 +80,10 @@
     "BRIEF_EXTRA_SLOT_LABEL_INVALID": "Field name must be {{min}}–{{max}} characters.",
     "BRIEF_EXTRA_SLOT_KIND_INVALID": "Unsupported field type.",
     "BRIEF_EXTRA_SLOT_VALUE_INVALID": "\"{{label}}\": {{detail}}",
+    "BRIEF_REF_MODE_INVALID": "Invalid reference mode",
+    "BRIEF_REF_CONSENT_REQUIRED": "Consent is required for remake mode",
+    "BRIEF_REF_CONSENT_INVALID": "Consent must be true",
+
     "CHAT_PROMPT_REQUIRED": "Prompt is required",
     "CHAT_PROMPT_TOO_LONG": "Prompt is too long (max {{max}} characters)",
     "CHAT_FAILED": "Failed to process the revision. Please try again.",
@@ -425,7 +429,13 @@
     "preparing": "Preparing your preview…",
     "stillPreparing": "Still preparing…",
     "bundling": "Bundling React and dependencies",
-    "largeProject": "Large project — this can take up to 30 seconds"
+    "largeProject": "Large project — this can take up to 30 seconds",
+    "remakeBadge": {
+      "from": "Remade from {{domain}}{{more}}",
+      "more": " +{{count}}",
+      "madeWith": "made with Renscraft",
+      "report": "Report"
+    }
   },
   "images": {
     "title": "Uploaded images",
@@ -567,7 +577,19 @@
     "answeringIsFree": "Answering is free. Generating a website uses credits.",
     "generate": "Generate Website",
     "questionOf": "Question {{current}} of {{total}}",
-    "backToQuestions": "Back to questions"
+    "backToQuestions": "Back to questions",
+    "backToSummary": "Back to summary",
+    "reference": {
+      "title": "Reference",
+      "subtitle": "Choose how Renscraft should use this URL.",
+      "inspirationLabel": "Design inspiration only",
+      "inspirationDesc": "Colors, fonts, style only — text and photos are not copied.",
+      "remakeLabel": "Remake this site's content",
+      "remakeDesc": "Text and photos are copied — requires the owner's permission.",
+      "consent": "I own this website or have the owner's permission to copy its text and images, and I take responsibility for how this content is used.",
+      "editFromSummary": "Edit reference",
+      "saveFailed": "Failed to save reference choice."
+    }
   },
   "landing": {
     "heroTitle1": "Describe a website.",
@@ -750,6 +772,8 @@
     "label": "Contact",
     "title": "Talk to the human who builds this.",
     "subtitle": "Renscraft is built and run by one person. Whether it's a bug, a feature idea, a refund, or just a hello — pick whichever channel you prefer. We usually reply within 1 business day.",
+    "reportContext": "You are reporting a project that remakes content from another site. Project ID: {{id}} — include this in your message.",
+
     "channels": {
       "emailLabel": "Email",
       "emailDesc": "Best for refund requests, account issues, and anything that needs an order ID.",
@@ -798,6 +822,7 @@
     "referralLinkCopied": "Referral link copied",
     "briefClassifyTimeout": "The server is taking too long to process. Please try again in a moment.",
     "briefExtraFailed": "Failed to add extra info",
+    "briefReferenceFailed": "Failed to save reference choice",
     "sessionExpired": "Session expired, please sign in again.",
     "welcomeBack": "Welcome back!",
     "accountCreated": "Account created successfully!",

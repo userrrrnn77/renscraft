@@ -29,6 +29,7 @@ const HomePage = () => {
     cancelBrief,
     addBriefExtra,
     removeBriefExtra,
+    saveBriefReference,
   } = useAppContext();
 
   const prefilledPrompt = location.state?.prefilledPrompt || "";
@@ -123,6 +124,7 @@ const HomePage = () => {
                 generating={generatingProject}
                 onAddExtra={addBriefExtra}
                 onRemoveExtra={removeBriefExtra}
+                onSaveReference={saveBriefReference}
               />
             </div>
           ) : (

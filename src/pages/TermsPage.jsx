@@ -90,7 +90,36 @@ const TermsPage = () => (
       not infringe on anyone&apos;s intellectual property.
     </p>
 
-    <h2>6. Your content and ownership</h2>
+    <h2>6. Content imported from other sites</h2>
+    <p>
+      Renscraft lets you choose how a reference URL is used. In{" "}
+      <em>inspiration</em> mode, only design tokens (colors, fonts, spacing,
+      shadows) are read — no text or images are copied. In <em>remake</em> mode,
+      text and images from that page are imported as content for your project.
+    </p>
+    <p>When you select remake mode, you confirm that:</p>
+    <ul>
+      <li>
+        You own the content, or you have the copyright owner&apos;s permission
+        to use it in this way.
+      </li>
+      <li>
+        You are solely responsible for the imported content and for how it is
+        used in the website you publish.
+      </li>
+      <li>
+        You will not use the feature to copy, republish, or redistribute someone
+        else&apos;s work without their permission.
+      </li>
+    </ul>
+    <p>
+      If a copyright owner reports that a website on Renscraft uses their
+      content without permission, we may unpublish that website — and, in
+      serious or repeated cases, suspend the account — without prior notice.
+      Where practical, we will inform the site owner of the action taken.
+    </p>
+
+    <h2>7. Your content and ownership</h2>
     <p>
       You own the code that Renscraft generates for you and the content you
       provide (prompts, answers to the brief, uploaded assets). You can publish
@@ -102,7 +131,7 @@ const TermsPage = () => (
       the ZIP, or serving your published website.
     </p>
 
-    <h2>7. AI limitations</h2>
+    <h2>8. AI limitations</h2>
     <p>
       Renscraft uses large language models. AI can make mistakes: wrong
       information, unexpected layouts, or code that doesn&apos;t work exactly as
@@ -111,7 +140,7 @@ const TermsPage = () => (
       mind.
     </p>
 
-    <h2>8. Service availability</h2>
+    <h2>9. Service availability</h2>
     <p>
       We aim to keep Renscraft online, but we do not guarantee uninterrupted
       access. We may pause, modify, or discontinue parts of the service at any
@@ -119,7 +148,7 @@ const TermsPage = () => (
       notice so you can export your projects.
     </p>
 
-    <h2>9. Limitation of liability</h2>
+    <h2>10. Limitation of liability</h2>
     <p>
       Renscraft is provided &quot;as is&quot;. To the maximum extent allowed by
       law, we are not liable for any indirect, incidental, or consequential
@@ -131,20 +160,20 @@ const TermsPage = () => (
       amount you paid us in the 3 months before the claim.
     </p>
 
-    <h2>10. Changes to these terms</h2>
+    <h2>11. Changes to these terms</h2>
     <p>
       We may update these terms from time to time. If we make a material change,
       we will notify you by email or by a notice in the app. Continued use of
       Renscraft after the change means you accept the updated terms.
     </p>
 
-    <h2>11. Governing law</h2>
+    <h2>12. Governing law</h2>
     <p>
       These terms are governed by the laws of the Republic of Indonesia. Any
       dispute will be handled in the courts of Indonesia.
     </p>
 
-    <h2>12. Contact</h2>
+    <h2>13. Contact</h2>
     <p>
       Questions about these terms? <Link to="/contact">Contact us</Link> or
       email <a href="mailto:developer@rensdev.my.id">developer@rensdev.my.id</a>

@@ -131,6 +131,10 @@
     "BRIEF_EXTRA_SLOT_LABEL_INVALID": "Judul field harus {{min}}–{{max}} karakter.",
     "BRIEF_EXTRA_SLOT_KIND_INVALID": "Tipe field tidak didukung.",
     "BRIEF_EXTRA_SLOT_VALUE_INVALID": "\"{{label}}\": {{detail}}",
+    "BRIEF_REF_MODE_INVALID": "Mode referensi tidak valid",
+    "BRIEF_REF_CONSENT_REQUIRED": "Consent wajib untuk mode remake",
+    "BRIEF_REF_CONSENT_INVALID": "Consent harus true",
+
     "ADMIN_INVALID_APP_ID": "ID app tidak valid",
     "ADMIN_APP_NOT_FOUND": "App tidak ditemukan",
     "BUNDLE_ERROR": "Kode yang di-generate tidak bisa di-bundle. Coba generate ulang.",
@@ -417,7 +421,13 @@
     "preparing": "Menyiapkan preview…",
     "stillPreparing": "Masih menyiapkan…",
     "bundling": "Membundel React dan dependensi",
-    "largeProject": "Project besar — bisa sampai 30 detik"
+    "largeProject": "Project besar — bisa sampai 30 detik",
+    "remakeBadge": {
+      "from": "Remake dari {{domain}}{{more}}",
+      "more": " +{{count}}",
+      "madeWith": "dibuat dengan Renscraft",
+      "report": "Laporkan"
+    }
   },
   "images": {
     "title": "Gambar yang diupload",
@@ -552,6 +562,19 @@
     "generate": "Generate Website",
     "questionOf": "Pertanyaan {{current}} dari {{total}}",
     "backToQuestions": "Kembali ke pertanyaan",
+    "backToSummary": "Kembali ke ringkasan",
+    "reference": {
+      "title": "Referensi",
+      "subtitle": "Pilih bagaimana Renscraft memakai URL ini.",
+      "inspirationLabel": "Inspirasi desain saja",
+      "inspirationDesc": "Hanya warna, font, gaya — teks dan foto tidak disalin.",
+      "remakeLabel": "Remake konten situs ini",
+      "remakeDesc": "Teks dan foto disalin — butuh izin pemilik.",
+      "consent": "Saya pemilik situs ini atau sudah mendapat izin dari pemiliknya untuk menyalin teks dan gambarnya, dan saya bertanggung jawab atas penggunaan konten tersebut.",
+      "editFromSummary": "Ubah referensi",
+      "saveFailed": "Gagal menyimpan pilihan referensi."
+    },
+
     "addExtra": "Tambah info",
     "extraLabelPlaceholder": "Judul field (mis. Jam buka, Instagram)",
     "extraValuePlaceholder": "Isi...",
@@ -738,6 +761,8 @@
     "label": "Kontak",
     "title": "Ngobrol langsung sama orang yang bikin ini.",
     "subtitle": "Renscraft dibangun dan dijalanin satu orang. Mau itu bug, ide fitur, refund, atau cuma nyapa — pilih channel yang paling nyaman. Biasanya kami balas dalam 1 hari kerja.",
+    "reportContext": "Kamu sedang melaporkan project yang me-remake konten situs lain. Project ID: {{id}} — sertakan ini di pesanmu.",
+
     "channels": {
       "emailLabel": "Email",
       "emailDesc": "Paling pas buat permintaan refund, masalah akun, dan apa pun yang butuh order ID.",
@@ -786,6 +811,8 @@
     "referralLinkCopied": "Link referral disalin",
     "briefClassifyTimeout": "Server terlalu lama memproses. Coba lagi sebentar.",
     "briefExtraFailed": "Gagal menambah info tambahan",
+    "briefReferenceFailed": "Gagal menyimpan pilihan referensi",
+
     "sessionExpired": "Sesi berakhir, silakan login lagi.",
     "welcomeBack": "Selamat datang kembali!",
     "accountCreated": "Akun berhasil dibuat!",

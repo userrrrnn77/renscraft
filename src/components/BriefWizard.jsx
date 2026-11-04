@@ -35,6 +35,9 @@ const splitQuestion = (q) => {
 };
 
 const initialStep = (brief) => {
+  // Langkah Referensi mendahului pertanyaan slot bila brief butuh referensi
+  // dan mode belum dipilih.
+  if (brief.needsReference && !brief.refMode) return "reference";
   const bySlot = Object.fromEntries(brief.slots.map((s) => [s.key, s]));
   const idx = brief.questionKeys.findIndex((k) => {
     const s = bySlot[k];
@@ -128,6 +131,148 @@ function SlotInput({
         @
       </span>
       {input}
+    </div>
+  );
+}
+
+// ─── Langkah Referensi ────────────────────────────────────────────────────
+//
+// Muncul sebagai langkah pertama bila brief.needsReference true dan user belum
+// memilih mode (refMode kosong). Bisa dibuka ulang dari Summary lewat
+// "Edit reference". Menyimpan lewat patchBrief({ refMode, refConsent: true }).
+function ReferenceStep({ brief, onSave, onDone, onBack, showBack }) {
+  const { t } = useTranslation();
+  const [mode, setMode] = useState(
+    brief.refMode === "remake" ? "remake" : "inspiration",
+  );
+  const [consent, setConsent] = useState(brief.refConsent?.accepted === true);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+
+  const canProceed = mode === "inspiration" || consent;
+
+  const submit = async () => {
+    if (!canProceed || busy) return;
+    if (!onSave) {
+      console.error("ReferenceStep: onSave not provided");
+      return;
+    }
+    setBusy(true);
+    setError("");
+    try {
+      const result = await onSave(mode, mode === "remake" ? true : undefined);
+      if (result?.ok) {
+        onDone?.();
+      } else {
+        setError(result?.error || t("brief.reference.saveFailed"));
+      }
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const radioBase =
+    "mt-0.5 h-4 w-4 shrink-0 accent-red-600 dark:accent-red-500";
+
+  return (
+    <div>
+      <p className="text-lg font-medium text-zinc-900 dark:text-zinc-50">
+        {t("brief.reference.title")}
+      </p>
+      <p className="text-xs text-zinc-500 mt-1 dark:text-zinc-400">
+        {t("brief.reference.subtitle")}
+      </p>
+
+      <div className="mt-4 space-y-3">
+        <label className="flex items-start gap-3 cursor-pointer select-none">
+          <input
+            type="radio"
+            name="briefRefMode"
+            value="inspiration"
+            checked={mode === "inspiration"}
+            disabled={busy}
+            onChange={() => setMode("inspiration")}
+            className={radioBase}
+          />
+          <span className="text-sm text-zinc-900 dark:text-zinc-50">
+            <span className="font-medium">
+              {t("brief.reference.inspirationLabel")}
+            </span>
+            <span className="block text-zinc-500 dark:text-zinc-400">
+              {t("brief.reference.inspirationDesc")}
+            </span>
+          </span>
+        </label>
+
+        <label className="flex items-start gap-3 cursor-pointer select-none">
+          <input
+            type="radio"
+            name="briefRefMode"
+            value="remake"
+            checked={mode === "remake"}
+            disabled={busy}
+            onChange={() => setMode("remake")}
+            className={radioBase}
+          />
+          <span className="text-sm text-zinc-900 dark:text-zinc-50">
+            <span className="font-medium">
+              {t("brief.reference.remakeLabel")}
+            </span>
+            <span className="block text-zinc-500 dark:text-zinc-400">
+              {t("brief.reference.remakeDesc")}
+            </span>
+          </span>
+        </label>
+      </div>
+
+      {mode === "remake" && (
+        <label className="mt-4 flex items-start gap-2 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={consent}
+            disabled={busy}
+            onChange={(e) => setConsent(e.target.checked)}
+            className="mt-0.5 h-4 w-4 shrink-0 accent-red-600 dark:accent-red-500"
+          />
+          <span className="text-sm text-zinc-700 dark:text-zinc-300">
+            {t("brief.reference.consent")}
+          </span>
+        </label>
+      )}
+
+      {error && (
+        <p className="text-sm text-red-500 mt-2 dark:text-red-400">{error}</p>
+      )}
+
+      <div className="flex items-center justify-between gap-2 mt-5">
+        {showBack && onBack ? (
+          <button
+            type="button"
+            onClick={onBack}
+            disabled={busy}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-sm text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 disabled:opacity-30 cursor-pointer dark:text-zinc-400 dark:hover:text-zinc-50 dark:hover:bg-zinc-800">
+            <ArrowLeftIcon size={14} />
+            {t("brief.backToSummary")}
+          </button>
+        ) : (
+          <span />
+        )}
+
+        <button
+          type="button"
+          onClick={submit}
+          disabled={!canProceed || busy}
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 cursor-pointer dark:bg-red-500 dark:hover:bg-red-600">
+          {busy ? (
+            <Loader2Icon size={14} className="animate-spin" />
+          ) : (
+            <>
+              {t("brief.next")}
+              <ArrowRightIcon size={14} />
+            </>
+          )}
+        </button>
+      </div>
     </div>
   );
 }
@@ -293,6 +438,7 @@ function Summary({
   actionsRef,
   onAddExtra,
   onRemoveExtra,
+  onEditReference,
 }) {
   const { t } = useTranslation();
   const [editing, setEditing] = useState(null);
@@ -320,6 +466,11 @@ function Summary({
     }
   };
 
+  const refLabel =
+    brief.refMode === "remake"
+      ? t("brief.reference.remakeLabel")
+      : t("brief.reference.inspirationLabel");
+
   return (
     <div>
       <p className="text-lg font-medium text-zinc-900 dark:text-zinc-50">
@@ -332,6 +483,29 @@ function Summary({
       {brief.sampleData && (
         <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] leading-relaxed text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">
           {t("brief.sampleDataHint")}
+        </div>
+      )}
+
+      {brief.needsReference && (
+        <div className="mt-4 rounded-lg border border-zinc-200 dark:border-zinc-800 p-3">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="text-xs uppercase tracking-wider text-zinc-400 dark:text-white/50">
+                {t("brief.reference.title")}
+              </p>
+              <p className="text-sm text-zinc-900 mt-0.5 dark:text-zinc-50">
+                {refLabel}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={onEditReference}
+              disabled={generating}
+              className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 cursor-pointer disabled:opacity-40 dark:text-white/80 dark:hover:text-white dark:hover:bg-white/10">
+              <PencilIcon size={12} />
+              {t("brief.reference.editFromSummary")}
+            </button>
+          </div>
         </div>
       )}
 
@@ -498,17 +672,20 @@ const BriefWizard = ({
   generating = false,
   onAddExtra,
   onRemoveExtra,
+  onSaveReference,
 }) => {
   const { t } = useTranslation();
   const [step, setStep] = useState(() => initialStep(brief));
   const [catOpen, setCatOpen] = useState(false);
   const [catBusy, setCatBusy] = useState(false);
+  const [referenceFromSummary, setReferenceFromSummary] = useState(false);
   const summaryActionsRef = useRef(null);
   const didMountRef = useRef(false);
 
   const categoryId = brief.category.id;
   useEffect(() => {
     setStep(initialStep(brief));
+    setReferenceFromSummary(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryId]);
 
@@ -531,18 +708,46 @@ const BriefWizard = ({
 
   const keys = brief.questionKeys;
   const total = keys.length;
-  const inQuestions = step !== "summary" && keys[step] !== undefined;
+  const hasReference = brief.needsReference === true;
+
+  const inReference = step === "reference";
+  const inQuestions =
+    !inReference && step !== "summary" && keys[step] !== undefined;
   const slot = inQuestions
     ? brief.slots.find((s) => s.key === keys[step])
     : null;
 
   const goNext = () => {
+    if (inReference) {
+      if (referenceFromSummary) {
+        setStep("summary");
+        setReferenceFromSummary(false);
+      } else if (total > 0) {
+        setStep(0);
+      } else {
+        setStep("summary");
+      }
+      return;
+    }
     if (typeof step === "number" && step + 1 < total) setStep(step + 1);
     else setStep("summary");
   };
+
   const goBack = () => {
+    if (inReference) {
+      if (referenceFromSummary) {
+        setStep("summary");
+        setReferenceFromSummary(false);
+      }
+      return;
+    }
     if (step === "summary") setStep(Math.max(total - 1, 0));
     else if (typeof step === "number" && step > 0) setStep(step - 1);
+  };
+
+  const editReference = () => {
+    setReferenceFromSummary(true);
+    setStep("reference");
   };
 
   const pickCategory = async (id) => {
@@ -552,6 +757,14 @@ const BriefWizard = ({
     await onCategoryChange(id);
     setCatBusy(false);
   };
+
+  const totalSteps = total + (hasReference ? 1 : 0);
+  const progressPct =
+    step === "summary" || totalSteps === 0
+      ? 100
+      : inReference
+        ? (1 / totalSteps) * 100
+        : (((hasReference ? 2 : 1) + step) / totalSteps) * 100;
 
   return (
     <div className={`${GLASS_CLS} mt-6 p-5 text-left`}>
@@ -597,16 +810,20 @@ const BriefWizard = ({
       <div className="h-1 rounded-full bg-zinc-200 dark:bg-white/10 mt-3 mb-5 overflow-hidden">
         <div
           className="h-full bg-red-600 transition-all dark:bg-red-500"
-          style={{
-            width:
-              step === "summary" || total === 0
-                ? "100%"
-                : `${((step + 1) / total) * 100}%`,
-          }}
+          style={{ width: `${progressPct}%` }}
         />
       </div>
 
-      {inQuestions && slot ? (
+      {inReference ? (
+        <ReferenceStep
+          key={`ref:${categoryId}`}
+          brief={brief}
+          onSave={onSaveReference}
+          onDone={goNext}
+          onBack={referenceFromSummary ? goBack : null}
+          showBack={referenceFromSummary}
+        />
+      ) : inQuestions && slot ? (
         <QuestionStep
           key={`${categoryId}:${slot.key}`}
           slot={slot}
@@ -628,6 +845,7 @@ const BriefWizard = ({
           actionsRef={summaryActionsRef}
           onAddExtra={onAddExtra}
           onRemoveExtra={onRemoveExtra}
+          onEditReference={editReference}
         />
       )}
 

@@ -74,3 +74,22 @@ export const adminDeleteRedeemCode = async (id) => {
   const { data } = await api.delete(`/api/admin/redeem/${id}`);
   return data;
 };
+
+// Remakes (takedown)
+export const adminListRemakes = async ({
+  page = 1,
+  limit = 25,
+  domain = "",
+} = {}) => {
+  const p = new URLSearchParams({ page: String(page), limit: String(limit) });
+  if (domain) p.set("domain", domain);
+  const { data } = await api.get(`/api/admin/remakes?${p}`);
+  return data;
+};
+
+export const adminUnpublishProject = async (id, reason = "") => {
+  const { data } = await api.post(`/api/admin/projects/${id}/unpublish`, {
+    reason,
+  });
+  return data;
+};

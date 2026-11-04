@@ -99,7 +99,7 @@ const ChatPanel = ({
         )}
 
         {messages.map((msg, i) => (
-          <div key={msg._id ?? msg.timestamp ?? i}>
+          <div key={msg._id ?? `${msg.timestamp ?? ""}:${i}`}>
             <div className="flex gap-2.5 items-start">
               <div className="shrink-0 w-6 h-6 rounded-md flex items-center justify-center mt-0.5 bg-zinc-50 dark:bg-zinc-900">
                 {msg.role === "user" ? (

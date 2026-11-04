@@ -80,7 +80,20 @@ const SubdomainPage = () => {
     );
   }
 
-  return <FullPagePreview files={project.files} />;
+  // Report link menuju situs utama, bukan subdomain. Di subdomain, /contact
+  // merender halaman ini lagi sehingga tidak berguna.
+  const reportHref = project?._id
+    ? `https://${SUBDOMAIN_ROOT}/contact?report=${encodeURIComponent(project._id)}`
+    : `https://${SUBDOMAIN_ROOT}/contact`;
+
+  return (
+    <FullPagePreview
+      files={project.files}
+      remakeOf={project.remakeOf}
+      projectId={project._id}
+      reportHref={reportHref}
+    />
+  );
 };
 
 export default SubdomainPage;

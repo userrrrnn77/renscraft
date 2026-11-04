@@ -20,7 +20,13 @@ const PreviewPage = () => {
 
   if (loading || !project) return <Loading />;
 
-  return <FullPagePreview files={project.files} />;
+  return (
+    <FullPagePreview
+      files={project.files}
+      remakeOf={project.remakeOf}
+      projectId={project._id}
+    />
+  );
 };
 
 export default PreviewPage;
