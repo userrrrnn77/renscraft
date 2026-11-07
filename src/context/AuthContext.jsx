@@ -21,6 +21,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { getDynamicConfig } from "../api/dynamicApps";
 import i18n from "../i18n";
+import { resetPaymentMethods } from "../utils/topup";
 
 const AuthContext = createContext(undefined);
 
@@ -94,6 +95,11 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     userRef.current = user;
   }, [user]);
+
+  // Metode pembayaran beda per akun: buang cache tiap login / logout / sesi habis
+  useEffect(() => {
+    resetPaymentMethods();
+  }, [user?.email]);
 
   // Session expired while the app was open (any non-auth request answered 401):
   // sign out locally once. AuthLayout then redirects to /login.

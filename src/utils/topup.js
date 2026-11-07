@@ -20,6 +20,12 @@ const METHODS_TIMEOUT_MS = 5000;
 
 let methodsPromise = null;
 
+// `methods` beda per akun (akun test Midtrans), jadi cache dibuang tiap user ganti.
+// Dipanggil dari AuthContext.
+export const resetPaymentMethods = () => {
+  methodsPromise = null;
+};
+
 export const getPaymentMethods = () => {
   if (methodsPromise) return methodsPromise;
 
