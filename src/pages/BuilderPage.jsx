@@ -12,7 +12,9 @@ import {
   MessageSquareIcon,
   MonitorPlayIcon,
   MenuIcon,
+  XIcon,
 } from "lucide-react";
+import AdsterraBanner from "../components/AdsterraBanner";
 import ChatPanel from "../components/ChatPanel";
 import FileExplorer from "../components/FileExplorer";
 import PreviewPanel from "../components/PreviewPanel";
@@ -40,6 +42,7 @@ const BuilderPage = () => {
   const [showSubdomainModal, setShowSubdomainModal] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [showPostGenAd, setShowPostGenAd] = useState(false);
 
   const {
     activeProject,
@@ -63,6 +66,17 @@ const BuilderPage = () => {
     if (!id) return;
     loadProject(id);
   }, [id]);
+
+  useEffect(() => {
+    // Kalau project baru selesai generate, dan belum pernah liat iklan di sesi ini
+    if (activeProject?.status === "completed") {
+      const adSeenKey = `seen_ad_${activeProject._id}_v${activeProject.version}`;
+      if (!sessionStorage.getItem(adSeenKey)) {
+        setShowPostGenAd(true);
+        sessionStorage.setItem(adSeenKey, "true");
+      }
+    }
+  }, [activeProject?.status, activeProject?._id, activeProject?.version]);
 
   const handleOpenPreview = () => {
     if (!id) return;
@@ -282,6 +296,36 @@ const BuilderPage = () => {
         onConfirm={handleDownload}
         onClose={() => setShowExportModal(false)}
       />
+
+      {showPostGenAd && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/50 p-4 backdrop-blur-sm dark:bg-zinc-950/80">
+          <div className="relative w-full max-w-sm rounded-xl border border-zinc-200 bg-white p-4 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900">
+            <button
+              onClick={() => setShowPostGenAd(false)}
+              className="absolute right-2 top-2 rounded-md p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50">
+              <XIcon size={16} />
+            </button>
+            <div className="mb-3 text-center">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400">
+                Sponsor Message
+              </p>
+              <p className="text-sm font-medium text-zinc-900 dark:text-zinc-50">
+                Website kamu sudah jadi!
+              </p>
+            </div>
+
+            <div className="flex justify-center">
+              <AdsterraBanner type="square300x250" />
+            </div>
+
+            <button
+              onClick={() => setShowPostGenAd(false)}
+              className="mt-4 w-full rounded-lg bg-zinc-950 py-2 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200">
+              Lanjut ke Builder
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

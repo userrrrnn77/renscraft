@@ -13,6 +13,7 @@ import api, { errorMessage } from "../api/api";
 import SiteNav from "../components/SiteNav";
 import usePageMeta from "../utils/usePageMeta";
 import { ProjectCard } from "../components/DisplayProjects";
+import AdsterraBanner from "../components/AdsterraBanner";
 
 // 3 kolom × 5 baris = 15 kartu per halaman
 const PAGE_SIZE = 15;
@@ -302,6 +303,17 @@ const WebPublicPage = () => {
           </>
         )}
       </main>
+
+      <div className="mt-12 mb-6">
+        {/* Tampil di mobile */}
+        <div className="block md:hidden">
+          <AdsterraBanner type="mobile320x50" />
+        </div>
+        {/* Tampil di desktop */}
+        <div className="hidden md:block">
+          <AdsterraBanner type="desktop728x90" />
+        </div>
+      </div>
     </div>
   );
 };

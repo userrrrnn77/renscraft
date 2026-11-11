@@ -958,5 +958,10 @@
       "started": "Started {{time}}",
       "resolved": "Resolved {{time}}"
     }
+  },
+  "adblock": {
+    "title": "Adblock Detected!",
+    "subtitle": "Renscraft is free because it's supported by ads. Please disable your Adblock (browser extension or DNS) to continue.",
+    "recheck": "I've disabled it, check again"
   }
 }

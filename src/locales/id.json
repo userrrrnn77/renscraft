@@ -948,5 +948,10 @@
       "started": "Dimulai {{time}}",
       "resolved": "Selesai {{time}}"
     }
+  },
+  "adblock": {
+    "title": "Adblock Terdeteksi!",
+    "subtitle": "Renscraft gratis karena didukung oleh iklan. Tolong matikan Adblock (ekstensi browser atau DNS) untuk melanjutkan.",
+    "recheck": "Saya sudah matikan, cek lagi"
   }
 }

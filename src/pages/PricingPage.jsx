@@ -15,6 +15,7 @@ import { formatIdr } from "../utils/billing";
 import usePageMeta from "../utils/usePageMeta";
 import { openManualPayment } from "../utils/manualBilling";
 import { openTopUp } from "../utils/topup";
+import AdsterraBanner from "../components/AdsterraBanner";
 
 const GRID_STYLE_LIGHT = {
   backgroundImage:
@@ -300,6 +301,17 @@ const PricingPage = () => {
           </p>
         )}
       </main>
+
+      <div className="mt-12 mb-6">
+        {/* Tampil di mobile */}
+        <div className="block md:hidden">
+          <AdsterraBanner type="mobile320x50" />
+        </div>
+        {/* Tampil di desktop */}
+        <div className="hidden md:block">
+          <AdsterraBanner type="desktop728x90" />
+        </div>
+      </div>
     </div>
   );
 };

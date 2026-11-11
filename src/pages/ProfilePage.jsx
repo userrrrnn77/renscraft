@@ -9,7 +9,9 @@ import {
   Link2Icon,
   Loader2Icon,
   LogOutIcon,
+  PlaySquareIcon,
 } from "lucide-react";
+import RewardAdModal from "../components/RewardAdModal";
 import moment from "moment";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -20,6 +22,7 @@ import { openTopUp } from "../utils/topup";
 import { errorMessage } from "../api/api";
 import { redeemCode } from "../api/redeem";
 import { getMyReferral } from "../api/referral";
+import AdsterraBanner from "../components/AdsterraBanner";
 
 // ─── Referral card ─────────────────────────────────────────────────────────
 
@@ -154,6 +157,7 @@ const ProfilePage = () => {
 
   const [code, setCode] = useState("");
   const [redeeming, setRedeeming] = useState(false);
+  const [showRewardAd, setShowRewardAd] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -283,6 +287,24 @@ const ProfilePage = () => {
           </form>
         </section>
 
+        {/* tonton iklan untuk mendapatkan kredit gratis */}
+        <section className="bg-white border border-zinc-200 rounded-2xl p-6 flex items-center justify-between gap-4 dark:bg-zinc-900 dark:border-zinc-800">
+          <div>
+            <p className="text-sm font-medium flex items-center gap-2">
+              <PlaySquareIcon size={16} className="text-amber-500" />
+              Dapet Kredit Gratis
+            </p>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+              Tonton iklan 30 detik, dapat 15 kredit.
+            </p>
+          </div>
+          <button
+            onClick={() => setShowRewardAd(true)}
+            className="shrink-0 rounded-lg bg-amber-500 px-4 py-2 text-xs font-medium text-white hover:bg-amber-600 transition-colors">
+            Tonton
+          </button>
+        </section>
+
         <section className="bg-white border border-zinc-200 rounded-2xl p-6 flex items-center justify-between gap-4 dark:bg-zinc-900 dark:border-zinc-800">
           <div>
             <p className="text-sm font-medium">{t("profile.signOut")}</p>
@@ -297,6 +319,19 @@ const ProfilePage = () => {
           </button>
         </section>
       </main>
+
+      <div className="mt-12 mb-6">
+        {/* Tampil di mobile */}
+        <div className="block md:hidden">
+          <AdsterraBanner type="mobile320x50" />
+        </div>
+        {/* Tampil di desktop */}
+        <div className="hidden md:block">
+          <AdsterraBanner type="desktop728x90" />
+        </div>
+      </div>
+
+      {showRewardAd && <RewardAdModal onClose={() => setShowRewardAd(false)} />}
     </div>
   );
 };

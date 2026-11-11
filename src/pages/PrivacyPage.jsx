@@ -149,6 +149,38 @@ const PrivacyPage = () => (
       will respond within 30 days.
     </p>
 
+    <h2>7.1 Third-Party Advertising (Adsterra)</h2>
+    <p>
+      We partner with third-party advertising networks, including{" "}
+      <strong>Adsterra</strong>, to display ads that support our free tier.
+      These ad networks may use cookies, web beacons, and similar technologies
+      to collect information about your interactions with their ads (such as
+      your IP address, browser type, and pages visited) to serve targeted
+      advertisements.
+    </p>
+    <p>
+      We do not control these third-party cookies. You can learn more about
+      Adsterra's privacy practices by visiting their website. You can also opt
+      out of targeted advertising through your browser settings or by using
+      ad-blocking extensions (though this may limit access to our free
+      features).
+    </p>
+
+    <h2>7.2 Ad-Supported Free Credits & Anti-Fraud</h2>
+    <p>
+      Renscraft offers a "Free Credits" feature where you can earn credits by
+      viewing ads. To prevent abuse and fraud (e.g., using bots to farm
+      credits), we collect and hash your <strong>IP address</strong> and create
+      a temporary, secure session ID when you initiate an ad view.
+    </p>
+    <p>
+      We enforce strict time-based verification (ensuring you actually spend
+      time on the ad) and daily limits. This data is used{" "}
+      <strong>solely for fraud prevention</strong> and is not sold or shared
+      with advertisers. IP hashes are retained for a short period (e.g., 30
+      days) for abuse detection.
+    </p>
+
     <h2>8. Security</h2>
     <p>
       We use industry-standard practices: HTTPS everywhere, hashed passwords

@@ -18,6 +18,7 @@ import SiteNav from "../components/SiteNav";
 import { useAppContext } from "../context/AppContext";
 import usePageMeta from "../utils/usePageMeta";
 import DisplayProjects from "../components/DisplayProjects";
+import AdsterraBanner from "../components/AdsterraBanner";
 
 const GRID_STYLE_LIGHT = {
   backgroundImage:
@@ -526,6 +527,17 @@ const LandingPage = () => {
           </div>
         </div>
       </footer>
+
+      <div className="mt-12 mb-6 pt-6 border-t border-zinc-200 dark:border-zinc-800">
+        {/* Tampil di mobile */}
+        <div className="block md:hidden">
+          <AdsterraBanner type="mobile320x50" />
+        </div>
+        {/* Tampil di desktop */}
+        <div className="hidden md:block">
+          <AdsterraBanner type="desktop728x90" />
+        </div>
+      </div>
     </div>
   );
 };

@@ -29,9 +29,12 @@ import DynamicAppPage from "./pages/DynamicAppPage";
 import SubdomainPage from "./pages/SubdomainPage";
 import { getSubdomainFromHostname } from "./utils/subdomain";
 import StatusPage from "./pages/StatusPage";
+import { useAdBlockDetector } from "./hooks/useAdBlockDetector";
+import AdBlockWall from "./components/AdBlockWall";
 
 const App = () => {
   const location = useLocation();
+  const { isBlocked, isChecking, recheck } = useAdBlockDetector();
 
   // Helper tunggal (utils/subdomain): cuma "<slug>.renscraft.cyou" yang lolos,
   // bukan "notrenscraft.cyou", "www.", atau domain utama.
@@ -59,6 +62,7 @@ const App = () => {
     <>
       <ScrollToTop />
       <Toaster />
+      {isBlocked && <AdBlockWall onRecheck={recheck} isChecking={isChecking} />}
       <BuyCreditsHost /> <ManualPaymentHost />
       <Routes>
         {/* Guest */}

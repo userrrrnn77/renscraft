@@ -167,6 +167,42 @@ const TermsPage = () => (
       Renscraft after the change means you accept the updated terms.
     </p>
 
+    <h2>11.1 Ad-Supported Service and Free Credits</h2>
+    <p>
+      Renscraft offers a free tier supported by third-party advertising
+      (Adsterra). You may earn "Free Credits" by interacting with these ads or
+      sponsor links. By using this feature, you agree to:
+    </p>
+    <ul>
+      <li>
+        Actually view the ad for the required duration (e.g., 30 seconds).
+      </li>
+      <li>
+        Not use VPNs, proxies, bots, or automated scripts to exploit or farm the
+        free credit system.
+      </li>
+      <li>
+        Not use ad-blocking software, DNS filters, or extensions that prevent
+        the loading of our ads. We reserve the right to restrict access to our
+        services if an ad-blocker is detected.
+      </li>
+    </ul>
+    <p>
+      We reserve the right to modify the amount of free credits awarded, the
+      required viewing duration, and the daily limits at any time. Abusing this
+      system will result in immediate account suspension and forfeiture of all
+      earned credits.
+    </p>
+
+    <h2>11.2 Adblockers and Service Access</h2>
+    <p>
+      Because Renscraft relies on ad revenue to keep the platform running, we
+      may detect the use of ad-blocking extensions or network-level ad blockers.
+      While we respect your choice to use them, doing so may prevent you from
+      accessing certain features (such as the Free Credits page) or the service
+      as a whole.
+    </p>
+
     <h2>12. Governing law</h2>
     <p>
       These terms are governed by the laws of the Republic of Indonesia. Any
