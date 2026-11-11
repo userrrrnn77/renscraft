@@ -34,16 +34,19 @@ import AdBlockWall from "./components/AdBlockWall";
 
 const App = () => {
   const location = useLocation();
-  // Helper tunggal (utils/subdomain): cuma "<slug>.renscraft.cyou" yang lolos,
-  // bukan "notrenscraft.cyou", "www.", atau domain utama.
-  const isDynamicSubdomain = getSubdomainFromHostname() !== null;
-  const { isBlocked, isChecking, recheck } = useAdBlockDetector();
 
+  // Helper tunggal (utils/subdomain): cuma "<slug>.renscraft.cyou" yang lolos
+  const isDynamicSubdomain = getSubdomainFromHostname() !== null;
+
+  // 1. TENTUKAN HALAMAN AMAN (Bebas dari Adblock Wall)
   const isSafeRoute =
     location.pathname.startsWith("/admin") ||
-    location.pathname.startsWith("/admin/login") ||
+    location.pathname.startsWith("/login") ||
     location.pathname.startsWith("/register") ||
-    location.pathname.startsWith("/login");
+    location.pathname.startsWith("/auth");
+
+  // 2. OPER isSafeRoute KE HOOK
+  const { isBlocked, isChecking, recheck } = useAdBlockDetector(isSafeRoute);
 
   useEffect(() => {
     getPaymentMethods();
@@ -67,10 +70,15 @@ const App = () => {
     <>
       <ScrollToTop />
       <Toaster />
+
+      {/* 3. TEMBOK MERAH CUMA MUNCUL KALAU BUKAN SAFE ROUTE */}
       {isBlocked && !isSafeRoute && (
         <AdBlockWall onRecheck={recheck} isChecking={isChecking} />
       )}
-      <BuyCreditsHost /> <ManualPaymentHost />
+
+      <BuyCreditsHost />
+      <ManualPaymentHost />
+
       <Routes>
         {/* Guest */}
         <Route element={<GuestLayout />}>
