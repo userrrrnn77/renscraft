@@ -9,6 +9,7 @@ import {
   Loader2Icon,
   UploadCloudIcon,
   XIcon,
+  MessageCircleIcon, // <-- ICON WA
 } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
 import { errorMessage } from "../api/api";
@@ -38,6 +39,7 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
   const [busy, setBusy] = useState(false);
   const [autoStarted, setAutoStarted] = useState(false);
   const [status, setStatus] = useState(null);
+  const [uploadedProofUrl, setUploadedProofUrl] = useState(null); // <-- STATE BARU BUAT URL GAMBAR
   const fileInputRef = useRef(null);
   const mountedRef = useRef(true);
 
@@ -111,10 +113,10 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
         setTimeout(tick, POLL_MS * 2);
       }
     };
-    const t = setTimeout(tick, 1000);
+    const timer = setTimeout(tick, 1000);
     return () => {
       cancelled = true;
-      clearTimeout(t);
+      clearTimeout(timer);
     };
   }, [step, order, refreshCredits, onClose, t]);
 
@@ -165,7 +167,14 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
 
     setBusy(true);
     try {
-      await uploadProof(order.orderId, file, name.trim(), bank.trim());
+      // Simpan response dari uploadProof buat dapetin link gambarnya
+      const response = await uploadProof(
+        order.orderId,
+        file,
+        name.trim(),
+        bank.trim(),
+      );
+      setUploadedProofUrl(response.proofUrl); // <-- SIMPAN URL
       setStep("waiting");
     } catch (err) {
       toast.error(errorMessage(err, t("manual.uploadFailed")));
@@ -187,6 +196,12 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
   const bankInfo = config.state === "ready" ? config.data.bankInfo : "";
   const bankAccounts =
     config.state === "ready" ? config.data.bankAccounts || [] : [];
+  const adminContact = config.state === "ready" ? config.data.adminContact : "";
+
+  // Bikin Link WhatsApp
+  const waNumber = adminContact ? adminContact.replace(/\D/g, "") : "";
+  const waMessage = `Halo admin Renscraft, saya sudah transfer untuk Order ID: *${order?.orderId}*.\n\nBerikut link bukti transfer saya:\n${uploadedProofUrl || "(Link tidak tersedia)"}\n\nMohon dibantu di-approve ya bang. Makasih!`;
+  const waLink = `https://wa.me/${waNumber}?text=${encodeURIComponent(waMessage)}`;
 
   return (
     <div
@@ -525,7 +540,7 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
           </form>
         )}
 
-        {/* Waiting & Done sama persis, cuma text-center udah aman bawaan */}
+        {/* Waiting & Done */}
         {step === "waiting" && (
           <div className="flex flex-col items-center py-6 text-center px-2">
             <Loader2Icon
@@ -549,7 +564,19 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
               </span>
             </div>
 
-            <div className="mt-6 flex flex-col items-center gap-2">
+            <div className="mt-6 flex flex-col items-center gap-3 w-full">
+              {/* TOMBOL WHATSAPP BARU */}
+              {waNumber && (
+                <a
+                  href={waLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex w-full max-w-xs cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#20bd5a] transition-colors">
+                  <MessageCircleIcon size={16} />
+                  Konfirmasi via WhatsApp
+                </a>
+              )}
+
               <button
                 type="button"
                 onClick={async () => {
@@ -577,7 +604,7 @@ const ManualPaymentModal = ({ onClose, initialPackageId = null }) => {
                     toast.error(t("manual.couldNotCheck"));
                   }
                 }}
-                className="cursor-pointer rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-800">
+                className="w-full max-w-xs cursor-pointer rounded-lg border border-zinc-200 px-3 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-800">
                 {t("manual.checkNow")}
               </button>
 
