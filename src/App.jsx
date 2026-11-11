@@ -39,6 +39,12 @@ const App = () => {
   const isDynamicSubdomain = getSubdomainFromHostname() !== null;
   const { isBlocked, isChecking, recheck } = useAdBlockDetector();
 
+  const isSafeRoute =
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith("/admin/login") ||
+    location.pathname.startsWith("/register") ||
+    location.pathname.startsWith("/login");
+
   useEffect(() => {
     getPaymentMethods();
   }, []);
@@ -61,7 +67,9 @@ const App = () => {
     <>
       <ScrollToTop />
       <Toaster />
-      {isBlocked && <AdBlockWall onRecheck={recheck} isChecking={isChecking} />}
+      {isBlocked && !isSafeRoute && (
+        <AdBlockWall onRecheck={recheck} isChecking={isChecking} />
+      )}
       <BuyCreditsHost /> <ManualPaymentHost />
       <Routes>
         {/* Guest */}
