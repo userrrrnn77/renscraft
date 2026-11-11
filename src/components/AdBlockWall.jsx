@@ -6,7 +6,10 @@ export default function AdBlockWall({ onRecheck, isChecking }) {
   const { t } = useTranslation();
 
   return (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-zinc-950/80 p-4 backdrop-blur-md">
+    // ID INI WAJIB ADA, BIAR MUTATION OBSERVER BISA NGEDETEKSI KALAU INI DIHAPUS
+    <div
+      id="adblock-wall"
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-zinc-950/80 p-4 backdrop-blur-md">
       <div className="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-900 p-8 text-center shadow-2xl">
         <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-red-500/20 text-red-500">
           <ShieldAlertIcon size={32} />

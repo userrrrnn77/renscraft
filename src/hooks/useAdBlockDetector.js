@@ -18,8 +18,6 @@ export function useAdBlockDetector() {
     // 2. CEK NETWORK (DNS/Pi-hole/AdGuard di HP atau WiFi)
     let networkBlocked = false;
     try {
-      // Kita coba fetch gambar kecil dari domain iklan umum (Google AdSense)
-      // Kalau DNS-nya di-block, fetch ini bakal error/catch.
       await fetch(
         "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js",
         {
@@ -41,14 +39,46 @@ export function useAdBlockDetector() {
         window.getComputedStyle(bait).visibility === "hidden";
 
       // Kalau salah satu nge-block, kita anggap user pakai Adblock
-      setIsBlocked(cosmeticBlocked || networkBlocked);
+      const currentlyBlocked = cosmeticBlocked || networkBlocked;
+
+      setIsBlocked(currentlyBlocked);
       setIsChecking(false);
       bait.remove();
+
+      // ==========================================
+      // ANTI-HAPUS DOM (Mutation Observer)
+      // ==========================================
+      if (currentlyBlocked) {
+        // Hapus observer lama kalau ada (biar gak dobel)
+        if (window.__adblockObserver) {
+          window.__adblockObserver.disconnect();
+        }
+
+        // Pasang "mata-mata" buat ngawasin kalau elemen kita dihapus
+        const observer = new MutationObserver(() => {
+          const wall = document.getElementById("adblock-wall");
+          if (!wall) {
+            // User ngehapus elemen lewat inspect? Paksa reload!
+            window.location.reload();
+          }
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+        window.__adblockObserver = observer;
+      }
     }, 600);
   }, []);
 
   useEffect(() => {
     checkAdBlock();
+
+    // Cek ulang tiap 3 detik (jaga-jaga kalau user baru nyalain adblock)
+    const interval = setInterval(checkAdBlock, 3000);
+
+    return () => {
+      clearInterval(interval);
+      if (window.__adblockObserver) window.__adblockObserver.disconnect();
+    };
   }, [checkAdBlock]);
 
   return { isBlocked, isChecking, recheck: checkAdBlock };

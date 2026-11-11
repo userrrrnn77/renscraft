@@ -34,11 +34,10 @@ import AdBlockWall from "./components/AdBlockWall";
 
 const App = () => {
   const location = useLocation();
-  const { isBlocked, isChecking, recheck } = useAdBlockDetector();
-
   // Helper tunggal (utils/subdomain): cuma "<slug>.renscraft.cyou" yang lolos,
   // bukan "notrenscraft.cyou", "www.", atau domain utama.
   const isDynamicSubdomain = getSubdomainFromHostname() !== null;
+  const { isBlocked, isChecking, recheck } = useAdBlockDetector();
 
   useEffect(() => {
     getPaymentMethods();
